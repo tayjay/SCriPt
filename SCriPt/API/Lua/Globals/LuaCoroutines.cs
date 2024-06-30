@@ -19,10 +19,7 @@ namespace SCriPt.API.Lua.Globals
          * end)
          */
 
-        public static void Create()
-        {
-            //MEC.Timing.RunCoroutine()
-        }
+        public static int CoroutineAutoYield => SCriPt.Instance.Config.CoroutineAutoYield;
 
         public static void CallDelayed(float delay, Closure closure)
         {
@@ -74,7 +71,7 @@ namespace SCriPt.API.Lua.Globals
             if (closure == null)
                 throw new NullReferenceException("Closure cannot be null.");
             DynValue coroutine = closure.OwnerScript.CreateCoroutine(closure);
-            coroutine.Coroutine.AutoYieldCounter = 0;
+            coroutine.Coroutine.AutoYieldCounter = CoroutineAutoYield;
             return Timing.RunCoroutine(Coroutine(coroutine));
         }
         
@@ -88,7 +85,7 @@ namespace SCriPt.API.Lua.Globals
                 return CallCoroutine(closure);
             }
             DynValue coroutine = closure.OwnerScript.CreateCoroutine(closure);
-            coroutine.Coroutine.AutoYieldCounter = 0;
+            coroutine.Coroutine.AutoYieldCounter = CoroutineAutoYield;
             return Timing.RunCoroutine(Coroutine(coroutine, args));
         }
         

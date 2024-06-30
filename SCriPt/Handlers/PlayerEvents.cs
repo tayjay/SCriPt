@@ -844,6 +844,15 @@ namespace SCriPt.Handlers
         {
             ChangingNickname?.Invoke(null, ev);
         }
+        
+        [MoonSharpVisible(true)]
+        public event EventHandler<ChangingDangerStateEventArgs> ChangingDangerState;
+        
+        [MoonSharpHidden]
+        public void OnChangingDangerState(ChangingDangerStateEventArgs ev)
+        {
+            ChangingDangerState?.Invoke(null, ev);
+        }
 
         [MoonSharpHidden]
         public void RegisterEvents()
@@ -941,6 +950,7 @@ namespace SCriPt.Handlers
             Exiled.Events.Handlers.Player.StayingOnEnvironmentalHazard += OnStayingOnEnvironmentalHazard;
             Exiled.Events.Handlers.Player.ExitingEnvironmentalHazard += OnExitingEnvironmentalHazard;
             Exiled.Events.Handlers.Player.ChangingNickname += OnChangingNickname;
+            Exiled.Events.Handlers.Player.ChangingDangerState += OnChangingDangerState;
         }
 
         [MoonSharpHidden]
@@ -1039,6 +1049,7 @@ namespace SCriPt.Handlers
             UserData.RegisterType<StayingOnEnvironmentalHazardEventArgs>();
             UserData.RegisterType<ExitingEnvironmentalHazardEventArgs>();
             UserData.RegisterType<ChangingNicknameEventArgs>();
+            UserData.RegisterType<ChangingDangerStateEventArgs>();
             
         }
 
@@ -1138,6 +1149,7 @@ namespace SCriPt.Handlers
             Exiled.Events.Handlers.Player.StayingOnEnvironmentalHazard -= OnStayingOnEnvironmentalHazard;
             Exiled.Events.Handlers.Player.ExitingEnvironmentalHazard -= OnExitingEnvironmentalHazard;
             Exiled.Events.Handlers.Player.ChangingNickname -= OnChangingNickname;
+            Exiled.Events.Handlers.Player.ChangingDangerState -= OnChangingDangerState;
         }
 
     }

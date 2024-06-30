@@ -36,6 +36,11 @@ namespace SCriPt.API.Lua.Globals
             }
         }
         
+        public static Room GetRoom(Vector3 position)
+        {
+            return Room.Get(position);
+        }
+        
         
     }
 }

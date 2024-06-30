@@ -41,5 +41,6 @@ namespace SCriPt.Commands.RemoteAdmin
         public string Command { get; } = "load";
         public string[] Aliases { get; } = {"start"};
         public string Description { get; } = "Loads a script from a file.";
+        public bool SanitizeResponse => true;
     }
 }

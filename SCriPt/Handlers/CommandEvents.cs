@@ -83,6 +83,11 @@ namespace SCriPt.Handlers
         public void RegisterEventTypes()
         {
             UserData.RegisterType<ConsoleCommandEvent>();
+            UserData.RegisterType<ConsoleCommandExecutedEvent>();
+            UserData.RegisterType<PlayerGameConsoleCommandEvent>();
+            UserData.RegisterType<PlayerGameConsoleCommandExecutedEvent>();
+            UserData.RegisterType<RemoteAdminCommandEvent>();
+            UserData.RegisterType<RemoteAdminCommandExecutedEvent>();
         }
 
         public void UnregisterEvents()

@@ -8,7 +8,7 @@ namespace SCriPt.Commands.RemoteAdmin
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if(sender.CheckPermission("SCriPt.list"))
+            if(!sender.CheckPermission("SCriPt.list"))
             {
                 response = "You do not have permission to use this command.";
                 return false;
@@ -25,5 +25,6 @@ namespace SCriPt.Commands.RemoteAdmin
         public string Command { get; } = "list";
         public string[] Aliases { get; } = {"active, loaded", "running"};
         public string Description { get; } = "Lists all loaded scripts.";
+        public bool SanitizeResponse => true;
     }
 }

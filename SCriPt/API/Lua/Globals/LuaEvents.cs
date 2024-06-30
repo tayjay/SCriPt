@@ -34,5 +34,7 @@ namespace SCriPt.API.Lua.Globals
         
         public static Scp3114Events Scp3114 => SCriPt.Instance.Scp3114Events;
         public static Scp3114Events Skeleton => SCriPt.Instance.Scp3114Events;
+        
+        public static CommandEvents Command => SCriPt.Instance.CommandEvents;
     }
 }

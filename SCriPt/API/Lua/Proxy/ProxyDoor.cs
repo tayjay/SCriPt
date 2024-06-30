@@ -29,6 +29,7 @@ namespace SCriPt.API.Lua.Proxy
         public bool IsGate => door.IsGate;
         public bool IsCheckpoint => door.IsCheckpoint;
         public bool IsElevator => door.IsElevator;
+        public bool IsBreakable => door is BreakableDoor;
         public KeycardPermissions KeycardPermissions => door.KeycardPermissions;
         
 
@@ -69,6 +70,27 @@ namespace SCriPt.API.Lua.Proxy
         public void Unlock()
         {
             door.Unlock();
+        }
+        
+        public bool Damage(float amount)
+        {
+            if (door is BreakableDoor breakable)
+            {
+                return breakable.Damage(amount);
+            }
+
+            return false;
+
+        }
+        
+        public bool Break()
+        {
+            if (door is BreakableDoor breakable)
+            {
+                return breakable.Break();
+            }
+
+            return false;
         }
 
 

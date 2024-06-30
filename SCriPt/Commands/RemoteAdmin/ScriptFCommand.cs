@@ -58,5 +58,6 @@ namespace SCriPt.Commands.RemoteAdmin
         public string Command { get; } = "scriptf";
         public string[] Aliases { get; } = {"luaf"};
         public string Description { get; } = "Runs a lua file.";
+        public bool SanitizeResponse => true;
     }
 }

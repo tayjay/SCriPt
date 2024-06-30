@@ -28,9 +28,13 @@ namespace SCriPt.API.Lua.Proxy
         public int Id => Player.Id;
         public string UserId => Player.UserId;
         public string IPAddress => Player.IPAddress;
-        public string DisplayNickname => Player.DisplayNickname;
+
+        public string DisplayNickname
+        {
+            get => Player.DisplayNickname;
+            set => Player.DisplayNickname = value;
+        } 
         public uint NetId => Player.NetId;
-        
         
         public float Health
         {
@@ -45,13 +49,13 @@ namespace SCriPt.API.Lua.Proxy
             set => Player.MaxHealth = value;
         }
         
-        public float ArtificalHealth
+        public float ArtificialHealth
         {
             get => Player.ArtificialHealth;
             set => Player.ArtificialHealth = value;
         }
         
-        public float MaxArtificalHealth
+        public float MaxArtificialHealth
         {
             get => Player.MaxArtificialHealth;
             set => Player.MaxArtificialHealth = value;
@@ -306,6 +310,22 @@ namespace SCriPt.API.Lua.Proxy
                 Vector3 currentPos = Player.Position;
                 Vector3 direction = (position - currentPos).normalized;
                 role.FirstPersonController.FpcModule.CharController.Move(direction);
+            }
+        }
+        
+        public void LookAtPoint(Vector3 point, float lerp = 1f)
+        {
+            if (Player.Role is FpcRole role)
+            {
+                role.FirstPersonController.LookAtPoint(point,lerp);
+            }
+        }
+        
+        public void LookAtDirection(Vector3 direction, float lerp = 1f)
+        {
+            if (Player.Role is FpcRole role)
+            {
+                role.FirstPersonController.LookAtDirection(direction,lerp);
             }
         }
         

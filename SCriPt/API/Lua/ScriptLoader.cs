@@ -19,7 +19,9 @@ using MEC;
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Interop;
 using MoonSharp.Interpreter.Loaders;
+using MoonSharp.Interpreter.Platforms;
 using PlayerRoles;
+using SCriPt.API.Connectors;
 using SCriPt.API.Lua.Proxy;
 using SCriPt.API.Lua.Proxy.Events;
 using SCriPt.API.Lua.Globals;
@@ -32,30 +34,69 @@ namespace SCriPt.API.Lua
     {
         
         public static Script AutoLoadScript = new Script();
+
+        public static string ScriptPath => SCriPt.Instance.Config.ScriptPath;
+
+        public static CoreModules SandboxLevel
+        {
+            get
+            {
+                switch (SCriPt.Instance.Config.SandboxLevel)
+                {
+                    case "Hard":
+                        return CoreModules.Preset_HardSandbox;
+                    case "Soft":
+                        return CoreModules.Preset_SoftSandbox;
+                    case "Default":
+                        return CoreModules.Preset_Default;
+                    case "Complete":
+                        return CoreModules.Preset_Complete;
+                    default:
+                        Log.Error("Incorrect SandboxLevel in config. Defaulting to 'Soft'.");
+                        return CoreModules.Preset_SoftSandbox;
+                }
+            
+            }
+        }
+
+        public static string SystemAccessLevel => SCriPt.Instance.Config.SystemAccessLevel;
         
         public static void AutoLoad()
         {
             Script.DefaultOptions.DebugPrint = s => Log.Send("[Lua] " + s, Discord.LogLevel.Debug, ConsoleColor.Green);;
             Script.DefaultOptions.ScriptLoader = new FileSystemScriptLoader();
+            switch (SystemAccessLevel)
+            {
+                case "Standard":
+                    Script.GlobalOptions.Platform = new StandardPlatformAccessor();
+                    break;
+                case "Limited":
+                    Script.GlobalOptions.Platform = new LimitedPlatformAccessor();
+                    break;
+                default:
+                    Script.GlobalOptions.Platform = new LimitedPlatformAccessor();
+                    Log.Error("Incorrect SystemAccessLevel in config. Defaulting to 'Limited'.");
+                    break;
+            }
             //UserData.RegistrationPolicy = InteropRegistrationPolicy.Automatic;
             RegisterTypes();
             
-            if(!Directory.Exists("Scripts"))
+            if(!Directory.Exists(ScriptPath+"Scripts"))
             {
-                Directory.CreateDirectory("Scripts");
+                Directory.CreateDirectory(ScriptPath+"Scripts");
             }
-            if(!Directory.Exists("Scripts/AutoLoad"))
+            if(!Directory.Exists(ScriptPath+"Scripts/AutoLoad"))
             {
-                Directory.CreateDirectory("Scripts/AutoLoad");
+                Directory.CreateDirectory(ScriptPath+"Scripts/AutoLoad");
             }
-            if(!Directory.Exists("Scripts/Globals"))
+            if(!Directory.Exists(ScriptPath+"Scripts/Globals"))
             {
-                Directory.CreateDirectory("Scripts/Globals");
+                Directory.CreateDirectory(ScriptPath+"Scripts/Globals");
             }
-            
-            AutoLoadScript = new Script();
+
+            AutoLoadScript = new Script(SandboxLevel);
             RegisterAPI(AutoLoadScript);
-            foreach(string file in Directory.GetFiles("Scripts/AutoLoad"))
+            foreach(string file in Directory.GetFiles(ScriptPath+"Scripts/AutoLoad"))
             {
                 if(file.EndsWith(".lua"))
                 {
@@ -80,7 +121,7 @@ namespace SCriPt.API.Lua
 
         public static string[] GetScriptsDir()
         {
-            return Directory.GetFiles("Scripts");
+            return Directory.GetFiles(ScriptPath+"Scripts");
         }
 
         private static void ExecuteLoad(Script script)
@@ -185,7 +226,7 @@ namespace SCriPt.API.Lua
         
         public static bool LoadFile(string fileName)
         {
-            foreach(string file in Directory.GetFiles("Scripts"))
+            foreach(string file in Directory.GetFiles(ScriptPath+"Scripts"))
             {
                 Log.Debug("Checking file: "+file);
                 if(file.EndsWith(".lua"))
@@ -194,7 +235,7 @@ namespace SCriPt.API.Lua
                     {
                         try
                         {
-                            Script script = new Script();
+                            Script script = new Script(SandboxLevel);
                             RegisterAPI(script);
                             //Script script = new Script();
                             script.DoFile(file);
@@ -232,6 +273,7 @@ namespace SCriPt.API.Lua
             AddGlobal<LuaPlayer>("Player");
             AddGlobal<LuaCoroutines>("Timing");
             AddGlobal<LuaRole>("Role");
+            AddGlobal<LuaSCriPt>("SCriPt");
             script.Globals["RegisterType"] = (Action<string,string>) RegisterType;
             
             foreach(var global in Globals)
@@ -239,6 +281,8 @@ namespace SCriPt.API.Lua
                 script.Globals[global.Key] = global.Value;
             }
             CustomAPIs(script); 
+            
+            SCriPt.Instance.RegisterAllGlobals(script);
         }
         
         public static void AddGlobal<T>(string globalName)
@@ -284,7 +328,10 @@ namespace SCriPt.API.Lua
             UserData.RegisterType<PickupSyncInfo>();
             UserData.RegisterType<CoroutineHandle>();
             UserData.RegisterType<EventHandler>();
+            UserData.RegisterType<IExiledEvent>();
             UserData.RegisterAssembly();
+            
+            SCriPt.Instance.RegisterAllTypes();
         }
         
         public static void RegisterType(string type, string assembly = "Exiled.API")

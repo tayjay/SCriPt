@@ -56,6 +56,11 @@ namespace SCriPt.API.Lua.Globals
             return RemoteAdmin.CommandProcessor.ProcessQuery(command, _serverConsoleSender);
         }
 
+        public static string RACommandAs(string command, Player player)
+        {
+            return CommandProcessor.ProcessQuery(command, new PlayerCommandSender(player.ReferenceHub));
+        }
+
         public static string LACommand(string command)
         {
             return Exiled.API.Features.Server.ExecuteCommand(command);

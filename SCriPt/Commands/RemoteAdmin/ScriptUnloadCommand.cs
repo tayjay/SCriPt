@@ -38,5 +38,6 @@ namespace SCriPt.Commands.RemoteAdmin
         public string Command { get; } = "unload";
         public string[] Aliases { get; } = {"stop"};
         public string Description { get; } = "Unloads a loaded script.";
+        public bool SanitizeResponse => true;
     }
 }

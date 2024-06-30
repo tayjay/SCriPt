@@ -9,6 +9,9 @@ namespace SCriPt.Commands.RemoteAdmin
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class ScriptCommand : ParentCommand
     {
+        
+        public ScriptCommand() => LoadGeneratedCommands();
+        
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if(!sender.CheckPermission("SCriPt"))
@@ -46,7 +49,14 @@ namespace SCriPt.Commands.RemoteAdmin
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            throw new NotImplementedException();
+            if(!sender.CheckPermission("SCriPt"))
+            {
+                response = "You do not have permission to use this command.";
+                return false;
+            }
+            
+            response = "Available commands: dir, load, unload, list, run";
+            return true;
         }
 
         public override string Command { get; } = "script";
@@ -56,6 +66,8 @@ namespace SCriPt.Commands.RemoteAdmin
         {
             RegisterCommand(new ScriptDirCommand());
             RegisterCommand(new ScriptLoadCommand());
+            RegisterCommand(new ScriptUnloadCommand());
+            RegisterCommand(new ScriptListCommand());
         }
     }
 }

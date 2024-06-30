@@ -23,5 +23,6 @@ namespace SCriPt.Commands.RemoteAdmin
         public string Command { get; } = "dir";
         public string[] Aliases { get; } = new[] { "files" };
         public string Description { get; } = "Lists all files in the scripts directory.";
+        public bool SanitizeResponse => true;
     }
 }

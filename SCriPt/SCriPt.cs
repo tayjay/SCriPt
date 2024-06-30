@@ -1,9 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Interfaces;
+using Exiled.Loader.GHApi;
+using MEC;
 using MoonSharp.Interpreter;
+using SCriPt.API.Connectors;
 using SCriPt.API.Lua;
 using SCriPt.Handlers;
 
@@ -57,7 +65,7 @@ namespace SCriPt
             
         }
         
-        public override PluginPriority Priority { get; } = PluginPriority.Higher;
+        public override PluginPriority Priority { get; } = PluginPriority.Last;
         
         public override void OnEnabled()
         {
@@ -70,6 +78,8 @@ namespace SCriPt
                 Log.Error("Error loading: "+e.Message);
             }
             Log.Info("SCriPt has been enabled!");
+            
+            //Exiled.Loader.Loader.GetPlugin()
         }
         
         public override void OnDisabled()
@@ -186,6 +196,10 @@ namespace SCriPt
 
         public void Load()
         {
+            if (!CheckForMoonSharp())
+            {
+                return;
+            }
             Register();
             LoadedScripts = new Dictionary<string, Script>();
             try
@@ -200,28 +214,89 @@ namespace SCriPt
             //EventHandler.RegisterEvents();
         }
 
-        
-        
-        
-        
-        
-        
+        public bool CheckForMoonSharp()
+        {
+            foreach (var assembly in Exiled.Loader.Loader.Dependencies)
+            {
+                if(assembly.FullName.Contains("MoonSharp"))
+                {
+                    return true;
+                }
+            }
+            Log.Error("Required Dependency MoonSharp not found, please install it following the documentation https://github.com/tayjay/SCriPt/wiki/Getting-Started");
+            return false;
+        }
         
         public void Unload()
         {
-            //EventHandler.UnregisterEvents();
-            Unregister();
-            /*LoadedScripts.Clear();
             
-            LuaScriptExecutor = null;
-            LuaScriptLoader = null;*/
+            Unregister();
+            foreach(var script in LoadedScripts)
+            {
+                try
+                {
+                    ScriptLoader.ExecuteUnload(script.Value);
+                } catch (IOException e)
+                {
+                    Log.Error("Error unloading script: "+e.Message);
+                }
+            }
+            
             LoadedScripts.Clear();
-            //EventHandler = null;
+            
+        }
+        
+        
+        /**
+         * Inter-Plugin Accessible Methods
+         */
+        public static List<PluginConnector> Plugins = new List<PluginConnector>();
+        
+        public PluginConnector SetupConnector(IPlugin<IConfig> plugin)
+        {
+            if(Plugins.Any(p => p.Plugin == plugin))
+            {
+                Log.Debug("Connector already exists for "+plugin.Name);
+                return Plugins.First(p => p.Plugin == plugin);
+            }
+            Log.Debug("Setting up connector for "+plugin.Name+"...");
+            var connector = new PluginConnector(plugin);
+            Plugins.Add(connector);
+            return connector;
+        }
+    
+        public void RegisterAssemblies()
+        {
+            foreach (var plugin in Plugins)
+            {
+                plugin.RegisterAssembly();
+            }
+        }
+    
+        public void RegisterAllTypes()
+        {
+            foreach (var plugin in Plugins)
+            {
+                plugin.RegisterTypes();
+            }
+        }
+    
+        public void RegisterAllGlobals(Script script)
+        {
+            foreach (var plugin in Plugins)
+            {
+                plugin.RegisterGlobals(script);
+            }
+        }
+    
+        public void ResetConnectors()
+        {
+            Plugins.Clear();
         }
         
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "SCriPt";
-        public override System.Version Version { get; } = new System.Version(0, 2, 0);
+        public override System.Version Version { get; } = new System.Version(0, 1, 0);
         
         
     }
