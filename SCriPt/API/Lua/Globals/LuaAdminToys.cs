@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features.Toys;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features.Toys;
 using Exiled.API.Structs;
 using UnityEngine;
 
@@ -26,6 +27,15 @@ namespace SCriPt.API.Lua.Globals
                 color = Color.white;
             PrimitiveSettings settings = new PrimitiveSettings(PrimitiveType.Cube, color, position, rotation, scale, true);
             Primitive.Create(settings);
+        }
+        
+        public static void ShootingTarget(Vector3 position, Vector3 rotation=default, Vector3 scale=default)
+        {
+            if(rotation==default)
+                rotation = Vector3.zero;
+            if(scale==default)
+                scale = Vector3.one;
+            ShootingTargetToy.Create(ShootingTargetType.ClassD, position, rotation, scale, true);
         }
         
     }

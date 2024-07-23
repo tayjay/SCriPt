@@ -5,6 +5,7 @@ using Exiled.Events.Handlers;
 using MoonSharp.Interpreter;
 using PlayerRoles;
 using RemoteAdmin;
+using SCriPt.API.Lua.Objects;
 using Player = Exiled.API.Features.Player;
 using Server = Exiled.API.Features.Server;
 
@@ -14,6 +15,7 @@ namespace SCriPt.API.Lua.Globals
     public class LuaServer
     {
         private static ServerConsoleSender _serverConsoleSender = new ServerConsoleSender();
+        private static ServerDiagnostics _serverDiagnostics = new ServerDiagnostics();
         
         public static int PlayerCount => Exiled.API.Features.Player.List.Count;
         public static int MaxPlayerCount => Server.MaxPlayerCount;
@@ -34,6 +36,16 @@ namespace SCriPt.API.Lua.Globals
         public static bool StreamingAllowed => Server.StreamingAllowed;
         public static bool IsBeta => Server.IsBeta;
         
+        public static ServerDiagnostics Diagnostics
+        {
+            get
+            {
+                if(!_serverDiagnostics.IsRunning)
+                    _serverDiagnostics.Start();
+                return _serverDiagnostics;
+            }
+        }
+
         public static bool IsIdleModeEnabled
         {
             get => Server.IsIdleModeEnabled;

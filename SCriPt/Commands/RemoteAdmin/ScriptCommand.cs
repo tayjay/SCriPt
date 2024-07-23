@@ -55,19 +55,20 @@ namespace SCriPt.Commands.RemoteAdmin
                 return false;
             }
             
-            response = "Available commands: dir, load, unload, list, run";
+            response = "Available commands: dir, load, unload, reload, list, run";
             return true;
         }
 
         public override string Command { get; } = "script";
         public override string[] Aliases { get; } = {"lua"};
-        public override string Description { get; } = "Runs a lua string.";
+        public override string Description { get; } = "Interact with the SCriPt environment.";
         public override void LoadGeneratedCommands()
         {
             RegisterCommand(new ScriptDirCommand());
             RegisterCommand(new ScriptLoadCommand());
             RegisterCommand(new ScriptUnloadCommand());
             RegisterCommand(new ScriptListCommand());
+            RegisterCommand(new ScriptReloadCommand());
         }
     }
 }

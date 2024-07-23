@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using CommandSystem;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
@@ -17,14 +18,17 @@ using InventorySystem.Items.Pickups;
 using LightContainmentZoneDecontamination;
 using MEC;
 using MoonSharp.Interpreter;
+using MoonSharp.Interpreter.Diagnostics;
 using MoonSharp.Interpreter.Interop;
 using MoonSharp.Interpreter.Loaders;
 using MoonSharp.Interpreter.Platforms;
 using PlayerRoles;
+using RemoteAdmin;
 using SCriPt.API.Connectors;
 using SCriPt.API.Lua.Proxy;
 using SCriPt.API.Lua.Proxy.Events;
 using SCriPt.API.Lua.Globals;
+using SCriPt.API.Lua.Objects;
 using UnityEngine;
 using Log = Exiled.API.Features.Log;
 
@@ -93,9 +97,16 @@ namespace SCriPt.API.Lua
             {
                 Directory.CreateDirectory(ScriptPath+"Scripts/Globals");
             }
-
+            if(!Directory.Exists(ScriptPath+"Scripts/Commands"))
+            {
+                Directory.CreateDirectory(ScriptPath+"Scripts/Commands");
+            }
             AutoLoadScript = new Script(SandboxLevel);
+            AutoLoadScript.Globals["ScriptName"] = "AutoLoad";
+            AutoLoadScript.Options.DebugPrint = s => Log.Send($"[Lua-{AutoLoadScript.Globals["ScriptName"]}] {s}", Discord.LogLevel.Debug, ConsoleColor.Green);
             RegisterAPI(AutoLoadScript);
+            
+            
             foreach(string file in Directory.GetFiles(ScriptPath+"Scripts/AutoLoad"))
             {
                 if(file.EndsWith(".lua"))
@@ -113,10 +124,13 @@ namespace SCriPt.API.Lua
                     }
                 }
             }
-            
             ExecuteLoad(AutoLoadScript);
             
             SCriPt.Instance.LoadedScripts.Add("AutoLoad",AutoLoadScript);
+            
+            Log.Info("Creating coroutine for registering commands.");
+            Timing.RunCoroutine(RegisterCommands());
+            
         }
 
         public static string[] GetScriptsDir()
@@ -181,6 +195,11 @@ namespace SCriPt.API.Lua
                 {
                     Table table = pair.Value.Table;
                     
+                    if(table.Get("command").Type == DataType.String)
+                    {
+                        UnregisterCommand(script);
+                    }
+                    
                     if(table.Get("loaded").Type == DataType.Boolean)
                     {
                         if(!table.Get("loaded").Boolean)
@@ -190,7 +209,7 @@ namespace SCriPt.API.Lua
                         }
                     }
                     
-                    // Check for the "load" function
+                    // Check for the "unload" function
                     if (table.Get("unload").Type == DataType.Function)
                     {
                         DynValue unloadFunction = table.Get("unload");
@@ -208,8 +227,14 @@ namespace SCriPt.API.Lua
                             Log.Error(ex.DecoratedMessage);
                         }
                     }
+
+                    if(LuaCoroutines.Instances.TryGetValue(script.Globals.Get("ScriptName").String, out var coroutines))
+                    {
+                        coroutines.KillAll();
+                    }
                 }
             }
+            UnregisterCommand(script);
         }
 
         public static void CustomAPIs(Script script)
@@ -236,12 +261,16 @@ namespace SCriPt.API.Lua
                         try
                         {
                             Script script = new Script(SandboxLevel);
+                            string name = file.Replace('\\', '/');
+                            script.Globals["ScriptName"] = name;
+                            script.Options.DebugPrint = s => Log.Send($"[Lua-{name}] {s}", Discord.LogLevel.Debug, ConsoleColor.Green);
                             RegisterAPI(script);
                             //Script script = new Script();
                             script.DoFile(file);
                             //SCriPt.Instance.LoadedScripts.Add(script);
                             ExecuteLoad(script);
-                            SCriPt.Instance.LoadedScripts.Add(file,script);
+                            
+                            SCriPt.Instance.LoadedScripts.Add(name, script);
                             return true;
                         }
                         catch (ScriptRuntimeException e)
@@ -255,26 +284,166 @@ namespace SCriPt.API.Lua
             return false;
         }
 
+        public static IEnumerator<float> RegisterCommands()
+        {
+            while (CommandProcessor.RemoteAdminCommandHandler == null)
+            {
+                Log.Debug("Waiting for CommandProcessor.RemoteAdminCommandHandler to be initialized.");
+                yield return Timing.WaitForSeconds(1f);
+            }
+            foreach(string file in Directory.GetFiles(ScriptPath+"Scripts/Commands"))
+            {
+                if(file.EndsWith(".lua"))
+                {
+                    Log.Info("Loading command: "+file);
+                    try
+                    {
+                        Script script = new Script(SandboxLevel);
+                        string scriptName = file.Replace('\\', '/');
+                        script.Globals["ScriptName"] = scriptName;
+                        script.Options.DebugPrint = s => Log.Send($"[Lua-{scriptName}] {s}", Discord.LogLevel.Debug, ConsoleColor.Green);
+                        RegisterAPI(script);
+                        //Script script = new Script();
+                        script.DoFile(file);
+                        ExecuteLoad(script);
+                        if (CustomCommand.TryCreate(script, out CustomCommand customCommand, out string commandType))
+                        {
+                            if (commandType.ToLower() == "remoteadmin" || commandType.ToLower() == "ra" || commandType.ToLower() == "admin")
+                            {
+                                CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(customCommand);
+                                Log.Info("Loaded RA command: " + file);
+                            }
+                            else if (commandType.ToLower() == "client" || commandType.ToLower()=="player" || commandType.ToLower()=="dot")
+                            {
+                                QueryProcessor.DotCommandHandler.RegisterCommand(customCommand);
+                                Log.Info("Loaded Client command: " + file);
+                            } else
+                            {
+                                Log.Error("Unknown command type: "+commandType);
+                            }
+                        }
+                        else
+                        {
+                            Log.Error("Failed to load command: " + file);
+                        }
+
+                        
+                        SCriPt.Instance.LoadedScripts.Add(scriptName, script);
+                    }
+                    catch (ScriptRuntimeException e)
+                    {
+                        Log.Error(e.DecoratedMessage);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error("General error on command load: "+e.Message);
+                    }
+                }
+            }
+            
+        }
+
+        public static void UnregisterCommand(Script script)
+        {
+            // Get the global table
+            Table globals = script.Globals;
+
+            // Iterate 
+            foreach (var pair in globals.Pairs)
+            {
+                if (pair.Value.Type == DataType.Table)
+                {
+                    Table table = pair.Value.Table;
+                    
+                    if(table.Get("command").Type == DataType.String)
+                    {
+                        string command = table.Get("command").String;
+                        if (CommandProcessor.RemoteAdminCommandHandler.TryGetCommand(command, out ICommand cmd))
+                        {
+                            if(cmd is not CustomCommand) continue;
+                            CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(cmd);
+                            Log.Info("Unregistered command: "+command);
+                        }
+                        else if (QueryProcessor.DotCommandHandler.TryGetCommand(command, out ICommand cmd2))
+                        {
+                            if(cmd2 is not CustomCommand) continue;
+                            QueryProcessor.DotCommandHandler.UnregisterCommand(cmd2);
+                            Log.Info("Unregistered command: "+command);
+                        }
+                        else
+                        {
+                            Log.Error("Failed to unregister command: "+command);
+                        }
+                    }
+                }
+            }
+        }
+
         
         private static Dictionary<string, DynValue> Globals = new Dictionary<string, DynValue>();
 
         public static void RegisterAPI(Script script)
         {
-            AddGlobal<LuaAdminToys>("AdminToys");
-            AddGlobal<LuaAPI>("API");
-            AddGlobal<LuaWarhead>("Warhead");
-            AddGlobal<LuaDecon>("Decon");
-            AddGlobal<LuaLobby>("Lobby");
-            AddGlobal<LuaRound>("Round");
-            AddGlobal<LuaFacility>("Facility");
-            AddGlobal<LuaCassie>("Cassie");
-            AddGlobal<LuaServer>("Server");
-            AddGlobal<LuaEvents>("Events");
-            AddGlobal<LuaPlayer>("Player");
-            AddGlobal<LuaCoroutines>("Timing");
-            AddGlobal<LuaRole>("Role");
-            AddGlobal<LuaSCriPt>("SCriPt");
+            AddStaticGlobal<LuaAdminToys>("AdminToys");
+            AddStaticGlobal<LuaAPI>("API");
+            AddStaticGlobal<LuaWarhead>("Warhead");
+            AddStaticGlobal<LuaDecon>("Decon");
+            AddStaticGlobal<LuaLobby>("Lobby");
+            AddStaticGlobal<LuaRound>("Round");
+            AddStaticGlobal<LuaFacility>("Facility");
+            AddStaticGlobal<LuaCassie>("Cassie");
+            AddStaticGlobal<LuaServer>("Server");
+            AddStaticGlobal<LuaEvents>("Events");
+            AddStaticGlobal<LuaPlayer>("Player");
+            //AddStaticGlobal<LuaCoroutines>("Timing");
+            AddStaticGlobal<LuaRole>("Role");
+            AddStaticGlobal<LuaSCriPt>("SCriPt");
+            AddStaticGlobal<LuaConfig>("Config");
+            if(SCriPt.Instance.Config.EnableStorage)
+                AddStaticGlobal<LuaStore>("Store");
+            script.Globals["Timing"] = new LuaCoroutines(script);
             script.Globals["RegisterType"] = (Action<string,string>) RegisterType;
+            script.Globals["Vector3"] = (Func<float, float, float, Vector3>) ((x, y, z) => new Vector3(x, y, z));
+            script.Globals["Quaternion"] = (Func<float, float, float, float, Quaternion>) ((x, y, z, w) => new Quaternion(x, y, z, w));
+            script.Globals["Color"] = (Func<float, float, float, float, Color>) ((r, g, b, a) => new Color(r, g, b, a));
+            script.Globals["PerformanceLog"] = (Func<string>) (() => script.PerformanceStats.GetPerformanceLog());
+            if (SCriPt.Instance.Config.AllowPastebin)
+            {
+                script.Globals["Pastebin"] = (Action<string>) (url =>
+                {
+                    if(Script.GlobalOptions.Platform.GetType() != typeof(LimitedPlatformAccessor))
+                    {
+                        Log.Error("Pastebin is disabled in this environment. Please change SystemAccessLevel to Limited.");
+                        return;
+                    }
+                    if(SandboxLevel == CoreModules.Preset_Complete || SandboxLevel == CoreModules.Preset_Default)
+                    {
+                        Log.Error("Pastebin is disabled in this environment. Please change SandboxLevel to Soft or Hard.");
+                        return;
+                    }
+                    if(string.IsNullOrEmpty(url))
+                    {
+                        Log.Error("Empty URL.");
+                        return;
+                    }
+
+                    string webScript = WebLoader.GetFromPastebin(url);
+                    if(string.IsNullOrEmpty(webScript))
+                    {
+                        Log.Error("Failed to get script from pastebin.");
+                        return;
+                    }
+
+                    if (webScript.ToLower().Contains("pastebin("))
+                    {
+                        Log.Error("Attempted to load a pastebin script that contains another pastebin link. Aborting.");
+                        return;
+                    }
+                    script.DoString(webScript);
+                    // Pastebin('xxxxxxxx')
+                });
+            }
+            
             
             foreach(var global in Globals)
             {
@@ -285,7 +454,7 @@ namespace SCriPt.API.Lua
             SCriPt.Instance.RegisterAllGlobals(script);
         }
         
-        public static void AddGlobal<T>(string globalName)
+        public static void AddStaticGlobal<T>(string globalName)
         {
             if (Attribute.GetCustomAttribute(typeof(T), typeof(MoonSharpUserDataAttribute)) == null)
                 UserData.RegisterType<T>();
@@ -329,6 +498,7 @@ namespace SCriPt.API.Lua
             UserData.RegisterType<CoroutineHandle>();
             UserData.RegisterType<EventHandler>();
             UserData.RegisterType<IExiledEvent>();
+            UserData.RegisterType<ICommandSender>();
             UserData.RegisterAssembly();
             
             SCriPt.Instance.RegisterAllTypes();

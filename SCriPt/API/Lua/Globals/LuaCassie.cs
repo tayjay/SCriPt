@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using System.Collections.Generic;
+using Exiled.API.Features;
 using MoonSharp.Interpreter;
 
 namespace SCriPt.API.Lua.Globals
@@ -26,6 +27,16 @@ namespace SCriPt.API.Lua.Globals
         public static bool IsValidSentence(string sentence)
         {
             return Exiled.API.Features.Cassie.IsValidSentence(sentence);
+        }
+
+        public static string[] GetAllWords()
+        {
+            List<string> voiceLines = new List<string>();
+            foreach (var kvp in NineTailedFoxAnnouncer.singleton.voiceLines)
+            {
+                voiceLines.Add(kvp.apiName);
+            }
+            return voiceLines.ToArray();
         }
         
         

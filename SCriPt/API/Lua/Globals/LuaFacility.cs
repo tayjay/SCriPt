@@ -2,6 +2,7 @@
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
+using Exiled.API.Features.Pickups;
 using MoonSharp.Interpreter;
 using PlayerRoles.FirstPersonControl;
 using UnityEngine;
@@ -25,8 +26,15 @@ namespace SCriPt.API.Lua.Globals
         {
             Door.UnlockAll();
         }
+
+        public static void SpawnPickup(ItemType item, Vector3 position, Quaternion rotation = default)
+        {
+            if(rotation==default)
+                rotation = Quaternion.identity;
+            Pickup.CreateAndSpawn(item,position,rotation);
+        }
         
-        public static Vector3 Gravity
+        /*public static Vector3 Gravity
         {
             get => FpcMotor.Gravity;
             set
@@ -34,7 +42,7 @@ namespace SCriPt.API.Lua.Globals
                 var Gravity = typeof(FpcMotor).GetField("Gravity", BindingFlags.Static | BindingFlags.NonPublic);
                 Gravity?.SetValue(null, value);
             }
-        }
+        }*/
         
         public static Room GetRoom(Vector3 position)
         {

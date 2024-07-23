@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Exiled.Events.EventArgs.Scp939;
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Interop;
@@ -81,6 +82,15 @@ namespace SCriPt.Handlers
             ValidatingVisibility?.Invoke(this, ev);
         }
         
+        [MoonSharpVisible(true)]
+        public event EventHandler<PlayingFootstepEventArgs> PlayingFootstep;
+        
+        [MoonSharpHidden]
+        public void OnPlayingFootstep(PlayingFootstepEventArgs ev)
+        {
+            PlayingFootstep?.Invoke(this, ev);
+        }
+        
         
         public void RegisterEvents()
         {
@@ -92,7 +102,10 @@ namespace SCriPt.Handlers
             Exiled.Events.Handlers.Scp939.PlayingSound += OnPlayingSound;
             Exiled.Events.Handlers.Scp939.Clawed += OnClawed;
             Exiled.Events.Handlers.Scp939.ValidatingVisibility += OnValidatingVisibility;
+            Exiled.Events.Handlers.Scp939.PlayingFootstep += OnPlayingFootstep;
         }
+
+        
 
         public void RegisterEventTypes()
         {
@@ -104,6 +117,7 @@ namespace SCriPt.Handlers
             UserData.RegisterType<PlayingSoundEventArgs>();
             UserData.RegisterType<ClawedEventArgs>();
             UserData.RegisterType<ValidatingVisibilityEventArgs>();
+            UserData.RegisterType<PlayingFootstepEventArgs>();
         }
 
         public void UnregisterEvents()
@@ -116,6 +130,7 @@ namespace SCriPt.Handlers
             Exiled.Events.Handlers.Scp939.PlayingSound -= OnPlayingSound;
             Exiled.Events.Handlers.Scp939.Clawed -= OnClawed;
             Exiled.Events.Handlers.Scp939.ValidatingVisibility -= OnValidatingVisibility;
+            Exiled.Events.Handlers.Scp939.PlayingFootstep -= OnPlayingFootstep;
         }
     }
 }

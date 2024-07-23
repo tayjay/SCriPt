@@ -30,5 +30,15 @@ namespace SCriPt
         // Access Level
         [Description("What level of access should be given to the system, default is Standard. Options are Limited, Standard")]
         public string SystemAccessLevel { get; set; } = "Limited";
+        
+        // Persistence
+        [Description("Should scripts be able to save data to disk using the Store global? Default is true")]
+        public bool EnableStorage { get; set; } = true;
+        [Description("How often should the Store be saved, default is 10 seconds. Higher numbers requires less writing, but possible data loss if the server crashes.")]
+        public float AutoSaveInterval { get; set; } = 10f;
+        
+        // AllowPastebin
+        [Description("Should scripts be able to download from pastebin? Default is false")]
+        public bool AllowPastebin { get; set; } = false;
     }
 }

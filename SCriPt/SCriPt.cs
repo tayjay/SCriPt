@@ -13,6 +13,7 @@ using MEC;
 using MoonSharp.Interpreter;
 using SCriPt.API.Connectors;
 using SCriPt.API.Lua;
+using SCriPt.API.Lua.Globals;
 using SCriPt.Handlers;
 
 
@@ -200,6 +201,10 @@ namespace SCriPt
             {
                 return;
             }
+
+            LuaConfig.LoadConfig();
+            LuaStore.LoadStores();
+            LuaStore.Register();
             Register();
             LoadedScripts = new Dictionary<string, Script>();
             try
@@ -212,6 +217,7 @@ namespace SCriPt
             
             //EventHandler = new EventHandler();
             //EventHandler.RegisterEvents();
+            Log.Info("SCriPt load function complete!");
         }
 
         public bool CheckForMoonSharp()
@@ -229,7 +235,7 @@ namespace SCriPt
         
         public void Unload()
         {
-            
+            LuaStore.Unregister();
             Unregister();
             foreach(var script in LoadedScripts)
             {
@@ -296,7 +302,7 @@ namespace SCriPt
         
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "SCriPt";
-        public override System.Version Version { get; } = new System.Version(0, 1, 0);
+        public override System.Version Version { get; } = new System.Version(0, 2, 0);
         
         
     }

@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using CommandSystem;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Pickups;
 using MoonSharp.Interpreter;
+using PlayerRoles;
 using UnityEngine;
 
 namespace SCriPt.API.Lua.Globals
@@ -21,6 +24,11 @@ namespace SCriPt.API.Lua.Globals
         {
             return Player.Get(name);
         }
+
+        public static Player Get(ICommandSender sender)
+        {
+            return Player.Get(sender);
+        }
         
         public static List<Player> List => Player.List.ToList();
         
@@ -34,6 +42,15 @@ namespace SCriPt.API.Lua.Globals
         public static Player GetRandom()
         {
             return Player.List.GetRandomValue();
+        }
+
+        public static Player GetRandomByRole(string roleId)
+        {
+            if(Enum.TryParse(roleId, out RoleTypeId roleType))
+            {
+                return Player.List.GetRandomValue(p => p.Role == roleType);
+            }
+            return null;
         }
         
         public static Player GetClosestTo(Pickup pickup)

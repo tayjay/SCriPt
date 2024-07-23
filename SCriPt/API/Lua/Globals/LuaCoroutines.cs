@@ -7,31 +7,35 @@ using PluginAPI.Core;
 namespace SCriPt.API.Lua.Globals
 {
     [MoonSharpUserData]
-    public class LuaCoroutines
+    public class LuaCoroutines : IGlobal
     {
-        /* This needs to be called in Lua to generate a C# coroutine
-         * Calling this would look like this:
-         * local co = Coroutines.create(function()
-         *      while true do
-         *          print("Hello, world!")
-         *          Coroutines.yield(1)
-         *      end
-         * end)
-         */
-
         public static int CoroutineAutoYield => SCriPt.Instance.Config.CoroutineAutoYield;
-
-        public static void CallDelayed(float delay, Closure closure)
+        public static Dictionary<string,LuaCoroutines> Instances { get; } = new Dictionary<string, LuaCoroutines>();
+        
+        public Script Owner { get; }
+        public List<CoroutineHandle> Handles { get; } = new List<CoroutineHandle>();
+        
+        public LuaCoroutines(Script owner)
         {
-            Timing.CallDelayed(delay, () => closure.Call());
+            Owner = owner;
+            Instances.Add(owner.Globals.Get("ScriptName").String,this);
         }
         
-        public static void CallDelayed(float delay, Closure closure, object[] args)
+        public CoroutineHandle CallDelayed(float delay, Closure closure)
         {
-            Timing.CallDelayed(delay, () => closure.Call(args));
+            CoroutineHandle handle = Timing.CallDelayed(delay, () => closure.Call());
+            Handles.Add(handle);
+            return handle;
         }
         
-        private static IEnumerator<float> Coroutine(DynValue coroutine)
+        public CoroutineHandle CallDelayed(float delay, Closure closure, object[] args)
+        {
+            CoroutineHandle handle = Timing.CallDelayed(delay, () => closure.Call(args));
+            Handles.Add(handle);
+            return handle;
+        }
+        
+        private IEnumerator<float> Coroutine(DynValue coroutine)
         {
             DynValue result = null;
             while (true)
@@ -46,7 +50,7 @@ namespace SCriPt.API.Lua.Globals
             yield return Timing.WaitForOneFrame;
         }
 
-        private static IEnumerator<float> Coroutine(DynValue coroutine, object[] args)
+        private IEnumerator<float> Coroutine(DynValue coroutine, object[] args)
         {
             DynValue result = null;
             while (true)
@@ -60,22 +64,26 @@ namespace SCriPt.API.Lua.Globals
                 {
                     x = coroutine.Coroutine.Resume();
                 }
-                if(x.IsNil() /*|| x.Number == 0*/) //todo: Confirm if 0 returned is necessary to break
+                if(x.IsNil() || x.Number == 0)
                     break;
                 yield return Timing.WaitForSeconds((float)x.Number);
             }
+            Log.Debug("Coroutine finished.");
+            yield return Timing.WaitForOneFrame;
         }
 
-        public static CoroutineHandle CallCoroutine(Closure closure)
+        public CoroutineHandle CallCoroutine(Closure closure)
         {
             if (closure == null)
                 throw new NullReferenceException("Closure cannot be null.");
             DynValue coroutine = closure.OwnerScript.CreateCoroutine(closure);
             coroutine.Coroutine.AutoYieldCounter = CoroutineAutoYield;
-            return Timing.RunCoroutine(Coroutine(coroutine));
+            CoroutineHandle handle = Timing.RunCoroutine(Coroutine(coroutine));
+            Handles.Add(handle);
+            return handle;
         }
         
-        public static CoroutineHandle CallCoroutine(Closure closure, object[] args)
+        public CoroutineHandle CallCoroutine(Closure closure, object[] args)
         {
             if (closure == null)
                 throw new NullReferenceException("Closure cannot be null.");
@@ -86,46 +94,70 @@ namespace SCriPt.API.Lua.Globals
             }
             DynValue coroutine = closure.OwnerScript.CreateCoroutine(closure);
             coroutine.Coroutine.AutoYieldCounter = CoroutineAutoYield;
-            return Timing.RunCoroutine(Coroutine(coroutine, args));
+            CoroutineHandle handle = Timing.RunCoroutine(Coroutine(coroutine, args));
+            Handles.Add(handle);
+            return handle;
         }
         
-        public static CoroutineHandle CallContinuously(float timeframe, Closure closure)
+        public CoroutineHandle CallContinuously(float timeframe, Closure closure)
         {
             if (closure == null)
                 throw new NullReferenceException("Closure cannot be null.");
-            return Timing.CallContinuously(timeframe, () => closure.Call());
+            CoroutineHandle handle = Timing.CallContinuously(timeframe, () => closure.Call());
+            Handles.Add(handle);
+            return handle;
         }
         
-        public static CoroutineHandle CallContinuously(float timeframe, Closure closure, object[] args)
+        public CoroutineHandle CallContinuously(float timeframe, Closure closure, object[] args)
         {
             if (closure == null)
                 throw new NullReferenceException("Closure cannot be null.");
-            return Timing.CallContinuously(timeframe, () => closure.Call(args));
+            CoroutineHandle handle = Timing.CallContinuously(timeframe, () => closure.Call(args));
+            Handles.Add(handle);
+            return handle;
         }
         
-        public static CoroutineHandle CallPeriodically(float timeframe, float period, Closure closure)
+        public CoroutineHandle CallPeriodically(float timeframe, float period, Closure closure)
         {
             if (closure == null)
                 throw new NullReferenceException("Closure cannot be null.");
-            return Timing.CallPeriodically(timeframe, period, () => closure.Call());
+            CoroutineHandle handle = Timing.CallPeriodically(timeframe, period, () => closure.Call());
+            Handles.Add(handle);
+            return handle;
         }
         
-        public static CoroutineHandle CallPeriodically(float timeframe, float period, Closure closure, object[] args)
+        public CoroutineHandle CallPeriodically(float timeframe, float period, Closure closure, object[] args)
         {
             if (closure == null)
                 throw new NullReferenceException("Closure cannot be null.");
-            return Timing.CallPeriodically(timeframe, period, () => closure.Call(args));
+            CoroutineHandle handle = Timing.CallPeriodically(timeframe, period, () => closure.Call(args));
+            Handles.Add(handle);
+            return handle;
         }
         
-        public static void Kill(CoroutineHandle handle)
+        public void Kill(CoroutineHandle handle)
         {
             KillCoroutine(handle);
         }
         
-        public static void KillCoroutine(CoroutineHandle handle)
+        public void KillCoroutine(CoroutineHandle handle)
         {
+            if (Handles.Contains(handle))
+                Handles.Remove(handle);
             Timing.KillCoroutines(handle);
         }
+        
+        
+        [MoonSharpHidden]
+        public void KillAll()
+        {
+            foreach (CoroutineHandle handle in Handles)
+            {
+                Timing.KillCoroutines(handle);
+            }
+            Handles.Clear();
+        }
+
         
     }
 }

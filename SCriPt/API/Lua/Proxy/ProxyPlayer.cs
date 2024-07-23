@@ -97,6 +97,12 @@ namespace SCriPt.API.Lua.Proxy
             get => Player.IsNoclipPermitted;
             set => Player.IsNoclipPermitted = value;
         }
+        
+        public bool IsNoClipActive
+        {
+            get => (Player.Role is FpcRole role) && role.FirstPersonController.FpcModule.Noclip.IsActive;
+            set => ((FpcRole)Player.Role).FirstPersonController.FpcModule.Noclip.IsActive = value;
+        }
 
         public Role Role
         {
@@ -137,13 +143,14 @@ namespace SCriPt.API.Lua.Proxy
             SetRole(role,(int)RoleSpawnFlags.All);
         }
         
-        public void ShowHint(string message, float duration)
+        public void ShowHint(string message, float duration=3f)
         {
             Player.ShowHint(message, duration);
         }
         
-        public void Broadcast(string message, ushort duration)
+        public void Broadcast(string message, ushort duration=5)
         {
+            if (duration <= 0) throw new ArgumentOutOfRangeException(nameof(duration));
             Player.Broadcast(duration, message);
         }
         

@@ -30,5 +30,17 @@ namespace SCriPt.API.Lua.Globals
         {
             Warhead.Shake();
         }
+        
+        public static float DetonationTimer
+        {
+            get => Warhead.DetonationTimer;
+            set => Warhead.DetonationTimer = value;
+        }
+        
+        public static bool LevelStatus
+        {
+            get => Warhead.LeverStatus;
+            set => Warhead.LeverStatus = value;
+        }
     }
 }

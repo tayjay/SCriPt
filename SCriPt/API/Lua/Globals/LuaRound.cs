@@ -9,24 +9,30 @@ namespace SCriPt.API.Lua.Globals
     {
         public static void Lock()
         {
-            RoundSummary.RoundLock = true;
+            Round.IsLocked = true;
         }
         
         public static void Unlock()
         {
-            RoundSummary.RoundLock = false;
+            Round.IsLocked = false;
         }
         
         public static void Start()
         {
-            RoundSummary.singleton.Start();
+            //RoundSummary.singleton.Start();
+            Round.Start();
         }
         
         public static void Restart()
         {
-            RoundRestart.InitiateRoundRestart();
+            //RoundRestart.InitiateRoundRestart();
+            Round.Restart();
         }
 
         public static bool InProgress => RoundSummary.RoundInProgress();
+        
+        public static bool IsLocked => RoundSummary.RoundLock;
+        
+        public static bool IsEnded => Round.IsEnded;
     }
 }
