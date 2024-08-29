@@ -93,52 +93,55 @@ public class NewScriptLoader
     public static void LoadScripts()
     {
         Log.Info("Loading scripts...");
-        
-        
 
-        foreach (string file in Directory.GetFiles(ScriptPath, "*.pastebin", SearchOption.AllDirectories))
+
+        if (SCriPt.Instance.Config.AllowPastebin)
         {
-            if(file.Contains("/Data/")) continue;
-            if(file.Contains("/Globals/")) continue;
-            if (file.EndsWith(".pastebin"))
+            foreach (string file in Directory.GetFiles(ScriptPath, "*.pastebin", SearchOption.AllDirectories))
             {
-                try
+                if(file.Contains("/Data/")) continue;
+                if(file.Contains("/Globals/")) continue;
+                if (file.EndsWith(".pastebin"))
                 {
-                    if (File.Exists(file.Replace(".pastebin", ".lua")))
+                    try
                     {
-                        Log.Debug("Skipping web script: "+file+" already downloaded.");
-                        continue;
-                    }
-                    if(Script.GlobalOptions.Platform.GetType() != typeof(LimitedPlatformAccessor))
+                        if (File.Exists(file.Replace(".pastebin", ".lua")))
+                        {
+                            Log.Debug("Skipping web script: "+file+" already downloaded.");
+                            continue;
+                        }
+                        if(Script.GlobalOptions.Platform.GetType() != typeof(LimitedPlatformAccessor))
+                        {
+                            Log.Error("Pastebin is disabled in this environment. Please change SystemAccessLevel to Limited.");
+                            continue;
+                        }
+                        if(SandboxLevel == CoreModules.Preset_Complete || SandboxLevel == CoreModules.Preset_Default)
+                        {
+                            Log.Error("Pastebin is disabled in this environment. Please change SandboxLevel to Soft or Hard.");
+                            continue;
+                        }
+                        string name = file.Replace('\\', '/');
+                        name = name.Substring(name.LastIndexOf('/') + 1);
+                        name = name.Substring(0, name.Length - 9);
+                        
+                        Log.Debug("Downloading web script: "+name);
+                        string script = WebLoader.GetFromPastebin(name);
+                        if (script == null)
+                        {
+                            Log.Error("Failed to download web script from pastebin: " + name);
+                            continue;
+                        }
+                        File.WriteAllText(file.Replace(".pastebin",".lua"), script);
+                    } catch (Exception e)
                     {
-                        Log.Error("Pastebin is disabled in this environment. Please change SystemAccessLevel to Limited.");
-                        continue;
+                        Log.Error("Failed to download web script: " + file);
+                        Log.Error(e.Message);
                     }
-                    if(SandboxLevel == CoreModules.Preset_Complete || SandboxLevel == CoreModules.Preset_Default)
-                    {
-                        Log.Error("Pastebin is disabled in this environment. Please change SandboxLevel to Soft or Hard.");
-                        continue;
-                    }
-                    string name = file.Replace('\\', '/');
-                    name = name.Substring(name.LastIndexOf('/') + 1);
-                    name = name.Substring(0, name.Length - 9);
                     
-                    Log.Debug("Downloading web script: "+name);
-                    string script = WebLoader.GetFromPastebin(name);
-                    if (script == null)
-                    {
-                        Log.Error("Failed to download web script from pastebin: " + name);
-                        continue;
-                    }
-                    File.WriteAllText(file.Replace(".pastebin",".lua"), script);
-                } catch (Exception e)
-                {
-                    Log.Error("Failed to download web script: " + file);
-                    Log.Error(e.Message);
                 }
-                
             }
         }
+        
         
         foreach (string file in Directory.GetFiles(ScriptPath,"*.lua", SearchOption.AllDirectories))
         {
