@@ -94,6 +94,8 @@ public class NewScriptLoader
     {
         Log.Info("Loading scripts...");
         
+        
+
         foreach (string file in Directory.GetFiles(ScriptPath, "*.pastebin", SearchOption.AllDirectories))
         {
             if(file.Contains("/Data/")) continue;
@@ -105,6 +107,16 @@ public class NewScriptLoader
                     if (File.Exists(file.Replace(".pastebin", ".lua")))
                     {
                         Log.Debug("Skipping web script: "+file+" already downloaded.");
+                        continue;
+                    }
+                    if(Script.GlobalOptions.Platform.GetType() != typeof(LimitedPlatformAccessor))
+                    {
+                        Log.Error("Pastebin is disabled in this environment. Please change SystemAccessLevel to Limited.");
+                        continue;
+                    }
+                    if(SandboxLevel == CoreModules.Preset_Complete || SandboxLevel == CoreModules.Preset_Default)
+                    {
+                        Log.Error("Pastebin is disabled in this environment. Please change SandboxLevel to Soft or Hard.");
                         continue;
                     }
                     string name = file.Replace('\\', '/');
