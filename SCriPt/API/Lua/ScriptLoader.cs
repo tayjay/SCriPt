@@ -140,6 +140,7 @@ namespace SCriPt.API.Lua
 
         private static void ExecuteLoad(Script script)
         {
+            
             // Get the global table
             Table globals = script.Globals;
 
@@ -228,10 +229,10 @@ namespace SCriPt.API.Lua
                         }
                     }
 
-                    if(LuaCoroutines.Instances.TryGetValue(script.Globals.Get("ScriptName").String, out var coroutines))
+                    /*if(LuaCoroutines.Instances.TryGetValue(script.Globals.Get("ScriptName").String, out var coroutines))
                     {
                         coroutines.KillAll();
-                    }
+                    }*/
                 }
             }
             UnregisterCommand(script);
@@ -397,7 +398,7 @@ namespace SCriPt.API.Lua
             AddStaticGlobal<LuaPlayer>("Player");
             //AddStaticGlobal<LuaCoroutines>("Timing");
             AddStaticGlobal<LuaRole>("Role");
-            AddStaticGlobal<LuaSCriPt>("SCriPt");
+            //AddStaticGlobal<LuaSCriPt>("SCriPt");
             AddStaticGlobal<LuaConfig>("Config");
             if(SCriPt.Instance.Config.EnableStorage)
                 AddStaticGlobal<LuaStore>("Store");
@@ -407,7 +408,7 @@ namespace SCriPt.API.Lua
             script.Globals["Quaternion"] = (Func<float, float, float, float, Quaternion>) ((x, y, z, w) => new Quaternion(x, y, z, w));
             script.Globals["Color"] = (Func<float, float, float, float, Color>) ((r, g, b, a) => new Color(r, g, b, a));
             script.Globals["PerformanceLog"] = (Func<string>) (() => script.PerformanceStats.GetPerformanceLog());
-            if (SCriPt.Instance.Config.AllowPastebin)
+            /*if (SCriPt.Instance.Config.AllowPastebin)
             {
                 script.Globals["Pastebin"] = (Action<string>) (url =>
                 {
@@ -442,7 +443,7 @@ namespace SCriPt.API.Lua
                     script.DoString(webScript);
                     // Pastebin('xxxxxxxx')
                 });
-            }
+            }*/
             
             
             foreach(var global in Globals)

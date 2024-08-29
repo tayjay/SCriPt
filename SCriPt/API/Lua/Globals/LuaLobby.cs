@@ -18,5 +18,7 @@ namespace SCriPt.API.Lua.Globals
         {
             RoundStart.LobbyLock = false;
         }
+
+        public float TimeLeft { get => RoundStart.singleton.NetworkTimer; set => RoundStart.singleton.NetworkTimer = (short)value;}
     }
 }

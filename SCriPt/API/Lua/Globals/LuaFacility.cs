@@ -34,6 +34,12 @@ namespace SCriPt.API.Lua.Globals
             Pickup.CreateAndSpawn(item,position,rotation);
         }
         
+        public static int Seed
+        {
+            get => Map.Seed;
+            set => Map.Seed = value;
+        }
+        
         /*public static Vector3 Gravity
         {
             get => FpcMotor.Gravity;

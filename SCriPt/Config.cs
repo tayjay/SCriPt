@@ -14,7 +14,7 @@ namespace SCriPt
         //todo: Configs to implement
         // ScriptPath Where to place the scripts, defaults to location of LocalAdmin
         [Description("Where to place the scripts, defaults to location of LocalAdmin. Use '/'s and be sure to include the trailing slash.")]
-        public string ScriptPath { get; set; } = "";
+        public string ScriptPath { get; set; } = "Scripts/";
         // CoroutineAutoYield How many operations can be done by a coroutine before it yields, default is 
         [Description("How many operations can be done by a coroutine before it yields, default is 1000000. If coroutines are dying early this can be set to 0, this can cause infinte loops if not accounted for.")]
         public int CoroutineAutoYield { get; set; } = 1000000;

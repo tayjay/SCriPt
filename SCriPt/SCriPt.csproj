@@ -115,11 +115,13 @@
         <Compile Include="API\Lua\Globals\LuaCassie.cs" />
         <Compile Include="API\Lua\Globals\LuaConfig.cs" />
         <Compile Include="API\Lua\Globals\LuaCoroutines.cs" />
+        <Compile Include="API\Lua\Globals\LuaCustomItems.cs" />
         <Compile Include="API\Lua\Globals\LuaDecon.cs" />
         <Compile Include="API\Lua\Globals\LuaEnums.cs" />
         <Compile Include="API\Lua\Globals\LuaEvents.cs" />
         <Compile Include="API\Lua\Globals\LuaFacility.cs" />
         <Compile Include="API\Lua\Globals\LuaLobby.cs" />
+        <Compile Include="API\Lua\Globals\LuaNew.cs" />
         <Compile Include="API\Lua\Globals\LuaPlayer.cs" />
         <Compile Include="API\Lua\Globals\LuaRole.cs" />
         <Compile Include="API\Lua\Globals\LuaRound.cs" />
@@ -128,8 +130,12 @@
         <Compile Include="API\Lua\Globals\LuaServer.cs" />
         <Compile Include="API\Lua\Globals\LuaStore.cs" />
         <Compile Include="API\Lua\Globals\LuaWarhead.cs" />
+        <Compile Include="API\Lua\NewScriptLoader.cs" />
         <Compile Include="API\Lua\Objects\CustomCommand.cs" />
         <Compile Include="API\Lua\Objects\CustomConfig.cs" />
+        <Compile Include="API\Lua\Objects\CustomScriptFirearm.cs" />
+        <Compile Include="API\Lua\Objects\CustomScriptItem.cs" />
+        <Compile Include="API\Lua\Objects\ScriptWrapper.cs" />
         <Compile Include="API\Lua\Objects\ServerDiagnostics.cs" />
         <Compile Include="API\Lua\Proxy\Events\ProxyJumpingEventArgs.cs" />
         <Compile Include="API\Lua\Proxy\ProxyDoor.cs" />

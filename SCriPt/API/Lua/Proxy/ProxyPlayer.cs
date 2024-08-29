@@ -7,9 +7,11 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Roles;
+using Exiled.Permissions.Extensions;
 using MoonSharp.Interpreter;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
+using PlayerRoles.RoleAssign;
 using UnityEngine;
 
 namespace SCriPt.API.Lua.Proxy
@@ -72,6 +74,35 @@ namespace SCriPt.API.Lua.Proxy
         public Lift Lift => Player.Lift;
         
         public List<StatusEffectBase> StatusEffects => Player.ActiveEffects.ToList();
+        
+        public void EnableEffect(EffectType effectType, int intensity=1, float duration=0)
+        {
+            if (effectType == EffectType.None)
+                return;
+            if (intensity < 0 || intensity > 5)
+                throw new ArgumentOutOfRangeException(nameof(intensity));
+            Log.Debug("SCriPt giving effect: "+effectType+" intensity: "+intensity+" duration: "+duration);
+            Player.EnableEffect(effectType, (byte)intensity, duration);
+        }
+        
+        public void DisableEffect(EffectType effectType)
+        {
+            if (effectType == EffectType.None)
+                return;
+            Player.DisableEffect(effectType);
+        }
+        
+        public void DisableAllEffects()
+        {
+            Player.DisableAllEffects();
+        }
+        
+        public bool IsEffectActive(EffectType effectType)
+        {
+            if (effectType == EffectType.None)
+                return false;
+            return Player.GetEffect(effectType).Intensity > 0;
+        }
         
         public bool IsInPocketDimension => Player.IsInPocketDimension;
 
@@ -143,6 +174,16 @@ namespace SCriPt.API.Lua.Proxy
             SetRole(role,(int)RoleSpawnFlags.All);
         }
         
+        public void SetRole(RoleTypeId roleTypeId, int flag)
+        {
+            Player.RoleManager.ServerSetRole(roleTypeId, RoleChangeReason.RemoteAdmin, (RoleSpawnFlags)flag);
+        }
+        
+        public void SetRole(RoleTypeId roleTypeId)
+        {
+            SetRole(roleTypeId,(int)RoleSpawnFlags.All);
+        }
+        
         public void ShowHint(string message, float duration=3f)
         {
             Player.ShowHint(message, duration);
@@ -152,6 +193,11 @@ namespace SCriPt.API.Lua.Proxy
         {
             if (duration <= 0) throw new ArgumentOutOfRangeException(nameof(duration));
             Player.Broadcast(duration, message);
+        }
+        
+        public bool CheckPermission(string permission)
+        {
+            return Player.CheckPermission(permission);
         }
         
         public void Handcuff()
@@ -335,6 +381,105 @@ namespace SCriPt.API.Lua.Proxy
                 role.FirstPersonController.LookAtDirection(direction,lerp);
             }
         }
+        
+        public int ScpTickets
+        {
+            get
+            {
+                using(ScpTicketsLoader loader = new ScpTicketsLoader())
+                {
+                    return loader.GetTickets(Player.ReferenceHub,10);
+                }
+            }
+            set
+            {
+                using(ScpTicketsLoader loader = new ScpTicketsLoader())
+                {
+                    loader.ModifyTickets(Player.ReferenceHub, value);
+                }
+            }
+        }
+        
+        public bool DoNotTrack { get => Player.DoNotTrack; }
+        
+        public void SendConsoleMessage(string message)
+        {
+            Player.SendConsoleMessage(message, "green");
+        }
+        
+        public bool UseHeldItem()
+        {
+            return Player.UseItem(Player.CurrentItem);
+        }
+
+        public bool UseItem(ItemType type)
+        {
+            return Player.UseItem(type);
+        } 
+        
+        public bool HasItem(ItemType type)
+        {
+            return Player.HasItem(type);
+        }
+        
+        public float MoveSpeed
+        {
+            get
+            {
+                if (Player.Role is FpcRole role)
+                {
+                    return role.FirstPersonController.FpcModule.Motor.Speed;
+                }
+                return 0f;
+            }
+        }
+        
+        public PlayerMovementState MovementState
+        {
+            get
+            {
+                if (Player.Role is FpcRole role)
+                {
+                    return role.FirstPersonController.FpcModule.CurrentMovementState;
+                }
+                return PlayerMovementState.Walking;
+            }
+            
+            set
+            {
+                if (Player.Role is FpcRole role)
+                {
+                    role.FirstPersonController.FpcModule.CurrentMovementState = value;
+                }
+            }
+        }
+        
+        public bool EnableFallDamage
+        {
+            get
+            {
+                if (Player.Role is FpcRole role)
+                {
+                    return role.FirstPersonController.FpcModule.Motor._enableFallDamage;
+                }
+                return false;
+            }
+            set
+            {
+                if (Player.Role is FpcRole role)
+                {
+                    try
+                    {
+                        var property = typeof(FpcMotor).GetProperty("_enableFallDamage");
+                        property?.SetValue(role.FirstPersonController.FpcModule.Motor, value);
+                    } catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
+                }
+            }
+        }
+        
         
     }
 }

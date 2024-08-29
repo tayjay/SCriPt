@@ -14,5 +14,3 @@ end
 function example:onWaitingForPlayers()
     print("Example mod waiting for players")
 end
-
-example:load()

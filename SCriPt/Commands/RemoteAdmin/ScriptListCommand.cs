@@ -15,7 +15,7 @@ namespace SCriPt.Commands.RemoteAdmin
             }
             
             response = "Loaded scripts:\n";
-            foreach (string script in SCriPt.Instance.LoadedScripts.Keys)
+            foreach (string script in SCriPt.Instance.LoadedWrappers.Keys)
             {
                 response += script + "\n";
             }

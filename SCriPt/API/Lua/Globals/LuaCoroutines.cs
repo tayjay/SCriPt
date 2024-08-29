@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MEC;
 using MoonSharp.Interpreter;
 using PluginAPI.Core;
+using Utf8Json.Internal.DoubleConversion;
 
 namespace SCriPt.API.Lua.Globals
 {
@@ -10,7 +11,7 @@ namespace SCriPt.API.Lua.Globals
     public class LuaCoroutines : IGlobal
     {
         public static int CoroutineAutoYield => SCriPt.Instance.Config.CoroutineAutoYield;
-        public static Dictionary<string,LuaCoroutines> Instances { get; } = new Dictionary<string, LuaCoroutines>();
+        //public static Dictionary<string,LuaCoroutines> Instances { get; } = new Dictionary<string, LuaCoroutines>();
         
         public Script Owner { get; }
         public List<CoroutineHandle> Handles { get; } = new List<CoroutineHandle>();
@@ -18,7 +19,7 @@ namespace SCriPt.API.Lua.Globals
         public LuaCoroutines(Script owner)
         {
             Owner = owner;
-            Instances.Add(owner.Globals.Get("ScriptName").String,this);
+            //Instances.Add(owner.Globals.Get("ScriptName").String,this);
         }
         
         public CoroutineHandle CallDelayed(float delay, Closure closure)
@@ -98,6 +99,16 @@ namespace SCriPt.API.Lua.Globals
             Handles.Add(handle);
             return handle;
         }
+
+        public CoroutineHandle RunCoroutine(Closure closure)
+        {
+            return CallCoroutine(closure);
+        }
+        
+        public CoroutineHandle RunCoroutine(Closure closure, object[] args)
+        {
+            return CallCoroutine(closure, args);
+        }
         
         public CoroutineHandle CallContinuously(float timeframe, Closure closure)
         {
@@ -157,7 +168,12 @@ namespace SCriPt.API.Lua.Globals
             }
             Handles.Clear();
         }
-
         
+        public float WaitForSeconds(float seconds)
+        {
+            return Timing.WaitForSeconds(seconds);
+        }
+        
+        public float WaitForOneFrame => Timing.WaitForOneFrame;
     }
 }

@@ -14,6 +14,7 @@ using MoonSharp.Interpreter;
 using SCriPt.API.Connectors;
 using SCriPt.API.Lua;
 using SCriPt.API.Lua.Globals;
+using SCriPt.API.Lua.Objects;
 using SCriPt.Handlers;
 
 
@@ -60,6 +61,7 @@ namespace SCriPt
         
         
         public Dictionary<string,Script> LoadedScripts { get; private set; } = new Dictionary<string,Script>();
+        public Dictionary<string,ScriptWrapper> LoadedWrappers { get; private set; } = new Dictionary<string,ScriptWrapper>();
 
         private SCriPt()
         {
@@ -100,6 +102,10 @@ namespace SCriPt
 
         public void Register()
         {
+            LuaConfig.LoadConfig();
+            LuaStore.LoadStores();
+            LuaStore.Register();
+            
             PlayerEvents = new PlayerEvents();
             ServerEvents = new ServerEvents();
             WarheadEvents = new WarheadEvents();
@@ -202,14 +208,15 @@ namespace SCriPt
                 return;
             }
 
-            LuaConfig.LoadConfig();
-            LuaStore.LoadStores();
-            LuaStore.Register();
+            
             Register();
             LoadedScripts = new Dictionary<string, Script>();
             try
             {
-                ScriptLoader.AutoLoad();
+                NewScriptLoader.Initialize();
+                NewScriptLoader.LoadScripts();
+                LuaCustomItems.RegisterAll();
+                //ScriptLoader.AutoLoad();
             } catch (IOException e)
             {
                 Log.Error("Error reading script file: "+e.Message);
@@ -237,18 +244,11 @@ namespace SCriPt
         {
             LuaStore.Unregister();
             Unregister();
-            foreach(var script in LoadedScripts)
-            {
-                try
-                {
-                    ScriptLoader.ExecuteUnload(script.Value);
-                } catch (IOException e)
-                {
-                    Log.Error("Error unloading script: "+e.Message);
-                }
-            }
+            NewScriptLoader.UnloadAllScripts();
+            ResetConnectors();
             
             LoadedScripts.Clear();
+            LoadedWrappers.Clear();
             
         }
         
@@ -302,7 +302,7 @@ namespace SCriPt
         
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "SCriPt";
-        public override System.Version Version { get; } = new System.Version(0, 2, 0);
+        public override System.Version Version { get; } = new System.Version(0, 3, 0);
         
         
     }

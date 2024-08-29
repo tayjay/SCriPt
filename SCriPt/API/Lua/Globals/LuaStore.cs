@@ -90,7 +90,7 @@ public class LuaStore
     public static void Register()
     {
         if(!SCriPt.Instance.Config.EnableStorage) return;
-        _saveCoroutine = Timing.RunCoroutine(SaveCoroutine());
+        //_saveCoroutine = Timing.RunCoroutine(SaveCoroutine());
     }
     
     [MoonSharpHidden]

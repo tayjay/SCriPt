@@ -105,6 +105,15 @@ namespace SCriPt.Handlers
         }
         
         [MoonSharpVisible(true)]
+        public event EventHandler<SelectingRespawnTeamEventArgs> SelectingRespawnTeam;
+        
+        [MoonSharpHidden]
+        public void OnSelectingRespawnTeam(SelectingRespawnTeamEventArgs ev)
+        {
+            SelectingRespawnTeam?.Invoke(null, ev);
+        }
+        
+        [MoonSharpVisible(true)]
         public event EventHandler ReloadedConfigs;
         
         [MoonSharpHidden]
@@ -171,6 +180,7 @@ namespace SCriPt.Handlers
             Exiled.Events.Handlers.Server.AddingUnitName += OnAddingUnitName;
             Exiled.Events.Handlers.Server.LocalReporting += OnLocalReporting;
             Exiled.Events.Handlers.Server.ChoosingStartTeamQueue += OnChoosingStartTeam;
+            Exiled.Events.Handlers.Server.SelectingRespawnTeam += OnSelectingRespawnTeam;
             Exiled.Events.Handlers.Server.ReloadedConfigs += OnReloadedConfigs;
             Exiled.Events.Handlers.Server.ReloadedTranslations += OnReloadedTranslations;
             Exiled.Events.Handlers.Server.ReloadedGameplay += OnReloadedGameplay;
@@ -188,6 +198,7 @@ namespace SCriPt.Handlers
             UserData.RegisterType<AddingUnitNameEventArgs>();
             UserData.RegisterType<LocalReportingEventArgs>();
             UserData.RegisterType<ChoosingStartTeamQueueEventArgs>();
+            UserData.RegisterType<SelectingRespawnTeamEventArgs>();
         }
 
         [MoonSharpHidden]
@@ -203,6 +214,7 @@ namespace SCriPt.Handlers
             Exiled.Events.Handlers.Server.AddingUnitName -= OnAddingUnitName;
             Exiled.Events.Handlers.Server.LocalReporting -= OnLocalReporting;
             Exiled.Events.Handlers.Server.ChoosingStartTeamQueue -= OnChoosingStartTeam;
+            Exiled.Events.Handlers.Server.SelectingRespawnTeam -= OnSelectingRespawnTeam;
             Exiled.Events.Handlers.Server.ReloadedConfigs -= OnReloadedConfigs;
             Exiled.Events.Handlers.Server.ReloadedTranslations -= OnReloadedTranslations;
             Exiled.Events.Handlers.Server.ReloadedGameplay -= OnReloadedGameplay;

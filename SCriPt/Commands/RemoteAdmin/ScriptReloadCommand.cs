@@ -25,11 +25,12 @@ public class ScriptReloadCommand : ICommand
             return false;
         }
         
-        foreach(var script in SCriPt.Instance.LoadedScripts)
+        /*foreach(var script in SCriPt.Instance.LoadedWrappers)
         {
             try
             {
-                ScriptLoader.ExecuteUnload(script.Value);
+                script.Value.ExecuteUnload();
+                //ScriptLoader.ExecuteUnload(script.Value);
             } catch (IOException e)
             {
                 Log.Error("Error unloading script: "+e.Message);
@@ -37,11 +38,13 @@ public class ScriptReloadCommand : ICommand
                 return false;
             }
         }
-        SCriPt.Instance.LoadedScripts.Clear();
+        SCriPt.Instance.LoadedScripts.Clear();*/
+        NewScriptLoader.UnloadAllScripts();
         
         try
         {
-            ScriptLoader.AutoLoad();
+            //ScriptLoader.AutoLoad();
+            NewScriptLoader.LoadScripts();
         } catch (IOException e)
         {
             Log.Error("Error reading script file: "+e.Message);
