@@ -1,3 +1,7 @@
+[![GitHub Release](https://img.shields.io/github/v/release/tayjay/SCriPt?include_prereleases)](https://github.com/tayjay/SCriPt/releases/latest)
+[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/tayjay/SCriPt/total)](https://github.com/tayjay/SCriPt/releases/latest)
+
+
 # SCriPt
 A SCP:SL plugin that provides a Lua -> EXILED programming bridge.
 
