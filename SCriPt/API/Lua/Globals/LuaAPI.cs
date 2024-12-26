@@ -45,7 +45,7 @@ namespace SCriPt.API.Lua.Globals
         
         public static void Round_Start()
         {
-            RoundSummary.singleton.Start();
+            Round.Start();
         }
         
         public static void Round_Restart()

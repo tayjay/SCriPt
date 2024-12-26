@@ -13,6 +13,8 @@ public class LuaConfig
 {
     [MoonSharpHidden] 
     public static CustomConfig Config { get; set; }
+
+    public static string ScriptPath => NewScriptLoader.ScriptPath;
     
     public static int LoadInt(string key, int defaultValue)
     {
@@ -98,17 +100,17 @@ public class LuaConfig
     {
         try
         {
-            if(!Directory.Exists("Scripts/Data"))
-                Directory.CreateDirectory("Scripts/Data");
-            if (!File.Exists("Scripts/Data/config.json"))
+            if(!Directory.Exists(ScriptPath+"Data"))
+                Directory.CreateDirectory(ScriptPath+"Data");
+            if (!File.Exists(ScriptPath+"Data/config.json"))
             {
                 CustomConfig newConfig = new CustomConfig();
                 //string json = JsonSerialize.ToJson(newConfig);
                 string json = JsonSerializer.ToJsonString(newConfig);
-                File.WriteAllText("Scripts/Data/config.json", JsonSerializer.PrettyPrint(json));
+                File.WriteAllText(ScriptPath+"Data/config.json", JsonSerializer.PrettyPrint(json));
             }
         
-            string data = File.ReadAllText("Scripts/Data/config.json");
+            string data = File.ReadAllText(ScriptPath+"Data/config.json");
             Config = JsonSerializer.Deserialize<CustomConfig>(data);
             Log.Debug("Lua Config loaded.");
         } catch (Exception e)
@@ -123,7 +125,7 @@ public class LuaConfig
         try
         {
             string json = JsonSerializer.ToJsonString(Config);
-            File.WriteAllText("Scripts/Data/config.json", JsonSerializer.PrettyPrint(json));
+            File.WriteAllText(ScriptPath+"Data/config.json", JsonSerializer.PrettyPrint(json));
             Log.Debug("Lua Config saved.");
         } catch (Exception e)
         {

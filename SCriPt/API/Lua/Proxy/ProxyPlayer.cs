@@ -5,6 +5,7 @@ using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Hazards;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Roles;
 using Exiled.Permissions.Extensions;
@@ -67,6 +68,11 @@ namespace SCriPt.API.Lua.Proxy
         {
             get => Player.HumeShield;
             set => Player.HumeShield = value;
+        }
+
+        public TantrumHazard PlaceTantrum(bool isActive = true)
+        {
+            return Player.PlaceTantrum(isActive);
         }
 
         public Room Room => Player.CurrentRoom;
@@ -179,10 +185,12 @@ namespace SCriPt.API.Lua.Proxy
             Player.RoleManager.ServerSetRole(roleTypeId, RoleChangeReason.RemoteAdmin, (RoleSpawnFlags)flag);
         }
         
-        public void SetRole(RoleTypeId roleTypeId)
+        public void SetRole(RoleTypeId roleTypeId, RoleSpawnFlags flag=RoleSpawnFlags.All)
         {
-            SetRole(roleTypeId,(int)RoleSpawnFlags.All);
+            Player.RoleManager.ServerSetRole(roleTypeId, RoleChangeReason.RemoteAdmin, flag);
         }
+        
+        
         
         public void ShowHint(string message, float duration=3f)
         {
@@ -195,20 +203,11 @@ namespace SCriPt.API.Lua.Proxy
             Player.Broadcast(duration, message);
         }
         
-        public bool CheckPermission(string permission)
-        {
-            return Player.CheckPermission(permission);
-        }
+        public bool CheckPermission(string permission) => Player.CheckPermission(permission);
         
-        public void Handcuff()
-        {
-            Player.Handcuff();
-        }
+        public void Handcuff() => Player.Handcuff();
         
-        public void Teleport(Vector3 position)
-        {
-            Player.Teleport(position);
-        }
+        public void Teleport(Vector3 position) => Player.Teleport(position);
 
         public bool IsJumping
         {
@@ -422,7 +421,7 @@ namespace SCriPt.API.Lua.Proxy
             return Player.HasItem(type);
         }
         
-        public float MoveSpeed
+        /*public float MoveSpeed
         {
             get
             {
@@ -432,7 +431,7 @@ namespace SCriPt.API.Lua.Proxy
                 }
                 return 0f;
             }
-        }
+        }*/
         
         public PlayerMovementState MovementState
         {
@@ -454,7 +453,7 @@ namespace SCriPt.API.Lua.Proxy
             }
         }
         
-        public bool EnableFallDamage
+        /*public bool EnableFallDamage
         {
             get
             {
@@ -478,8 +477,11 @@ namespace SCriPt.API.Lua.Proxy
                     }
                 }
             }
-        }
-        
-        
+        }*/
+
+
+        public Dictionary<string, object> SessionVariables => Player.SessionVariables;
+
+
     }
 }

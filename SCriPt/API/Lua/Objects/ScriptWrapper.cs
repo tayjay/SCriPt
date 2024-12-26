@@ -86,6 +86,28 @@ public class ScriptWrapper : Script
         Log.Info("Loaded script: " + name);
         return wrapper;
     }
+    
+    public static ScriptWrapper FromString(string script, CoreModules sandboxLevel)
+    {
+        string name = "StringScript";
+        if(SCriPt.Instance.LoadedWrappers.ContainsKey(name))
+        {
+            Log.Error("Script already loaded: "+name);
+            throw new Exception("Script already loaded: "+name);
+        }
+        ScriptWrapper wrapper = new ScriptWrapper(name, sandboxLevel);
+        wrapper.SetupAPI();
+        Log.Debug("Loaded API...");
+        wrapper.DoString(script);
+        Log.Debug("Loaded file...");
+        wrapper.ExecuteLoad();
+        Log.Debug("Executed load...");
+        wrapper.customCommands = CustomCommand.CreateAll(wrapper);
+        wrapper.RegisterCommands();
+        Log.Debug($"Created {wrapper.customCommands.Count} commands...");
+        Log.Info("Loaded script: " + name);
+        return wrapper;
+    }
 
     public static ScriptWrapper FromWeb(string path, CoreModules sandboxLevel = CoreModules.Preset_SoftSandbox)
     {

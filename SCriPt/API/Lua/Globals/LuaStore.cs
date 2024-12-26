@@ -17,6 +17,8 @@ public class LuaStore
 {
     public static Dictionary<string,Table> Tables { get; set; } = new Dictionary<string, Table>();
     
+    public static string ScriptPath => NewScriptLoader.ScriptPath;
+    
     public static Table Load(string key, DynValue defaultTable = null)
     {
         if (!Tables.TryGetValue(key, out var storage))
@@ -42,15 +44,15 @@ public class LuaStore
     {
         try
         {
-            if(!Directory.Exists("Scripts/Data"))
-                Directory.CreateDirectory("Scripts/Data");
-            if (!File.Exists("Scripts/Data/store.json"))
+            if(!Directory.Exists(ScriptPath+"Data"))
+                Directory.CreateDirectory(ScriptPath+"Data");
+            if (!File.Exists(ScriptPath+"Data/store.json"))
             {
                 string json = JsonSerializer.ToJsonString(new Dictionary<string,string>());
-                File.WriteAllText("Scripts/Data/store.json", JsonSerializer.PrettyPrint(json));
+                File.WriteAllText(ScriptPath+"Data/store.json", JsonSerializer.PrettyPrint(json));
             }
         
-            string data = File.ReadAllText("Scripts/Data/store.json");
+            string data = File.ReadAllText(ScriptPath+"Data/store.json");
             Dictionary<string,string> temp = JsonSerializer.Deserialize<Dictionary<string, string>>(data);
             foreach (KeyValuePair<string,string> pair in temp)
             {
@@ -74,7 +76,7 @@ public class LuaStore
                 output[pair.Key] = JsonTableConverter.TableToJson(pair.Value);
             }
             string json = JsonSerializer.ToJsonString(output);
-            File.WriteAllText("Scripts/Data/store.json", JsonSerializer.PrettyPrint(json));
+            File.WriteAllText(ScriptPath+"Data/store.json", JsonSerializer.PrettyPrint(json));
             Log.Debug("Lua Store saved.");
         } catch (Exception e)
         {

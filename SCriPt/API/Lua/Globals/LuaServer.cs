@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Exiled.API.Enums;
 using Exiled.Events.Handlers;
 using MoonSharp.Interpreter;
@@ -65,12 +67,48 @@ namespace SCriPt.API.Lua.Globals
         
         public static string RACommand(string command)
         {
-            return RemoteAdmin.CommandProcessor.ProcessQuery(command, _serverConsoleSender);
+            var _serverConsoleSender = new ServerConsoleSender(); // Depends on how you usually instantiate this
+
+            // Get the RemoteAdmin.CommandProcessor type
+            Type commandProcessorType = typeof(RemoteAdmin.CommandProcessor);
+
+            // Get the ProcessQuery method
+            MethodInfo processQueryMethod =
+                commandProcessorType.GetMethod("ProcessQuery", BindingFlags.NonPublic | BindingFlags.Static);
+
+            if (processQueryMethod != null)
+            {
+                // Invoking the ProcessQuery method
+                var result = processQueryMethod.Invoke(_serverConsoleSender,
+                    new object[] { command, _serverConsoleSender });
+                return result as string;
+            }
+
+            return null;
+            //return RemoteAdmin.CommandProcessor.ProcessQuery(command, _serverConsoleSender);
         }
 
         public static string RACommandAs(string command, Player player)
         {
-            return CommandProcessor.ProcessQuery(command, new PlayerCommandSender(player.ReferenceHub));
+            var _playerCommandSender = new PlayerCommandSender(player.ReferenceHub);
+
+            // Get the RemoteAdmin.CommandProcessor type
+            Type commandProcessorType = typeof(RemoteAdmin.CommandProcessor);
+
+            // Get the ProcessQuery method
+            MethodInfo processQueryMethod =
+                commandProcessorType.GetMethod("ProcessQuery", BindingFlags.NonPublic | BindingFlags.Static);
+
+            if (processQueryMethod != null)
+            {
+                // Invoking the ProcessQuery method
+                var result = processQueryMethod.Invoke(_playerCommandSender,
+                    new object[] { command, _playerCommandSender });
+                return result as string;
+            }
+
+            return null;
+            //return CommandProcessor.ProcessQuery(command, new PlayerCommandSender(player.ReferenceHub));
         }
 
         public static string LACommand(string command)

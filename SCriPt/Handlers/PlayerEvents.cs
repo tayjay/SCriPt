@@ -83,11 +83,13 @@ namespace SCriPt.Handlers
         [MoonSharpVisible(true)]
         public event EventHandler<UsingItemCompletedEventArgs> UsingItemCompleted;
         
+        
         [MoonSharpHidden]
         public void OnUsingItemCompleted(UsingItemCompletedEventArgs ev)
         {
             UsingItemCompleted?.Invoke(null, ev);
         }
+        
         
         [MoonSharpVisible(true)]
         public event EventHandler<UsedItemEventArgs> UsedItem;
@@ -773,14 +775,14 @@ namespace SCriPt.Handlers
             DamageWindow?.Invoke(null, ev);
         }
         
-        [MoonSharpVisible(true)]
+        /*[MoonSharpVisible(true)]
         public event EventHandler<DamagingDoorEventArgs> DamagingDoor;
         
         [MoonSharpHidden]
         public void OnDamagingDoor(DamagingDoorEventArgs ev)
         {
             DamagingDoor?.Invoke(null, ev);
-        }
+        }*/
         
         [MoonSharpVisible(true)]
         public event EventHandler<ItemAddedEventArgs> ItemAdded;
@@ -800,7 +802,7 @@ namespace SCriPt.Handlers
             ItemRemoved?.Invoke(null, ev);
         }
         
-        [MoonSharpVisible(true)]
+        /*[MoonSharpVisible(true)]
         public event EventHandler<KillingPlayerEventArgs> KillingPlayer;
         
         [MoonSharpHidden]
@@ -808,6 +810,7 @@ namespace SCriPt.Handlers
         {
             KillingPlayer?.Invoke(null, ev);
         }
+        */
         
         [MoonSharpVisible(true)]
         public event EventHandler<EnteringEnvironmentalHazardEventArgs> EnteringEnvironmentalHazard;
@@ -865,7 +868,7 @@ namespace SCriPt.Handlers
             Exiled.Events.Handlers.Player.Banned += OnBanned;
             Exiled.Events.Handlers.Player.EarningAchievement += OnEarningAchievement;
             Exiled.Events.Handlers.Player.UsingItem += OnUsingItem;
-            Exiled.Events.Handlers.Player.UsingItemCompleted += OnUsingItemCompleted;
+            //Exiled.Events.Handlers.Player.UsingItemCompleted += OnUsingItemCompleted;
             Exiled.Events.Handlers.Player.UsedItem += OnUsedItem;
             Exiled.Events.Handlers.Player.CancellingItemUse += OnCancellingItemUse;
             Exiled.Events.Handlers.Player.CancelledItemUse += OnCancelledItemUse;
@@ -900,7 +903,7 @@ namespace SCriPt.Handlers
             Exiled.Events.Handlers.Player.EnteringKillerCollision += OnEnteringKillerCollision;
             Exiled.Events.Handlers.Player.ReloadingWeapon += OnReloadingWeapon;
             Exiled.Events.Handlers.Player.Spawning += OnSpawning;
-            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            //Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
             Exiled.Events.Handlers.Player.ChangingItem += OnChangingItem;
             Exiled.Events.Handlers.Player.ChangingGroup += OnChangingGroup;
@@ -941,11 +944,11 @@ namespace SCriPt.Handlers
             Exiled.Events.Handlers.Player.TogglingRadio += OnTogglingRadio;
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
             Exiled.Events.Handlers.Player.SendingAdminChatMessage += OnSendingAdminChatMessageEventsArgs;
-            Exiled.Events.Handlers.Player.PlayerDamageWindow += OnPlayerDamageWindow;
-            Exiled.Events.Handlers.Player.DamagingDoor += OnDamagingDoor;
+            //Exiled.Events.Handlers.Player.PlayerDamageWindow += OnPlayerDamageWindow;
+            //Exiled.Events.Handlers.Player.DamagingDoor += OnDamagingDoor;
             Exiled.Events.Handlers.Player.ItemAdded += OnItemAdded;
             Exiled.Events.Handlers.Player.ItemRemoved += OnItemRemoved;
-            Exiled.Events.Handlers.Player.KillingPlayer += OnKillingPlayer;
+            //Exiled.Events.Handlers.Player.KillingPlayer += OnKillingPlayer;
             Exiled.Events.Handlers.Player.EnteringEnvironmentalHazard += OnEnteringEnvironmentalHazard;
             Exiled.Events.Handlers.Player.StayingOnEnvironmentalHazard += OnStayingOnEnvironmentalHazard;
             Exiled.Events.Handlers.Player.ExitingEnvironmentalHazard += OnExitingEnvironmentalHazard;
@@ -1041,10 +1044,10 @@ namespace SCriPt.Handlers
             UserData.RegisterType<SearchingPickupEventArgs>();
             UserData.RegisterType<SendingAdminChatMessageEventsArgs>();
             UserData.RegisterType<DamagingWindowEventArgs>();
-            UserData.RegisterType<DamagingDoorEventArgs>();
+            //UserData.RegisterType<DamagingDoorEventArgs>();
             UserData.RegisterType<ItemAddedEventArgs>();
             UserData.RegisterType<ItemRemovedEventArgs>();
-            UserData.RegisterType<KillingPlayerEventArgs>();
+            //UserData.RegisterType<KillingPlayerEventArgs>();
             UserData.RegisterType<EnteringEnvironmentalHazardEventArgs>();
             UserData.RegisterType<StayingOnEnvironmentalHazardEventArgs>();
             UserData.RegisterType<ExitingEnvironmentalHazardEventArgs>();
@@ -1140,11 +1143,11 @@ namespace SCriPt.Handlers
             Exiled.Events.Handlers.Player.TogglingRadio -= OnTogglingRadio;
             Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
             Exiled.Events.Handlers.Player.SendingAdminChatMessage -= OnSendingAdminChatMessageEventsArgs;
-            Exiled.Events.Handlers.Player.PlayerDamageWindow -= OnPlayerDamageWindow;
-            Exiled.Events.Handlers.Player.DamagingDoor -= OnDamagingDoor;
+            //Exiled.Events.Handlers.Player.PlayerDamageWindow -= OnPlayerDamageWindow;
+            //Exiled.Events.Handlers.Player.DamagingDoor -= OnDamagingDoor;
             Exiled.Events.Handlers.Player.ItemAdded -= OnItemAdded;
             Exiled.Events.Handlers.Player.ItemRemoved -= OnItemRemoved;
-            Exiled.Events.Handlers.Player.KillingPlayer -= OnKillingPlayer;
+            //Exiled.Events.Handlers.Player.KillingPlayer -= OnKillingPlayer;
             Exiled.Events.Handlers.Player.EnteringEnvironmentalHazard -= OnEnteringEnvironmentalHazard;
             Exiled.Events.Handlers.Player.StayingOnEnvironmentalHazard -= OnStayingOnEnvironmentalHazard;
             Exiled.Events.Handlers.Player.ExitingEnvironmentalHazard -= OnExitingEnvironmentalHazard;

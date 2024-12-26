@@ -16,13 +16,13 @@ namespace SCriPt.Handlers
             PlacingBulletHole?.Invoke(this, ev);
         }
         
-        [MoonSharpVisible(true)] public event EventHandler<PlacingBloodEventArgs> PlacingBlood;
+        /*[MoonSharpVisible(true)] public event EventHandler<PlacingBloodEventArgs> PlacingBlood;
         
         [MoonSharpHidden]
         public void OnPlacingBlood(PlacingBloodEventArgs ev)
         {
             PlacingBlood?.Invoke(this, ev);
-        }
+        }*/
         
         [MoonSharpVisible(true)] public event EventHandler<AnnouncingDecontaminationEventArgs> AnnouncingDecontamination;
         
@@ -149,7 +149,7 @@ namespace SCriPt.Handlers
         public void RegisterEvents()
         {
             Exiled.Events.Handlers.Map.PlacingBulletHole += OnPlacingBulletHole;
-            Exiled.Events.Handlers.Map.PlacingBlood += OnPlacingBlood;
+            //Exiled.Events.Handlers.Map.PlacingBlood += OnPlacingBlood;
             Exiled.Events.Handlers.Map.AnnouncingDecontamination += OnAnnouncingDecontamination;
             Exiled.Events.Handlers.Map.AnnouncingScpTermination += OnAnnouncingScpTermination;
             Exiled.Events.Handlers.Map.AnnouncingNtfEntrance += OnAnnouncingNtfEntrance;
@@ -171,7 +171,7 @@ namespace SCriPt.Handlers
         public void RegisterEventTypes()
         {
             UserData.RegisterType<PlacingBulletHoleEventArgs>();
-            UserData.RegisterType<PlacingBloodEventArgs>();
+            //UserData.RegisterType<PlacingBloodEventArgs>();
             UserData.RegisterType<AnnouncingDecontaminationEventArgs>();
             UserData.RegisterType<AnnouncingScpTerminationEventArgs>();
             UserData.RegisterType<AnnouncingNtfEntranceEventArgs>();
@@ -192,7 +192,7 @@ namespace SCriPt.Handlers
         public void UnregisterEvents()
         {
             Exiled.Events.Handlers.Map.PlacingBulletHole -= OnPlacingBulletHole;
-            Exiled.Events.Handlers.Map.PlacingBlood -= OnPlacingBlood;
+            //Exiled.Events.Handlers.Map.PlacingBlood -= OnPlacingBlood;
             Exiled.Events.Handlers.Map.AnnouncingDecontamination -= OnAnnouncingDecontamination;
             Exiled.Events.Handlers.Map.AnnouncingScpTermination -= OnAnnouncingScpTermination;
             Exiled.Events.Handlers.Map.AnnouncingNtfEntrance -= OnAnnouncingNtfEntrance;

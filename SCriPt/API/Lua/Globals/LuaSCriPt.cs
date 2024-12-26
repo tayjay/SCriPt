@@ -15,10 +15,10 @@ public class LuaSCriPt
     public static string MoonSharpVersion => MoonSharp.Interpreter.Script.VERSION;
     public static string LuaVersion => MoonSharp.Interpreter.Script.LUA_VERSION;
     
-    private Script Script { get; set; }
+    private ScriptWrapper Script { get; set; }
     
     
-    public LuaSCriPt(Script script)
+    public LuaSCriPt(ScriptWrapper script)
     {
         Script = script;
     }
@@ -47,6 +47,11 @@ public class LuaSCriPt
     //todo: This is going to break sandboxing, so need to add config option to enable this
     public static DynValue ExecuteInScript(string scriptName, string code)
     {
+        if(!SCriPt.Instance.Config.FullAccess)
+        {
+            Log.Error("FullAccess is not enabled, cannot execute in script.");
+            return DynValue.Nil;
+        }
         if (!SCriPt.Instance.LoadedScripts.TryGetValue(scriptName, out Script script))
         {
             return DynValue.Nil;
@@ -56,9 +61,9 @@ public class LuaSCriPt
         //SCriPt:ExecuteInScript('AutoLoad', 'print("Hello World!")')
     }
     
-    public static DynValue ExecuteInSandbox(string code)
+    public DynValue ExecuteInSandbox(string code)
     {
-        ScriptWrapper wrapper = new ScriptWrapper("Sandbox-"+DateTime.Now.GetHashCode(), CoreModules.Preset_SoftSandbox);
+        ScriptWrapper wrapper = new ScriptWrapper(Script.Name+"-Sandbox-"+DateTime.Now.GetHashCode(), CoreModules.Preset_SoftSandbox);
         ScriptLoader.RegisterAPI(wrapper);
         SCriPt.Instance.LoadedScripts[wrapper.Name] = wrapper;
         return ((Script)wrapper).DoString(code);

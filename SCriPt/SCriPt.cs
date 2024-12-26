@@ -73,6 +73,7 @@ namespace SCriPt
         public override void OnEnabled()
         {
             base.OnEnabled();
+            Log.Error("Loading scripts from "+Paths.Exiled+"/SCriPt");
             try
             {
                 Load();
@@ -216,7 +217,7 @@ namespace SCriPt
                 NewScriptLoader.Initialize();
                 NewScriptLoader.LoadScripts();
                 LuaCustomItems.RegisterAll();
-                //ScriptLoader.AutoLoad();
+                ScriptLoader.AutoLoad();
             } catch (IOException e)
             {
                 Log.Error("Error reading script file: "+e.Message);
@@ -302,7 +303,7 @@ namespace SCriPt
         
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "SCriPt";
-        public override System.Version Version { get; } = new System.Version(0, 3, 0);
+        public override System.Version Version { get; } = new System.Version(0, 4, 0);
         
         
     }

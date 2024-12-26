@@ -30,6 +30,10 @@ namespace SCriPt
         // Access Level
         [Description("What level of access should be given to the system, default is Standard. Options are Limited, Standard")]
         public string SystemAccessLevel { get; set; } = "Limited";
+
+        // FullAccess
+        [Description("Should scripts have full permissions? If false, default permissions will be applied to scripts, limiting their ability to interact with dangerous systems. If True, scripts will have full access to the server. Default is false.")]
+        public bool FullAccess { get; set; } = false;
         
         // Persistence
         [Description("Should scripts be able to save data to disk using the Store global? Default is true")]
@@ -38,7 +42,7 @@ namespace SCriPt
         public float AutoSaveInterval { get; set; } = 10f;
         
         // AllowPastebin
-        [Description("Should scripts be able to download from pastebin? Default is false")]
+        [Description("Should scripts be able to download from pastebin? Config 'full_access' must be false to download external scripts. Default is false.")]
         public bool AllowPastebin { get; set; } = false;
     }
 }

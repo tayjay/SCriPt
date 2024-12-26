@@ -18,7 +18,7 @@ namespace SCriPt.Handlers
         [PluginEvent(ServerEventType.RemoteAdminCommand), MoonSharpHidden]
         public void OnRemoteAdminCommandEvent(RemoteAdminCommandEvent ev)
         {
-            Log.Info(ev.Command);
+            //Log.Info(ev.Command);
             RemoteAdminCommand?.Invoke(this, ev);
         }
         
@@ -28,7 +28,7 @@ namespace SCriPt.Handlers
         [PluginEvent(ServerEventType.RemoteAdminCommandExecuted), MoonSharpHidden]
         public void OnRemoteAdminCommandExecutedEvent(RemoteAdminCommandExecutedEvent ev)
         {
-            Log.Info(ev.Command);
+            //Log.Info(ev.Command);
             RemoteAdminCommandExecuted?.Invoke(this, ev);
         }
         
@@ -39,7 +39,7 @@ namespace SCriPt.Handlers
         [PluginEvent(ServerEventType.ConsoleCommand), MoonSharpHidden]
         public void OnConsoleCommandEvent(ConsoleCommandEvent ev)
         {
-            Log.Info(ev.Command);
+            //Log.Info(ev.Command);
             ConsoleCommand?.Invoke(this, ev);
         }
         
@@ -49,7 +49,7 @@ namespace SCriPt.Handlers
         [PluginEvent(ServerEventType.ConsoleCommandExecuted), MoonSharpHidden]
         public void OnConsoleCommandExecutedEvent(ConsoleCommandExecutedEvent ev)
         {
-            Log.Info(ev.Command);
+            //Log.Info(ev.Command);
             ConsoleCommandExecuted?.Invoke(this, ev);
         }
         
@@ -60,7 +60,7 @@ namespace SCriPt.Handlers
         [PluginEvent(ServerEventType.PlayerGameConsoleCommand), MoonSharpHidden]
         public void OnPlayerGameConsoleCommandEvent(PlayerGameConsoleCommandEvent ev)
         {
-            Log.Info(ev.Command);
+            //Log.Info(ev.Command);
             PlayerGameConsoleCommand?.Invoke(this, ev);
         }
         
@@ -70,7 +70,7 @@ namespace SCriPt.Handlers
         [PluginEvent(ServerEventType.PlayerGameConsoleCommandExecuted), MoonSharpHidden]
         public void OnPlayerGameConsoleCommandExecutedEvent(PlayerGameConsoleCommandExecutedEvent ev)
         {
-            Log.Info(ev.Command);
+            //Log.Info(ev.Command);
             PlayerGameConsoleCommandExecuted?.Invoke(this, ev);
         }
         
