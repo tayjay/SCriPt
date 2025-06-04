@@ -1,98 +1,57 @@
 ﻿using System;
+using System.Diagnostics.Tracing;
+using CommandSystem;
+using LabApi.Events.Arguments.ServerEvents;
+using LabApi.Events.CustomHandlers;
+using LabApi.Features.Enums;
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Interop;
-using PluginAPI.Core;
-using PluginAPI.Core.Attributes;
-using PluginAPI.Enums;
-using PluginAPI.Events;
 
 namespace SCriPt.Handlers
 {
     [MoonSharpUserData]
-    public class CommandEvents : IEventHandler
+    public class CommandEvents : CustomEventsHandler, IEventHandler
     {
         // Triggers when a Remote Admin command is recieved
         [MoonSharpVisible(true)]
-        public event EventHandler<RemoteAdminCommandEvent> RemoteAdminCommand;
+        public event EventHandler<CommandExecutingEventArgs> CommandExecuting;
         
-        [PluginEvent(ServerEventType.RemoteAdminCommand), MoonSharpHidden]
-        public void OnRemoteAdminCommandEvent(RemoteAdminCommandEvent ev)
+        
+        public override void OnServerCommandExecuting(CommandExecutingEventArgs ev)
         {
-            //Log.Info(ev.Command);
-            RemoteAdminCommand?.Invoke(this, ev);
+            base.OnServerCommandExecuting(ev);
+            CommandExecuting?.Invoke(this, ev);
         }
-        
+
         [MoonSharpVisible(true)]
-        public event EventHandler<RemoteAdminCommandExecutedEvent> RemoteAdminCommandExecuted;
-        
-        [PluginEvent(ServerEventType.RemoteAdminCommandExecuted), MoonSharpHidden]
-        public void OnRemoteAdminCommandExecutedEvent(RemoteAdminCommandExecutedEvent ev)
+        public event EventHandler<CommandExecutedEventArgs> CommandExecuted;
+
+        public override void OnServerCommandExecuted(CommandExecutedEventArgs ev)
         {
-            //Log.Info(ev.Command);
-            RemoteAdminCommandExecuted?.Invoke(this, ev);
+            base.OnServerCommandExecuted(ev);
+            CommandExecuted?.Invoke(this, ev);
         }
-        
-        // Triggers when a local admin server command is issued
-        [MoonSharpVisible(true)]
-        public event EventHandler<ConsoleCommandEvent> ConsoleCommand;
-        
-        [PluginEvent(ServerEventType.ConsoleCommand), MoonSharpHidden]
-        public void OnConsoleCommandEvent(ConsoleCommandEvent ev)
-        {
-            //Log.Info(ev.Command);
-            ConsoleCommand?.Invoke(this, ev);
-        }
-        
-        [MoonSharpVisible(true)]
-        public event EventHandler<ConsoleCommandExecutedEvent> ConsoleCommandExecuted;
-        
-        [PluginEvent(ServerEventType.ConsoleCommandExecuted), MoonSharpHidden]
-        public void OnConsoleCommandExecutedEvent(ConsoleCommandExecutedEvent ev)
-        {
-            //Log.Info(ev.Command);
-            ConsoleCommandExecuted?.Invoke(this, ev);
-        }
-        
-        // Triggers when a player sends through the ~ console
-        [MoonSharpVisible(true)]
-        public event EventHandler<PlayerGameConsoleCommandEvent> PlayerGameConsoleCommand;
-        
-        [PluginEvent(ServerEventType.PlayerGameConsoleCommand), MoonSharpHidden]
-        public void OnPlayerGameConsoleCommandEvent(PlayerGameConsoleCommandEvent ev)
-        {
-            //Log.Info(ev.Command);
-            PlayerGameConsoleCommand?.Invoke(this, ev);
-        }
-        
-        [MoonSharpVisible(true)]
-        public event EventHandler<PlayerGameConsoleCommandExecutedEvent> PlayerGameConsoleCommandExecuted;
-        
-        [PluginEvent(ServerEventType.PlayerGameConsoleCommandExecuted), MoonSharpHidden]
-        public void OnPlayerGameConsoleCommandExecutedEvent(PlayerGameConsoleCommandExecutedEvent ev)
-        {
-            //Log.Info(ev.Command);
-            PlayerGameConsoleCommandExecuted?.Invoke(this, ev);
-        }
-        
+
+
         public void RegisterEvents()
         {
-            PluginAPI.Events.EventManager.RegisterEvents(this);
+            CustomHandlersManager.RegisterEventsHandler(this);
             Exiled.API.Features.Log.Info("CommandEvents registered!");
         }
+        
+        
 
         public void RegisterEventTypes()
         {
-            UserData.RegisterType<ConsoleCommandEvent>();
-            UserData.RegisterType<ConsoleCommandExecutedEvent>();
-            UserData.RegisterType<PlayerGameConsoleCommandEvent>();
-            UserData.RegisterType<PlayerGameConsoleCommandExecutedEvent>();
-            UserData.RegisterType<RemoteAdminCommandEvent>();
-            UserData.RegisterType<RemoteAdminCommandExecutedEvent>();
+            UserData.RegisterType<CommandExecutedEventArgs>();
+            UserData.RegisterType<CommandExecutingEventArgs>();
+            UserData.RegisterType<CommandType>();
+            UserData.RegisterType<ICommand>();
         }
 
         public void UnregisterEvents()
         {
-            PluginAPI.Events.EventManager.UnregisterEvents(this);
+            CustomHandlersManager.UnregisterEventsHandler(this);
         }
     }
 }

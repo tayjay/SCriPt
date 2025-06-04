@@ -775,14 +775,14 @@ namespace SCriPt.Handlers
             DamageWindow?.Invoke(null, ev);
         }
         
-        /*[MoonSharpVisible(true)]
+        [MoonSharpVisible(true)]
         public event EventHandler<DamagingDoorEventArgs> DamagingDoor;
         
         [MoonSharpHidden]
         public void OnDamagingDoor(DamagingDoorEventArgs ev)
         {
             DamagingDoor?.Invoke(null, ev);
-        }*/
+        }
         
         [MoonSharpVisible(true)]
         public event EventHandler<ItemAddedEventArgs> ItemAdded;
@@ -944,8 +944,8 @@ namespace SCriPt.Handlers
             Exiled.Events.Handlers.Player.TogglingRadio += OnTogglingRadio;
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
             Exiled.Events.Handlers.Player.SendingAdminChatMessage += OnSendingAdminChatMessageEventsArgs;
-            //Exiled.Events.Handlers.Player.PlayerDamageWindow += OnPlayerDamageWindow;
-            //Exiled.Events.Handlers.Player.DamagingDoor += OnDamagingDoor;
+            Exiled.Events.Handlers.Player.DamagingWindow += OnPlayerDamageWindow;
+            Exiled.Events.Handlers.Player.DamagingDoor += OnDamagingDoor;
             Exiled.Events.Handlers.Player.ItemAdded += OnItemAdded;
             Exiled.Events.Handlers.Player.ItemRemoved += OnItemRemoved;
             //Exiled.Events.Handlers.Player.KillingPlayer += OnKillingPlayer;
@@ -954,6 +954,8 @@ namespace SCriPt.Handlers
             Exiled.Events.Handlers.Player.ExitingEnvironmentalHazard += OnExitingEnvironmentalHazard;
             Exiled.Events.Handlers.Player.ChangingNickname += OnChangingNickname;
             Exiled.Events.Handlers.Player.ChangingDangerState += OnChangingDangerState;
+            //Exiled.Events.Handlers.Player.ChangingEmotion += OnChangingEmotion;
+            //Exiled.Events.Handlers.Player.ChangedEmotion += OnChangedEmotion;
         }
 
         [MoonSharpHidden]
@@ -1044,7 +1046,7 @@ namespace SCriPt.Handlers
             UserData.RegisterType<SearchingPickupEventArgs>();
             UserData.RegisterType<SendingAdminChatMessageEventsArgs>();
             UserData.RegisterType<DamagingWindowEventArgs>();
-            //UserData.RegisterType<DamagingDoorEventArgs>();
+            UserData.RegisterType<DamagingDoorEventArgs>();
             UserData.RegisterType<ItemAddedEventArgs>();
             UserData.RegisterType<ItemRemovedEventArgs>();
             //UserData.RegisterType<KillingPlayerEventArgs>();
@@ -1143,8 +1145,8 @@ namespace SCriPt.Handlers
             Exiled.Events.Handlers.Player.TogglingRadio -= OnTogglingRadio;
             Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
             Exiled.Events.Handlers.Player.SendingAdminChatMessage -= OnSendingAdminChatMessageEventsArgs;
-            //Exiled.Events.Handlers.Player.PlayerDamageWindow -= OnPlayerDamageWindow;
-            //Exiled.Events.Handlers.Player.DamagingDoor -= OnDamagingDoor;
+            Exiled.Events.Handlers.Player.DamagingWindow -= OnPlayerDamageWindow;
+            Exiled.Events.Handlers.Player.DamagingDoor -= OnDamagingDoor;
             Exiled.Events.Handlers.Player.ItemAdded -= OnItemAdded;
             Exiled.Events.Handlers.Player.ItemRemoved -= OnItemRemoved;
             //Exiled.Events.Handlers.Player.KillingPlayer -= OnKillingPlayer;

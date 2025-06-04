@@ -12,6 +12,7 @@ using Exiled.Permissions.Extensions;
 using MoonSharp.Interpreter;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
+using PlayerRoles.FirstPersonControl.Thirdperson.Subcontrollers;
 using PlayerRoles.RoleAssign;
 using UnityEngine;
 
@@ -482,6 +483,12 @@ namespace SCriPt.API.Lua.Proxy
 
         public Dictionary<string, object> SessionVariables => Player.SessionVariables;
 
+
+        public EmotionPresetType Emotion
+        {
+            get => Player.Emotion;
+            set => Player.Emotion = value;
+        }
 
     }
 }

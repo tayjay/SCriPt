@@ -468,7 +468,7 @@ namespace SCriPt.API.Lua
         {
             //UserData.RegisterType<Player>();
             UserData.RegisterProxyType<ProxyPlayer, Player>(p => new ProxyPlayer(p));
-            UserData.RegisterProxyType<ProxyPlayer, PluginAPI.Core.Player>(p => new ProxyPlayer(Exiled.API.Features.Player.Get(p.ReferenceHub)));
+            UserData.RegisterProxyType<ProxyPlayer, LabApi.Features.Wrappers.Player>(p => new ProxyPlayer(Exiled.API.Features.Player.Get(p.ReferenceHub)));
             UserData.RegisterProxyType<ProxyPickup, Pickup>(p => new ProxyPickup(p));
             UserData.RegisterProxyType<ProxyRoom, Room>(r => new ProxyRoom(r));
             UserData.RegisterProxyType<ProxyTeslaGate, Exiled.API.Features.TeslaGate>(t => new ProxyTeslaGate(t));

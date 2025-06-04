@@ -15,6 +15,7 @@ using GameObjectPools;
 using Interactables.Interobjects.DoorUtils;
 using InventorySystem;
 using InventorySystem.Items.Pickups;
+using LabApi.Features.Enums;
 using MEC;
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Interop;
@@ -22,6 +23,7 @@ using MoonSharp.Interpreter.Loaders;
 using MoonSharp.Interpreter.Platforms;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
+using PlayerRoles.FirstPersonControl.Thirdperson.Subcontrollers;
 using PlayerRoles.PlayableScps.HumeShield;
 using PlayerRoles.PlayableScps.Scp049;
 using PlayerRoles.PlayableScps.Scp049.Zombies;
@@ -217,7 +219,7 @@ public class NewScriptLoader
     private static void RegisterProxies()
     {
         UserData.RegisterProxyType<ProxyPlayer, Player>(p => new ProxyPlayer(p));
-        UserData.RegisterProxyType<ProxyPlayer, PluginAPI.Core.Player>(p => new ProxyPlayer(Exiled.API.Features.Player.Get(p.ReferenceHub)));
+        UserData.RegisterProxyType<ProxyPlayer, LabApi.Features.Wrappers.Player>(p => new ProxyPlayer(Exiled.API.Features.Player.Get(p.ReferenceHub)));
         UserData.RegisterProxyType<ProxyPickup, Pickup>(p => new ProxyPickup(p));
         UserData.RegisterProxyType<ProxyRoom, Room>(r => new ProxyRoom(r));
         UserData.RegisterProxyType<ProxyTeslaGate, Exiled.API.Features.TeslaGate>(t => new ProxyTeslaGate(t));
@@ -284,7 +286,7 @@ public class NewScriptLoader
         UserData.RegisterType<AmmoType>();
         UserData.RegisterType<DangerType>();
         UserData.RegisterType<DanceType>();
-        //UserData.RegisterType<DecontaminationState>();
+        UserData.RegisterType<DecontaminationState>();
         UserData.RegisterType<EffectCategory>();
         UserData.RegisterType<GeneratorState>();
         UserData.RegisterType<KeycardPermissions>();
@@ -296,7 +298,8 @@ public class NewScriptLoader
         UserData.RegisterType<UsableRippleType>();
         UserData.RegisterType<Scp939LungeState>();
         UserData.RegisterType<Scp3114Identity.DisguiseStatus>();
-        //UserData.RegisterType<Scp3114VoiceLines.VoiceLinesName>();
+        UserData.RegisterType<Scp3114VoiceLines.VoiceLinesName>();
+        UserData.RegisterType<EmotionPresetType>();
         
         
     }
@@ -349,6 +352,7 @@ public class NewScriptLoader
         AddStaticGlobal<Scp939LungeState>("Scp939LungeState");
         AddStaticGlobal<Scp3114Identity.DisguiseStatus>("DisguiseStatus");
         //AddStaticGlobal<Scp3114VoiceLines.VoiceLinesName>("VoiceLinesName");
+        AddStaticGlobal<CommandType>("CommandType");
         
         AddStaticGlobal<LuaDeadmanSwitch>("DeadmanSwitch");
         

@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Http;
 using MoonSharp.Interpreter;
-using PluginAPI.Core;
 
 namespace SCriPt.API;
 

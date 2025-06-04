@@ -42,6 +42,13 @@ public class LuaSCriPt
             Log.Error("Script "+scriptName+" does not exist.");
         }
     }
+
+    public LuaModule New(string scriptName=null)
+    {
+        if (scriptName == null) scriptName = Script.Name;
+        LuaModule module = new LuaModule(Script, scriptName,"","","");
+        return module;
+    }
     
 
     //todo: This is going to break sandboxing, so need to add config option to enable this

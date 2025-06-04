@@ -243,6 +243,11 @@ namespace SCriPt
         
         public void Unload()
         {
+            if (!CheckForMoonSharp())
+            {
+                return;
+            }
+            
             LuaStore.Unregister();
             Unregister();
             NewScriptLoader.UnloadAllScripts();
@@ -303,7 +308,7 @@ namespace SCriPt
         
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "SCriPt";
-        public override System.Version Version { get; } = new System.Version(0, 4, 0);
+        public override System.Version Version { get; } = new System.Version(0, 5, 0);
         
         
     }

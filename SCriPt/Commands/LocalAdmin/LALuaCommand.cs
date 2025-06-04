@@ -22,7 +22,6 @@ public class LALuaCommand : ICommand
         }
         response = value.ToPrintString();
         return true;
-
     }
 
     public string Command { get; } = "lua";

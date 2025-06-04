@@ -15,8 +15,10 @@ public class ScriptWrapper : Script
     LuaCoroutines coroutines;
     LuaSCriPt luaSCriPt;
     LuaCustomItems customItems;
+    LuaSSMenu ssMenu;
     
     List<CustomCommand> customCommands = new List<CustomCommand>();
+    
     
     //Here we can add more properties to a script that cannot be manipulated by the script itself
     //If there is something sensitive we want to keep track of on a script but cannot trust the script author or a malicious actor from changing it we can add it here
@@ -40,6 +42,8 @@ public class ScriptWrapper : Script
         customItems = new LuaCustomItems();
         customItems.AddScript(this);
         Globals["CustomItems"] = customItems;
+        ssMenu = new LuaSSMenu(this);
+        Globals["Menu"] = ssMenu;
         
         //script.Globals["RegisterType"] = (Action<string,string>) RegisterType;
         //new:Vector3(1,2,3)
@@ -54,8 +58,9 @@ public class ScriptWrapper : Script
         if (!path.EndsWith(".lua"))
         {
             Log.Error("Script file must be a .lua file");
+            throw new Exception("Script file must be a .lua file");
         }
-        DoFile(path);
+        LoadFile(path);
     }
     
     public static ScriptWrapper FromFile(string path, CoreModules sandboxLevel)
@@ -78,15 +83,49 @@ public class ScriptWrapper : Script
         Log.Debug("Loaded API...");
         wrapper.FromFile(path);
         Log.Debug("Loaded file...");
+        
         wrapper.ExecuteLoad();
         Log.Debug("Executed load...");
         wrapper.customCommands = CustomCommand.CreateAll(wrapper);
         wrapper.RegisterCommands();
+        Log.Info("Getting menus from "+name+"...");
+        wrapper.ssMenu.AddScript(wrapper);
+        
         Log.Debug($"Created {wrapper.customCommands.Count} commands...");
         Log.Info("Loaded script: " + name);
         return wrapper;
     }
     
+    /*
+     * lua
+     * mod = {}
+     * function mod:load() 
+     *   Player.Join:add(mod.joined)
+     * end
+     *
+     * mod.on(Player.Join, mod.joined) 
+     *
+     * funtion mod:joined(player)
+     *   print("Player joined: " .. player.Name)
+     * end
+     *
+     *
+     * mod = New.Module("mod")
+     *
+     * mod.on(Player.Join, mod.joined)
+     *
+     * function mod:load()
+     *  Player.Join:add(mod.joined)
+     * end
+     *
+     * function mod:joined(player)
+     *   print("Player joined: " .. player.Name)
+     * end
+     *
+     * 
+     */
+    
+    /*
     public static ScriptWrapper FromString(string script, CoreModules sandboxLevel)
     {
         string name = "StringScript";
@@ -146,6 +185,7 @@ public class ScriptWrapper : Script
         Log.Info("Loaded script: " + name);
         return wrapper;
     }
+    */
 
     public void ExecuteLoad()
     {
