@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
+            Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{BA85A442-DFC1-4C05-84F4-FBF481411DA1}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>SCriPt.LabAPI</RootNamespace>
+        <AssemblyName>SCriPt.LabAPI</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <PropertyGroup>
+      <PostBuildEvent>xcopy /Y "E:\Projects\SCPSL\SCriPt\SCriPt.LabAPI\bin\Debug\SCriPt.LabAPI.dll" "C:\Users\tayjm\AppData\Roaming\SCP Secret Laboratory\LabAPI\plugins\global"</PostBuildEvent>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="Assembly-CSharp">
+          <HintPath>C:\Users\tayjm\Desktop\scpsl\SCPSL_Data\Managed\Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp-firstpass">
+          <HintPath>C:\Users\tayjm\Desktop\scpsl\SCPSL_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+        </Reference>
+        <Reference Include="CommandSystem.Core">
+          <HintPath>C:\Users\tayjm\Desktop\scpsl\SCPSL_Data\Managed\CommandSystem.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="LabApi">
+          <HintPath>C:\Users\tayjm\Desktop\scpsl\SCPSL_Data\Managed\LabApi.dll</HintPath>
+        </Reference>
+        <Reference Include="Mirror">
+          <HintPath>C:\Users\tayjm\Desktop\scpsl\SCPSL_Data\Managed\Mirror.dll</HintPath>
+        </Reference>
+        <Reference Include="MoonSharp.Interpreter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=921e73ce94aa17f8, processorArchitecture=MSIL">
+          <HintPath>..\packages\MoonSharp.2.0.0.0\lib\net40-client\MoonSharp.Interpreter.dll</HintPath>
+        </Reference>
+        <Reference Include="mscorlib">
+          <HintPath>C:\Users\tayjm\Desktop\scpsl\SCPSL_Data\Managed\mscorlib.dll</HintPath>
+        </Reference>
+        <Reference Include="NorthwoodLib">
+          <HintPath>C:\Users\tayjm\Desktop\scpsl\SCPSL_Data\Managed\NorthwoodLib.dll</HintPath>
+        </Reference>
+        <Reference Include="Pooling">
+          <HintPath>C:\Users\tayjm\Desktop\scpsl\SCPSL_Data\Managed\Pooling.dll</HintPath>
+        </Reference>
+        <Reference Include="System"/>
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Data"/>
+        <Reference Include="System.Xml"/>
+        <Reference Include="UnityEngine">
+          <HintPath>C:\Users\tayjm\Desktop\scpsl\SCPSL_Data\Managed\UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+          <HintPath>..\..\REFERENCE\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="API\Lua\Globals\GlobalAdminToys.cs" />
+        <Compile Include="API\Lua\Globals\GlobalCoroutines.cs" />
+        <Compile Include="API\Lua\Globals\GlobalDeadmanSwitch.cs" />
+        <Compile Include="API\Lua\Globals\GlobalDecon.cs" />
+        <Compile Include="API\Lua\Globals\GlobalEvents.cs" />
+        <Compile Include="API\Lua\Globals\GlobalLobby.cs" />
+        <Compile Include="API\Lua\Globals\GlobalNew.cs" />
+        <Compile Include="API\Lua\Globals\GlobalPlayers.cs" />
+        <Compile Include="API\Lua\Globals\GlobalRound.cs" />
+        <Compile Include="API\Lua\Globals\GlobalSCriPt.cs" />
+        <Compile Include="API\Lua\Objects\LuaCustomCommand.cs" />
+        <Compile Include="API\Lua\Objects\LuaModule.cs" />
+        <Compile Include="API\Lua\Objects\ScriptHandler.cs" />
+        <Compile Include="API\Lua\Proxies\ProxyPlayer.cs" />
+        <Compile Include="Handlers\EventHandlers\ILuaEventHandler.cs" />
+        <Compile Include="Handlers\EventHandlers\LuaPlayerEvents.cs" />
+        <Compile Include="Handlers\EventHandlers\LuaScp0492Events.cs" />
+        <Compile Include="Handlers\EventHandlers\LuaScp049Events.cs" />
+        <Compile Include="Handlers\EventHandlers\LuaScp079Events.cs" />
+        <Compile Include="Handlers\EventHandlers\LuaScp096Events.cs" />
+        <Compile Include="Handlers\EventHandlers\LuaScp106Events.cs" />
+        <Compile Include="Handlers\EventHandlers\LuaScp173Events.cs" />
+        <Compile Include="Handlers\EventHandlers\LuaScp914Events.cs" />
+        <Compile Include="Handlers\EventHandlers\LuaScp939Events.cs" />
+        <Compile Include="Handlers\EventHandlers\LuaServerEvents.cs" />
+        <Compile Include="Handlers\EventHandlers\LuaWarheadEvents.cs" />
+        <Compile Include="Handlers\ScriptLoader.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="SCriPt.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="packages.config" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>

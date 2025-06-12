@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCriPt", "SCriPt\SCriPt.csproj", "{46A9EEA4-760D-4B6C-8239-D4DC82D0C19C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCriPt.EXILED", "SCriPt.EXILED\SCriPt.EXILED.csproj", "{46A9EEA4-760D-4B6C-8239-D4DC82D0C19C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCriPt.LabAPI", "SCriPt.LabAPI\SCriPt.LabAPI.csproj", "{BA85A442-DFC1-4C05-84F4-FBF481411DA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +14,9 @@ Global
 		{46A9EEA4-760D-4B6C-8239-D4DC82D0C19C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46A9EEA4-760D-4B6C-8239-D4DC82D0C19C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46A9EEA4-760D-4B6C-8239-D4DC82D0C19C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA85A442-DFC1-4C05-84F4-FBF481411DA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA85A442-DFC1-4C05-84F4-FBF481411DA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA85A442-DFC1-4C05-84F4-FBF481411DA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA85A442-DFC1-4C05-84F4-FBF481411DA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

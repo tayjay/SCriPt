@@ -1,0 +1,1 @@
+_SCriPt v0.3.0_ | A plugin by **TayTay** | Give it a ⭐ to show your support
