@@ -301,6 +301,25 @@ public class LuaPlayerEvents : ILuaEventHandler
 
     [MoonSharpVisible(true)] public event EventHandler<PlayerValidatedVisibilityEventArgs> ValidatedVisibility;
     
+    [MoonSharpVisible(true)] public event EventHandler<PlayerJumpedEventArgs> Jumped;
+    //MovementStateChanged
+    [MoonSharpVisible(true)] public event EventHandler<PlayerMovementStateChangedEventArgs> MovementStateChanged;
+    // ChangingAttachments
+    [MoonSharpVisible(true)] public event EventHandler<PlayerChangingAttachmentsEventArgs> ChangingAttachments;
+    //ChangedAttachments
+    [MoonSharpVisible(true)] public event EventHandler<PlayerChangedAttachmentsEventArgs> ChangedAttachments;
+    //SendingAttachmentsPrefs
+    [MoonSharpVisible(true)] public event EventHandler<PlayerSendingAttachmentsPrefsEventArgs> SendingAttachmentsPrefs;
+    //SentAttachmentsPrefs
+    [MoonSharpVisible(true)] public event EventHandler<PlayerSentAttachmentsPrefsEventArgs> SentAttachmentsPrefs;
+    //InteractingWarheadLever
+    [MoonSharpVisible(true)] public event EventHandler<PlayerInteractingWarheadLeverEventArgs> InteractingWarheadLever;
+    //InteractedWarheadLever
+    [MoonSharpVisible(true)] public event EventHandler<PlayerInteractedWarheadLeverEventArgs> InteractedWarheadLever;
+    
+    
+    
+    
     [MoonSharpHidden]
 public void OnJoined(PlayerJoinedEventArgs ev) => Joined?.Invoke(null, ev);
 [MoonSharpHidden]

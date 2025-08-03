@@ -18,9 +18,19 @@ public class GlobalDeadmanSwitch
     }
     
     //todo: Temp, likely won't work this way as TimeLeft is changed on spawn wave
+    public static bool IsDeadmanSwitchEnabled
+    {
+        get => DeadmanSwitch.IsDeadmanSwitchEnabled;
+        set => DeadmanSwitch.ForceCountdownToggle = value;
+    }
+    
     public static void Disable()
     {
-        //DeadmanSwitch.IsSequenceActive = false;
-        DeadmanSwitch.CountdownTimeLeft = float.MaxValue;
+        IsDeadmanSwitchEnabled = false;
+    }
+    
+    public static void Enable()
+    {
+        IsDeadmanSwitchEnabled = true;
     }
 }

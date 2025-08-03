@@ -1,3 +1,5 @@
+-- To be redone for LabAPI --
+
 -- Start by creating a table to hold our functions
 skeleton_command = {
     command_type='RemoteAdmin', -- This is a RemoteAdmin command

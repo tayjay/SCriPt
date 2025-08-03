@@ -1,13 +1,21 @@
-﻿using MoonSharp.Interpreter;
+﻿using LabApi.Features.Console;
+using MoonSharp.Interpreter;
 
 namespace SCriPt.LabAPI.API.Lua.Objects;
 
+[MoonSharpUserData]
 public class LuaModule : Table
 {
     public int Priority
     {
         get => (int)this["Priority"];
     }
+    
+    public string Name
+    {
+        get => (string)this["Name"];
+    }
+    
     public LuaModule(Script owner, string name, int priority = 3) : base(owner)
     {
         this["Name"] = DynValue.NewString(name);
@@ -25,9 +33,11 @@ public class LuaModule : Table
     [MoonSharpHidden]
     public void LoadModule()
     {
+        Logger.Debug("Loading module...");
         //Look for .load function in the module and run it
         foreach(var kvp in this.Pairs)
         {
+            Logger.Debug(kvp.Key + ": " + kvp.Value);
             if (kvp.Key.String == "load" && kvp.Value.Type == DataType.Function)
             {
                 var loadFunction = kvp.Value.Function;

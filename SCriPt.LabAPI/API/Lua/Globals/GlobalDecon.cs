@@ -7,12 +7,13 @@ public class GlobalDecon
 {
     public static void Disable()
     {
-        LightContainmentZoneDecontamination.DecontaminationController.Singleton.NetworkDecontaminationOverride =
+        LightContainmentZoneDecontamination.DecontaminationController.Singleton.DecontaminationOverride =
             LightContainmentZoneDecontamination.DecontaminationController.DecontaminationStatus.Disabled;
     }
     
     public static void Force()
     {
-        LightContainmentZoneDecontamination.DecontaminationController.Singleton.ForceDecontamination();
+        LightContainmentZoneDecontamination.DecontaminationController.Singleton.DecontaminationOverride=
+            LightContainmentZoneDecontamination.DecontaminationController.DecontaminationStatus.Forced;
     }
 }

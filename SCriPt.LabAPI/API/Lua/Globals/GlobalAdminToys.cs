@@ -1,6 +1,12 @@
-﻿using LabApi.Features.Wrappers;
+﻿using AdminToys;
+using LabApi.Features.Wrappers;
 using MoonSharp.Interpreter;
 using UnityEngine;
+using CapybaraToy = LabApi.Features.Wrappers.CapybaraToy;
+using LightSourceToy = LabApi.Features.Wrappers.LightSourceToy;
+using PrimitiveObjectToy = LabApi.Features.Wrappers.PrimitiveObjectToy;
+using SpeakerToy = LabApi.Features.Wrappers.SpeakerToy;
+using TextToy = LabApi.Features.Wrappers.TextToy;
 
 namespace SCriPt.LabAPI.API.Lua.Globals;
 
@@ -62,7 +68,7 @@ public class GlobalAdminToys
             return speakerToy;
         }
         
-        public static CapybaraToy SpawnCapybara(Vector3 position, Quaternion rotation = default, Vector3 scale = default)
+        public static CapybaraToy SpawnCapybara(Vector3 position, Quaternion rotation = default, Vector3 scale = default, bool collidable = true)
         {
             if (rotation == default)
                 rotation = Quaternion.identity;
@@ -70,12 +76,13 @@ public class GlobalAdminToys
                 scale = Vector3.one;
 
             CapybaraToy capybaraToy = CapybaraToy.Create(position, rotation, scale, networkSpawn:false);
+            capybaraToy.CollidersEnabled = collidable;
             capybaraToy.Spawn();
             return capybaraToy;
         }
 
         public static PrimitiveObjectToy SpawnPrimitiveObject(PrimitiveType type, Vector3 position, Quaternion rotation = default,
-            Vector3 scale = default, Color color = default)
+            Vector3 scale = default, Color color = default, bool collidable = true)
         {
             if(rotation == default)
                 rotation = Quaternion.identity;
@@ -87,7 +94,9 @@ public class GlobalAdminToys
             PrimitiveObjectToy primitiveObjectToy = PrimitiveObjectToy.Create(position, rotation, scale, networkSpawn:false);
             primitiveObjectToy.Type = type;
             primitiveObjectToy.Color = color;
+            primitiveObjectToy.Flags = collidable ? primitiveObjectToy.Flags | PrimitiveFlags.Collidable : primitiveObjectToy.Flags & ~PrimitiveFlags.Collidable;
             primitiveObjectToy.Spawn();
             return primitiveObjectToy;
         }
+        
 }

@@ -1,6 +1,12 @@
-﻿using LabApi.Features.Wrappers;
+﻿using JetBrains.Annotations;
+using LabApi.Features.Extensions;
+using LabApi.Features.Permissions;
+using LabApi.Features.Wrappers;
 using MapGeneration;
+using Mirror;
 using MoonSharp.Interpreter;
+using PlayerRoles;
+using UnityEngine;
 
 namespace SCriPt.LabAPI.API.Lua.Proxies;
 
@@ -62,5 +68,67 @@ public class ProxyPlayer
     public Room Room => Player.Room;
 
     public FacilityZone Zone => Player.Zone;
+
+    public Vector3 Gravity
+    {
+        get => Player.Gravity;
+        set => Player.Gravity = value;
+    }
+
+    public bool DoNotTrack => Player.DoNotTrack;
+    
+    public bool IsDummy => Player.IsDummy;
+
+    public bool IsDead => !Player.IsAlive;
+    public bool IsAlive => Player.IsAlive;
+    
+    public RoleTypeId Role => Player.Role;
+
+    public bool IsScp => Player.Role.IsScp();
+    
+    public bool IsHuman => Player.Role.IsHuman();
+    
+    [CanBeNull] public Player CurrentlySpectating => Player.CurrentlySpectating;
+    
+    public Item CurrentItem
+    {
+        get => Player.CurrentItem;
+        set => Player.CurrentItem = value;
+    }
+
+    public void Move(Vector3 delta)
+    {
+        Player.Move(delta);
+    }
+    
+    public Faction Faction
+    {
+        get => Player.Faction;
+    }
+    
+    public NetworkConnectionToClient ConnectionToClient => Player.ConnectionToClient;
+    
+    public int LifeId => Player.LifeId;
+    
+    public void Jump()
+    {
+        Player.Jump();
+    }
+    
+    public void Jump(float force)
+    {
+        Player.Jump(force);
+    }
+    
+    
+    public string[] GetPermissions()
+    {
+        return Player.GetPermissions();
+    }
+    
+    
+    public void Test()
+    {
+    }
     
 }

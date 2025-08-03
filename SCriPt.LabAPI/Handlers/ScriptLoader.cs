@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using AdminToys;
 using CustomPlayerEffects;
 using GameObjectPools;
 using InventorySystem;
 using InventorySystem.Items.Pickups;
 using LabApi.Events.Arguments.Interfaces;
+using LabApi.Events.Handlers;
 using LabApi.Features.Enums;
 using LabApi.Features.Wrappers;
 using MapGeneration;
@@ -17,8 +20,11 @@ using PlayerRoles;
 using PlayerRoles.PlayableScps.HumeShield;
 using SCriPt.LabAPI.API.Lua.Globals;
 using SCriPt.LabAPI.API.Lua.Objects;
+using SCriPt.LabAPI.API.Lua.Proxies;
 using UnityEngine;
+using CapybaraToy = LabApi.Features.Wrappers.CapybaraToy;
 using Logger = LabApi.Features.Console.Logger;
+
 
 namespace SCriPt.LabAPI.Handlers;
 
@@ -26,8 +32,8 @@ public class ScriptLoader
 {
 
     public static DirectoryInfo ScriptPathParent => LabApi.Loader.Features.Paths.PathManager.LabApi;
-    
-    public static CoreModules SandboxLevel => CoreModules.Preset_SoftSandbox;
+
+    public static CoreModules SandboxLevel => SCriPt.Instance.Config!.FullAccess ? CoreModules.Preset_Complete : CoreModules.Preset_SoftSandbox;
     
     public static Dictionary<string, DynValue> Globals { get; } = new Dictionary<string, DynValue>();
 
@@ -36,18 +42,27 @@ public class ScriptLoader
         // Configure Default options for MoonSharp
         Script.DefaultOptions.DebugPrint = s => Logger.Debug("[Lua] " + s);
         Script.DefaultOptions.ScriptLoader = new FileSystemScriptLoader();
-        Script.GlobalOptions.Platform = new LimitedPlatformAccessor();
+        Script.GlobalOptions.Platform = SCriPt.Instance.Config!.FullAccess
+            ? new StandardPlatformAccessor()
+            : new LimitedPlatformAccessor();
         
         // Register the core modules
         RegisterProxies();
         RegisterTypes();
         SetupStaticGlobals();
         
+        
         // Create Script folders if not already exist
         ScriptPathParent.CreateSubdirectory("SCriPt");
         ScriptPathParent.CreateSubdirectory("SCriPt/Scripts");
-        ScriptPathParent.CreateSubdirectory("SCriPt/Scripts/Global");
+        ScriptPathParent.CreateSubdirectory("SCriPt/Data");
+        GlobalData.LoadFromDisk();
         
+    }
+
+    public static void CreateScriptByCommand(string command)
+    {
+        ScriptHandler script = ScriptHandler.CreateFromCommand(command, CoreModules.Preset_SoftSandbox);
     }
 
     public static void LoadScripts()
@@ -60,10 +75,8 @@ public class ScriptLoader
             try
             {
                 Logger.Debug($"Loading script: {file.FullName}");
-                var script = new Script(SandboxLevel);
-                script.Options.ScriptLoader = new FileSystemScriptLoader();
-                script.Globals["ScriptName"] = file.Name;
-                script.DoFile(file.FullName);
+                ScriptHandler script = ScriptHandler.Create(file.FullName, SandboxLevel);
+                SCriPt.Instance.Scripts[file.Name] = script;
             }
             catch (Exception e)
             {
@@ -76,12 +89,47 @@ public class ScriptLoader
 
     public static void UnloadAllScripts()
     {
-        
+        Logger.Info("Unloading all scripts...");
+        foreach(var script in SCriPt.Instance.Scripts.Values)
+        {
+            try
+            {
+                script.ExecuteUnload();
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Error unloading script {script.Name}: {e.Message}");
+            }
+        }
+        SCriPt.Instance.Scripts.Clear();
+    }
+    
+    public static void UnloadScript(string scriptName)
+    {
+        if (SCriPt.Instance.Scripts.TryGetValue(scriptName, out ScriptHandler script))
+        {
+            try
+            {
+                script.ExecuteUnload();
+                SCriPt.Instance.Scripts.Remove(scriptName);
+                Logger.Info($"Unloaded script: {scriptName}");
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Error unloading script {scriptName}: {e.Message}");
+            }
+        }
+        else
+        {
+            Logger.Warn($"Script {scriptName} not found.");
+        }
     }
 
     private static void RegisterProxies()
     {
-        
+        //UserData.RegisterProxyType<ProxyPlayer, Player>(p => new ProxyPlayer(p));
+        UserData.RegisterProxyType<ProxyAdminToy, AdminToy>(p => new ProxyAdminToy(p));
+        UserData.RegisterProxyType<ProxyCapybaraToy, CapybaraToy>(p => new ProxyCapybaraToy(p));
     }
     
     public static void AddGlobalsToScript(ScriptHandler script)
@@ -105,6 +153,8 @@ public class ScriptLoader
         UserData.RegisterType<MonoBehaviour>();
         UserData.RegisterType<PoolObject>();
         UserData.RegisterType<HumeShieldModuleBase>();
+        UserData.RegisterType<GlobalSCriPt>();
+        UserData.RegisterType<GlobalServer>();
         
         UserData.RegisterType<Vector3>();
         UserData.RegisterType<Quaternion>();
@@ -122,16 +172,36 @@ public class ScriptLoader
         UserData.RegisterType<CommandType>();
         UserData.RegisterType<FacilityZone>();
         UserData.RegisterType<DoorName>();
+        UserData.RegisterType<StatusEffectBase>();
+        UserData.RegisterType<PlayerRoleBase>();
+        /*UserData.RegisterType<AdminToys.PrimitiveObjectToy>();
+        UserData.RegisterType<LabApi.Features.Wrappers.PrimitiveObjectToy>();
+        UserData.RegisterType<PrimitiveFlags>();
+        UserData.RegisterType<AdminToys.SpeakerToy>();
+        UserData.RegisterType<LabApi.Features.Wrappers.SpeakerToy>();
+        UserData.RegisterType<AdminToys.LightSourceToy>();
+        UserData.RegisterType<LabApi.Features.Wrappers.LightSourceToy>();
+        UserData.RegisterType<AdminToys.ShootingTarget>();
+        UserData.RegisterType<LabApi.Features.Wrappers.ShootingTargetToy>();
+        UserData.RegisterType<AdminToys.TextToy>();
+        UserData.RegisterType<LabApi.Features.Wrappers.TextToy>();*/
         
         UserData.RegisterAssembly();
+        
     }
 
     public static void SetupStaticGlobals()
     {
         AddStaticGlobal<GlobalAdminToys>("AdminToys");
         AddStaticGlobal<GlobalDeadmanSwitch>("DeadmanSwitch");
+        AddStaticGlobal<GlobalDeadmanSwitch>("DMS");
         AddStaticGlobal<GlobalEvents>("Events");
         AddStaticGlobal<GlobalDecon>("Decon");
+        AddStaticGlobal<GlobalData>("Data");
+        AddStaticGlobal<GlobalNew>("New");
+        AddStaticGlobal<GlobalLobby>("Lobby");
+        AddStaticGlobal<GlobalRound>("Round");
+        AddStaticGlobal<GlobalServer>("Server");
 
         //ENUMS https://github.com/moonsharp-devs/moonsharp/blob/master/src/MoonSharp.Interpreter.Tests/EndToEnd/UserDataEnumsTest.cs
         AddStaticGlobal<RoleTypeId>("RoleTypeId");
@@ -141,6 +211,9 @@ public class ScriptLoader
         AddStaticGlobal<FacilityZone>("FacilityZone");
         AddStaticGlobal<StatusEffectBase.EffectClassification>("EffectClassification");
         AddStaticGlobal<CommandType>("CommandType");
+
+        
+        Globals["PlayerEvents"] = UserData.CreateStatic(typeof(PlayerEvents));
     }
     
     
@@ -149,7 +222,7 @@ public class ScriptLoader
         if (Attribute.GetCustomAttribute(typeof(T), typeof(MoonSharpUserDataAttribute)) == null)
             UserData.RegisterType<T>();
         if(Globals.ContainsKey(globalName)) return;
-        UserData.CreateStatic(typeof(T));
+        //UserData.CreateStatic(typeof(T));
         Globals[globalName] = UserData.CreateStatic(typeof(T));
     }
     

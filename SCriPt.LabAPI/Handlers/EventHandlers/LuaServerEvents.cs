@@ -87,7 +87,14 @@ public class LuaServerEvents : ILuaEventHandler
     [MoonSharpVisible(true)] public event EventHandler<GeneratorActivatingEventArgs> GeneratorActivating;
 
     [MoonSharpVisible(true)] public event EventHandler<GeneratorActivatedEventArgs> GeneratorActivated;
-        
+      
+    [MoonSharpVisible(true)] public event EventHandler<RoundEndingConditionsCheckEventArgs> RoundEndingConditionsCheck;
+    // ElevatorSequenceChanged
+    [MoonSharpVisible(true)] public event EventHandler<ElevatorSequenceChangedEventArgs> ElevatorSequenceChanged;
+    
+    
+    
+    
     [MoonSharpHidden]
     public void OnWaitingForPlayers()
     {
@@ -321,6 +328,12 @@ public class LuaServerEvents : ILuaEventHandler
     {
         GeneratorActivated?.Invoke(null, ev);
     }
+    
+    [MoonSharpHidden]
+    public void OnRoundEndingConditionsCheck(RoundEndingConditionsCheckEventArgs ev)
+    {
+        RoundEndingConditionsCheck?.Invoke(null, ev);
+    }
 
     [MoonSharpHidden]
     public void RegisterEventTypes()
@@ -360,6 +373,7 @@ public class LuaServerEvents : ILuaEventHandler
         UserData.RegisterType<ExplosionSpawnedEventArgs>();
         UserData.RegisterType<GeneratorActivatingEventArgs>();
         UserData.RegisterType<GeneratorActivatedEventArgs>();
+        UserData.RegisterType<RoundEndingConditionsCheckEventArgs>();
     }
     
     
@@ -405,6 +419,7 @@ public class LuaServerEvents : ILuaEventHandler
         ServerEvents.ExplosionSpawned += OnExplosionSpawned;
         ServerEvents.GeneratorActivating += OnGeneratorActivating;
         ServerEvents.GeneratorActivated += OnGeneratorActivated;
+        ServerEvents.RoundEndingConditionsCheck += OnRoundEndingConditionsCheck;
     }
 
     [MoonSharpHidden]
@@ -449,6 +464,7 @@ public class LuaServerEvents : ILuaEventHandler
         ServerEvents.ExplosionSpawned -= OnExplosionSpawned;
         ServerEvents.GeneratorActivating -= OnGeneratorActivating;
         ServerEvents.GeneratorActivated -= OnGeneratorActivated;
+        ServerEvents.RoundEndingConditionsCheck -= OnRoundEndingConditionsCheck;
     }
 
 }

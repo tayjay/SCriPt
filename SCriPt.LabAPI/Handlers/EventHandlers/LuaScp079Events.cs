@@ -51,6 +51,10 @@ public class LuaScp079Events : ILuaEventHandler
 
     public event EventHandler<Scp079UsedTeslaEventArgs> UsedTesla;
     
+    public event EventHandler<Scp079PingingEventArgs> Pinging;
+    
+    public event EventHandler<Scp079PingedEventArgs> Pinged;
+    
     [MoonSharpHidden]
     public void OnBlackingOutRoom(Scp079BlackingOutRoomEventsArgs ev)
     {
@@ -181,6 +185,18 @@ public class LuaScp079Events : ILuaEventHandler
     {
         UsedTesla?.Invoke(this, ev);
     }
+    
+    [MoonSharpHidden]
+    public void OnPinging(Scp079PingingEventArgs ev)
+    {
+        Pinging?.Invoke(this, ev);
+    }
+    
+    [MoonSharpHidden]
+    public void OnPinged(Scp079PingedEventArgs ev)
+    {
+        Pinged?.Invoke(this, ev);
+    }
 
 
     public void RegisterEventTypes()
@@ -207,6 +223,8 @@ public class LuaScp079Events : ILuaEventHandler
         UserData.RegisterType<Scp079UnlockedDoorEventArgs>();
         UserData.RegisterType<Scp079UsingTeslaEventArgs>();
         UserData.RegisterType<Scp079UsedTeslaEventArgs>();
+        UserData.RegisterType<Scp079PingingEventArgs>();
+        UserData.RegisterType<Scp079PingedEventArgs>();
     }
 
     public void RegisterEvents()
@@ -233,6 +251,8 @@ public class LuaScp079Events : ILuaEventHandler
         LabApi.Events.Handlers.Scp079Events.UnlockedDoor += OnUnlockedDoor;
         LabApi.Events.Handlers.Scp079Events.UsingTesla += OnUsingTesla;
         LabApi.Events.Handlers.Scp079Events.UsedTesla += OnUsedTesla;
+        LabApi.Events.Handlers.Scp079Events.Pinging += OnPinging;
+        LabApi.Events.Handlers.Scp079Events.Pinged += OnPinged; 
     }
 
     public void UnregisterEvents()
@@ -259,5 +279,7 @@ public class LuaScp079Events : ILuaEventHandler
         LabApi.Events.Handlers.Scp079Events.UnlockedDoor -= OnUnlockedDoor;
         LabApi.Events.Handlers.Scp079Events.UsingTesla -= OnUsingTesla;
         LabApi.Events.Handlers.Scp079Events.UsedTesla -= OnUsedTesla;
+        LabApi.Events.Handlers.Scp079Events.Pinging -= OnPinging;
+        LabApi.Events.Handlers.Scp079Events.Pinged -= OnPinged;
     }
 }

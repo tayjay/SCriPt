@@ -1,40 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using LabApi.Events.Arguments.PlayerEvents;
 using LabApi.Features;
 using LabApi.Features.Console;
+using LabApi.Features.Wrappers;
 using LabApi.Loader.Features.Plugins;
 using LabApi.Loader.Features.Plugins.Enums;
+using MoonSharp.Interpreter;
 using SCriPt.LabAPI.API.Lua.Objects;
 using SCriPt.LabAPI.Handlers;
 
 namespace SCriPt.LabAPI
 {
-    public class SCriPt : Plugin
+    public class SCriPt : Plugin<Config>
     {
+        public static SCriPt Instance { get; private set; }
 
-        public static LuaServerEvents ServerEvents { get; set; }
-        public static LuaWarheadEvents WarheadEvents { get; set; }
-        public static LuaPlayerEvents PlayerEvents { get; set; }
+        public LuaServerEvents ServerEvents { get; set; }
+        public LuaWarheadEvents WarheadEvents { get; set; }
+        public LuaPlayerEvents PlayerEvents { get; set; }
         
-        public static LuaScp049Events Scp049Events { get; set; }
+        public LuaScp049Events Scp049Events { get; set; }
         
-        public static LuaScp096Events Scp096Events { get; set; }
+        public LuaScp096Events Scp096Events { get; set; }
         
-        public static LuaScp173Events Scp173Events { get; set; }
+        public LuaScp173Events Scp173Events { get; set; }
         
-        public static LuaScp939Events Scp939Events { get; set; }
+        public LuaScp939Events Scp939Events { get; set; }
         
-        public static LuaScp106Events Scp106Events { get; set; }
+        public LuaScp106Events Scp106Events { get; set; }
         
-        public static LuaScp0492Events Scp0492Events { get; set; }
+        public LuaScp0492Events Scp0492Events { get; set; }
         
-        public static LuaScp079Events Scp079Events { get; set; }
+        public LuaScp079Events Scp079Events { get; set; }
         
-        public static LuaScp914Events Scp914Events { get; set; }
+        public LuaScp914Events Scp914Events { get; set; }
         
         
         
-        public static Dictionary<string,ScriptHandler> Scripts;
+        public Dictionary<string,ScriptHandler> Scripts;
         
         public override void Enable()
         {
@@ -42,13 +49,20 @@ namespace SCriPt.LabAPI
             {
                 return;
             }
+            if(Config!.FullAccess)
+                Logger.Error("You have enabled FullAccess, this is not recommended and can cause security issues. If you do not know what this means, please disable it in the config.");
+            
+            Instance = this;
             RegisterEvents();
             
             Scripts = new Dictionary<string, ScriptHandler>();
             ScriptLoader.Initialize();
             ScriptLoader.LoadScripts();
             
+            
         }
+
+        
 
         public override void Disable()
         {
@@ -57,6 +71,7 @@ namespace SCriPt.LabAPI
                 return;
             }
             UnregisterEvents();
+            ScriptLoader.UnloadAllScripts();
         }
         
         private void RegisterEvents()
@@ -94,6 +109,8 @@ namespace SCriPt.LabAPI
             Scp106Events.RegisterEvents();
             Scp0492Events.RegisterEvents();
             Scp079Events.RegisterEvents();
+            
+            Logger.Info("Has PlayerSpawnEvent been registered? " + UserData.IsTypeRegistered<PlayerSpawnedEventArgs>());
         }
         
         private void UnregisterEvents()
@@ -135,8 +152,13 @@ namespace SCriPt.LabAPI
         public override string Name { get; } = "SCriPt.LabAPI";
         public override string Description { get; } = "A plugin for Lua programming with LabAPI.";
         public override string Author { get; } = "TayTay";
-        public override Version Version { get; } = new (0, 1, 0);
+        public override Version Version { get; } = new (0, 5, 0);
         public override Version RequiredApiVersion { get; } = new (LabApiProperties.CompiledVersion);
         public override LoadPriority Priority { get; } = LoadPriority.Low;
+        
+        
+        
+        
+        
     }
 }
