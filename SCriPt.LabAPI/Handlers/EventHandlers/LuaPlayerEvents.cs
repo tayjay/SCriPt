@@ -316,7 +316,48 @@ public class LuaPlayerEvents : ILuaEventHandler
     [MoonSharpVisible(true)] public event EventHandler<PlayerInteractingWarheadLeverEventArgs> InteractingWarheadLever;
     //InteractedWarheadLever
     [MoonSharpVisible(true)] public event EventHandler<PlayerInteractedWarheadLeverEventArgs> InteractedWarheadLever;
-    
+    //PlayerSpinningRevolver
+    [MoonSharpVisible(true)] public event EventHandler<PlayerSpinningRevolverEventArgs> SpinningRevolver;
+    //PlayerSpunRevolver
+    [MoonSharpVisible(true)] public event EventHandler<PlayerSpinnedRevolverEventArgs> SpinnedRevolver;
+    //PlayerToggggledDisruptorMode
+    [MoonSharpVisible(true)] public event EventHandler<PlayerToggledDisruptorFiringModeEventArgs> ToggledDisruptorFiringMode;
+    //PlayerChangedBadgeVisibility
+    [MoonSharpVisible(true)] public event EventHandler<PlayerChangedBadgeVisibilityEventArgs> ChangedBadgeVisibility;
+    //PlayerChangingBadgeVisibility
+    [MoonSharpVisible(true)] public event EventHandler<PlayerChangingBadgeVisibilityEventArgs> ChangingBadgeVisibility;
+    //PlayerProcessingJailbirdMessage
+    [MoonSharpVisible(true)] public event EventHandler<PlayerProcessingJailbirdMessageEventArgs> ProcessingJailbirdMessage;
+    //PlayerProcessedJailbirdMessage
+    [MoonSharpVisible(true)] public event EventHandler<PlayerProcessedJailbirdMessageEventArgs> ProcessedJailbirdMessage;
+    //PlayerInspectingKeycard
+    [MoonSharpVisible(true)] public event EventHandler<PlayerInspectingKeycardEventArgs> InspectingKeycard;
+    //PlayerInspectedKeycard
+    [MoonSharpVisible(true)] public event EventHandler<PlayerInspectedKeycardEventArgs> InspectedKeycard;
+    //RoomChanged
+    [MoonSharpVisible(true)] public event EventHandler<PlayerRoomChangedEventArgs> RoomChanged;
+    //ZoneChanged
+    [MoonSharpVisible(true)] public event EventHandler<PlayerZoneChangedEventArgs> ZoneChanged;
+    //PlayerRaPlayerListAddedPlayer
+    [MoonSharpVisible(true)] public event EventHandler<PlayerRaPlayerListAddedPlayerEventArgs> RaPlayerListAddedPlayer;
+    //PlayerRaPlayerListAddingPlayer
+    [MoonSharpVisible(true)] public event EventHandler<PlayerRaPlayerListAddingPlayerEventArgs> RaPlayerListAddingPlayer;
+    //PlayerReceivedAchievement
+    [MoonSharpVisible(true)] public event EventHandler<PlayerReceivedAchievementEventArgs> ReceivedAchievement;
+    //PlayerRequestedRaPlayerInfo
+    [MoonSharpVisible(true)] public event EventHandler<PlayerRequestedRaPlayerInfoEventArgs> RequestedRaPlayerInfo;
+    //PlayerRequestingRaPlayerInfo
+    [MoonSharpVisible(true)] public event EventHandler<PlayerRequestingRaPlayerInfoEventArgs> RequestingRaPlayerInfo;
+    //PlayerRequestedCustomRaInfo
+    [MoonSharpVisible(true)] public event EventHandler<PlayerRequestedCustomRaInfoEventArgs> RequestedCustomRaInfo;
+    //PlayerRequestedRaPlayerList
+    [MoonSharpVisible(true)] public event EventHandler<PlayerRequestedRaPlayerListEventArgs> RequestedRaPlayerList;
+    //PlayerRequestingRaPlayerList
+    [MoonSharpVisible(true)] public event EventHandler<PlayerRequestingRaPlayerListEventArgs> RequestingRaPlayerList;
+    //PlayerRequestedRaPlayersInfo
+    [MoonSharpVisible(true)] public event EventHandler<PlayerRequestedRaPlayersInfoEventArgs> RequestedRaPlayersInfo;
+    //PlayerRequestingRaPlayersInfo
+    [MoonSharpVisible(true)] public event EventHandler<PlayerRequestingRaPlayersInfoEventArgs> RequestingRaPlayersInfo;
     
     
     
@@ -612,6 +653,64 @@ public void OnLeavingHazard(PlayerLeavingHazardEventArgs ev) => LeavingHazard?.I
 public void OnLeftHazard(PlayerLeftHazardEventArgs ev) => LeftHazard?.Invoke(null, ev);
 [MoonSharpHidden]
 public void OnValidatedVisibility(PlayerValidatedVisibilityEventArgs ev) => ValidatedVisibility?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnJumped(PlayerJumpedEventArgs ev) => Jumped?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnMovementStateChanged(PlayerMovementStateChangedEventArgs ev) => MovementStateChanged?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnChangingAttachments(PlayerChangingAttachmentsEventArgs ev) => ChangingAttachments?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnChangedAttachments(PlayerChangedAttachmentsEventArgs ev) => ChangedAttachments?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnSendingAttachmentsPrefs(PlayerSendingAttachmentsPrefsEventArgs ev) => SendingAttachmentsPrefs?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnSentAttachmentsPrefs(PlayerSentAttachmentsPrefsEventArgs ev) => SentAttachmentsPrefs?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnInteractingWarheadLever(PlayerInteractingWarheadLeverEventArgs ev) => InteractingWarheadLever?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnInteractedWarheadLever(PlayerInteractedWarheadLeverEventArgs ev) => InteractedWarheadLever?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnSpinningRevolver(PlayerSpinningRevolverEventArgs ev) => SpinningRevolver?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnSpinnedRevolver(PlayerSpinnedRevolverEventArgs ev) => SpinnedRevolver?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnToggledDisruptorFiringMode(PlayerToggledDisruptorFiringModeEventArgs ev) => ToggledDisruptorFiringMode?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnChangedBadgeVisibility(PlayerChangedBadgeVisibilityEventArgs ev) => ChangedBadgeVisibility?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnChangingBadgeVisibility(PlayerChangingBadgeVisibilityEventArgs ev) => ChangingBadgeVisibility?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnProcessingJailbirdMessage(PlayerProcessingJailbirdMessageEventArgs ev) => ProcessingJailbirdMessage?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnProcessedJailbirdMessage(PlayerProcessedJailbirdMessageEventArgs ev) => ProcessedJailbirdMessage?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnInspectingKeycard(PlayerInspectingKeycardEventArgs ev) => InspectingKeycard?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnInspectedKeycard(PlayerInspectedKeycardEventArgs ev) => InspectedKeycard?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnRoomChanged(PlayerRoomChangedEventArgs ev) => RoomChanged?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnZoneChanged(PlayerZoneChangedEventArgs ev) => ZoneChanged?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnRaPlayerListAddedPlayer(PlayerRaPlayerListAddedPlayerEventArgs ev) => RaPlayerListAddedPlayer?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnRaPlayerListAddingPlayer(PlayerRaPlayerListAddingPlayerEventArgs ev) => RaPlayerListAddingPlayer?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnReceivedAchievement(PlayerReceivedAchievementEventArgs ev) => ReceivedAchievement?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnRequestedRaPlayerInfo(PlayerRequestedRaPlayerInfoEventArgs ev) => RequestedRaPlayerInfo?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnRequestingRaPlayerInfo(PlayerRequestingRaPlayerInfoEventArgs ev) => RequestingRaPlayerInfo?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnRequestedCustomRaInfo(PlayerRequestedCustomRaInfoEventArgs ev) => RequestedCustomRaInfo?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnRequestedRaPlayerList(PlayerRequestedRaPlayerListEventArgs ev) => RequestedRaPlayerList?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnRequestingRaPlayerList(PlayerRequestingRaPlayerListEventArgs ev) => RequestingRaPlayerList?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnRequestedRaPlayersInfo(PlayerRequestedRaPlayersInfoEventArgs ev) => RequestedRaPlayersInfo?.Invoke(null, ev);
+[MoonSharpHidden]
+public void OnRequestingRaPlayersInfo(PlayerRequestingRaPlayersInfoEventArgs ev) => RequestingRaPlayersInfo?.Invoke(null, ev);
 
 
 [MoonSharpHidden]
@@ -763,6 +862,35 @@ public void RegisterEventTypes()
     UserData.RegisterType<PlayerLeavingHazardEventArgs>();
     UserData.RegisterType<PlayerLeftHazardEventArgs>();
     UserData.RegisterType<PlayerValidatedVisibilityEventArgs>();
+    UserData.RegisterType<PlayerJumpedEventArgs>();
+    UserData.RegisterType<PlayerMovementStateChangedEventArgs>();
+    UserData.RegisterType<PlayerChangingAttachmentsEventArgs>();
+    UserData.RegisterType<PlayerChangedAttachmentsEventArgs>();
+    UserData.RegisterType<PlayerSendingAttachmentsPrefsEventArgs>();
+    UserData.RegisterType<PlayerSentAttachmentsPrefsEventArgs>();
+    UserData.RegisterType<PlayerInteractingWarheadLeverEventArgs>();
+    UserData.RegisterType<PlayerInteractedWarheadLeverEventArgs>();
+    UserData.RegisterType<PlayerSpinningRevolverEventArgs>();
+    UserData.RegisterType<PlayerSpinnedRevolverEventArgs>();
+    UserData.RegisterType<PlayerToggledDisruptorFiringModeEventArgs>();
+    UserData.RegisterType<PlayerChangedBadgeVisibilityEventArgs>();
+    UserData.RegisterType<PlayerChangingBadgeVisibilityEventArgs>();
+    UserData.RegisterType<PlayerProcessingJailbirdMessageEventArgs>();
+    UserData.RegisterType<PlayerProcessedJailbirdMessageEventArgs>();
+    UserData.RegisterType<PlayerInspectingKeycardEventArgs>();
+    UserData.RegisterType<PlayerInspectedKeycardEventArgs>();
+    UserData.RegisterType<PlayerRoomChangedEventArgs>();
+    UserData.RegisterType<PlayerZoneChangedEventArgs>();
+    UserData.RegisterType<PlayerRaPlayerListAddedPlayerEventArgs>();
+    UserData.RegisterType<PlayerRaPlayerListAddingPlayerEventArgs>();
+    UserData.RegisterType<PlayerReceivedAchievementEventArgs>();
+    UserData.RegisterType<PlayerRequestedRaPlayerInfoEventArgs>();
+    UserData.RegisterType<PlayerRequestingRaPlayerInfoEventArgs>();
+    UserData.RegisterType<PlayerRequestedCustomRaInfoEventArgs>();
+    UserData.RegisterType<PlayerRequestedRaPlayerListEventArgs>();
+    UserData.RegisterType<PlayerRequestingRaPlayerListEventArgs>();
+    UserData.RegisterType<PlayerRequestedRaPlayersInfoEventArgs>();
+    UserData.RegisterType<PlayerRequestingRaPlayersInfoEventArgs>();
 }
 
 
@@ -916,6 +1044,35 @@ public void RegisterEventTypes()
         PlayerEvents.LeavingHazard += OnLeavingHazard;
         PlayerEvents.LeftHazard += OnLeftHazard;
         PlayerEvents.ValidatedVisibility += OnValidatedVisibility;
+        PlayerEvents.Jumped += OnJumped;
+        PlayerEvents.MovementStateChanged += OnMovementStateChanged;
+        PlayerEvents.ChangingAttachments += OnChangingAttachments;
+        PlayerEvents.ChangedAttachments += OnChangedAttachments;
+        PlayerEvents.SendingAttachmentsPrefs += OnSendingAttachmentsPrefs;
+        PlayerEvents.SentAttachmentsPrefs += OnSentAttachmentsPrefs;
+        PlayerEvents.InteractingWarheadLever += OnInteractingWarheadLever;
+        PlayerEvents.InteractedWarheadLever += OnInteractedWarheadLever;
+        PlayerEvents.SpinningRevolver += OnSpinningRevolver;
+        PlayerEvents.SpinnedRevolver += OnSpinnedRevolver;
+        PlayerEvents.ToggledDisruptorFiringMode += OnToggledDisruptorFiringMode;
+        PlayerEvents.ChangedBadgeVisibility += OnChangedBadgeVisibility;
+        PlayerEvents.ChangingBadgeVisibility += OnChangingBadgeVisibility;
+        PlayerEvents.ProcessingJailbirdMessage += OnProcessingJailbirdMessage;
+        PlayerEvents.ProcessedJailbirdMessage += OnProcessedJailbirdMessage;
+        PlayerEvents.InspectingKeycard += OnInspectingKeycard;
+        PlayerEvents.InspectedKeycard += OnInspectedKeycard;
+        PlayerEvents.RoomChanged += OnRoomChanged;
+        PlayerEvents.ZoneChanged += OnZoneChanged;
+        PlayerEvents.RaPlayerListAddedPlayer += OnRaPlayerListAddedPlayer;
+        PlayerEvents.RaPlayerListAddingPlayer += OnRaPlayerListAddingPlayer;
+        PlayerEvents.ReceivedAchievement += OnReceivedAchievement;
+        PlayerEvents.RequestedRaPlayerInfo += OnRequestedRaPlayerInfo;
+        PlayerEvents.RequestingRaPlayerInfo += OnRequestingRaPlayerInfo;
+        PlayerEvents.RequestedCustomRaInfo += OnRequestedCustomRaInfo;
+        PlayerEvents.RequestedRaPlayerList += OnRequestedRaPlayerList;
+        PlayerEvents.RequestingRaPlayerList += OnRequestingRaPlayerList;
+        PlayerEvents.RequestedRaPlayersInfo += OnRequestedRaPlayersInfo;
+        PlayerEvents.RequestingRaPlayersInfo += OnRequestingRaPlayersInfo;
     }
 
     [MoonSharpHidden]
@@ -1067,6 +1224,35 @@ public void RegisterEventTypes()
         PlayerEvents.LeavingHazard -= OnLeavingHazard;
         PlayerEvents.LeftHazard -= OnLeftHazard;
         PlayerEvents.ValidatedVisibility -= OnValidatedVisibility;
+        PlayerEvents.Jumped -= OnJumped;
+        PlayerEvents.MovementStateChanged -= OnMovementStateChanged;
+        PlayerEvents.ChangingAttachments -= OnChangingAttachments;
+        PlayerEvents.ChangedAttachments -= OnChangedAttachments;
+        PlayerEvents.SendingAttachmentsPrefs -= OnSendingAttachmentsPrefs;
+        PlayerEvents.SentAttachmentsPrefs -= OnSentAttachmentsPrefs;
+        PlayerEvents.InteractingWarheadLever -= OnInteractingWarheadLever;
+        PlayerEvents.InteractedWarheadLever -= OnInteractedWarheadLever;
+        PlayerEvents.SpinningRevolver -= OnSpinningRevolver;
+        PlayerEvents.SpinnedRevolver -= OnSpinnedRevolver;
+        PlayerEvents.ToggledDisruptorFiringMode -= OnToggledDisruptorFiringMode;
+        PlayerEvents.ChangedBadgeVisibility -= OnChangedBadgeVisibility;
+        PlayerEvents.ChangingBadgeVisibility -= OnChangingBadgeVisibility;
+        PlayerEvents.ProcessingJailbirdMessage -= OnProcessingJailbirdMessage;
+        PlayerEvents.ProcessedJailbirdMessage -= OnProcessedJailbirdMessage;
+        PlayerEvents.InspectingKeycard -= OnInspectingKeycard;
+        PlayerEvents.InspectedKeycard -= OnInspectedKeycard;
+        PlayerEvents.RoomChanged -= OnRoomChanged;
+        PlayerEvents.ZoneChanged -= OnZoneChanged;
+        PlayerEvents.RaPlayerListAddedPlayer -= OnRaPlayerListAddedPlayer;
+        PlayerEvents.RaPlayerListAddingPlayer -= OnRaPlayerListAddingPlayer;
+        PlayerEvents.ReceivedAchievement -= OnReceivedAchievement;
+        PlayerEvents.RequestedRaPlayerInfo -= OnRequestedRaPlayerInfo;
+        PlayerEvents.RequestingRaPlayerInfo -= OnRequestingRaPlayerInfo;
+        PlayerEvents.RequestedCustomRaInfo -= OnRequestedCustomRaInfo;
+        PlayerEvents.RequestedRaPlayerList -= OnRequestedRaPlayerList;
+        PlayerEvents.RequestingRaPlayerList -= OnRequestingRaPlayerList;
+        PlayerEvents.RequestedRaPlayersInfo -= OnRequestedRaPlayersInfo;
+        PlayerEvents.RequestingRaPlayersInfo -= OnRequestingRaPlayersInfo;
     }
 
     // mod.on(Events.Player, "Joined", function(ev))

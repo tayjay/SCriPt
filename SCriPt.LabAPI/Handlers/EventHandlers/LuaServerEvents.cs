@@ -334,6 +334,12 @@ public class LuaServerEvents : ILuaEventHandler
     {
         RoundEndingConditionsCheck?.Invoke(null, ev);
     }
+    
+    [MoonSharpHidden]
+    public void OnElevatorSequenceChanged(ElevatorSequenceChangedEventArgs ev)
+    {
+        ElevatorSequenceChanged?.Invoke(null, ev);
+    }
 
     [MoonSharpHidden]
     public void RegisterEventTypes()
@@ -374,6 +380,7 @@ public class LuaServerEvents : ILuaEventHandler
         UserData.RegisterType<GeneratorActivatingEventArgs>();
         UserData.RegisterType<GeneratorActivatedEventArgs>();
         UserData.RegisterType<RoundEndingConditionsCheckEventArgs>();
+        UserData.RegisterType<ElevatorSequenceChangedEventArgs>();
     }
     
     
@@ -420,6 +427,7 @@ public class LuaServerEvents : ILuaEventHandler
         ServerEvents.GeneratorActivating += OnGeneratorActivating;
         ServerEvents.GeneratorActivated += OnGeneratorActivated;
         ServerEvents.RoundEndingConditionsCheck += OnRoundEndingConditionsCheck;
+        ServerEvents.ElevatorSequenceChanged += OnElevatorSequenceChanged;
     }
 
     [MoonSharpHidden]
@@ -465,6 +473,7 @@ public class LuaServerEvents : ILuaEventHandler
         ServerEvents.GeneratorActivating -= OnGeneratorActivating;
         ServerEvents.GeneratorActivated -= OnGeneratorActivated;
         ServerEvents.RoundEndingConditionsCheck -= OnRoundEndingConditionsCheck;
+        ServerEvents.ElevatorSequenceChanged -= OnElevatorSequenceChanged;
     }
 
 }

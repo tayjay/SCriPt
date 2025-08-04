@@ -112,13 +112,16 @@
         <Compile Include="Commands\LuaReloadCommand.cs" />
         <Compile Include="Config.cs" />
         <Compile Include="Handlers\EventHandlers\ILuaEventHandler.cs" />
+        <Compile Include="Handlers\EventHandlers\LuaObjectiveEvents.cs" />
         <Compile Include="Handlers\EventHandlers\LuaPlayerEvents.cs" />
         <Compile Include="Handlers\EventHandlers\LuaScp0492Events.cs" />
         <Compile Include="Handlers\EventHandlers\LuaScp049Events.cs" />
         <Compile Include="Handlers\EventHandlers\LuaScp079Events.cs" />
         <Compile Include="Handlers\EventHandlers\LuaScp096Events.cs" />
         <Compile Include="Handlers\EventHandlers\LuaScp106Events.cs" />
+        <Compile Include="Handlers\EventHandlers\LuaScp127Events.cs" />
         <Compile Include="Handlers\EventHandlers\LuaScp173Events.cs" />
+        <Compile Include="Handlers\EventHandlers\LuaScp3114Events.cs" />
         <Compile Include="Handlers\EventHandlers\LuaScp914Events.cs" />
         <Compile Include="Handlers\EventHandlers\LuaScp939Events.cs" />
         <Compile Include="Handlers\EventHandlers\LuaServerEvents.cs" />

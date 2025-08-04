@@ -38,6 +38,9 @@ namespace SCriPt.LabAPI
         public LuaScp079Events Scp079Events { get; set; }
         
         public LuaScp914Events Scp914Events { get; set; }
+        public LuaScp127Events Scp127Events { get; set; }
+        public LuaScp3114Events Scp3114Events { get; set; }
+        public LuaObjectiveEvents ObjectiveEvents { get; set; }
         
         
         
@@ -87,6 +90,9 @@ namespace SCriPt.LabAPI
             Scp0492Events = new LuaScp0492Events();
             Scp079Events = new LuaScp079Events();
             Scp914Events = new LuaScp914Events();
+            Scp127Events = new LuaScp127Events();
+            Scp3114Events = new LuaScp3114Events();
+            ObjectiveEvents = new LuaObjectiveEvents();
             
             ServerEvents.RegisterEventTypes();
             WarheadEvents.RegisterEventTypes();
@@ -98,6 +104,10 @@ namespace SCriPt.LabAPI
             Scp106Events.RegisterEventTypes();
             Scp0492Events.RegisterEventTypes();
             Scp079Events.RegisterEventTypes();
+            Scp914Events.RegisterEventTypes();
+            Scp127Events.RegisterEventTypes();
+            Scp3114Events.RegisterEventTypes();
+            ObjectiveEvents.RegisterEventTypes();
             
             ServerEvents.RegisterEvents();
             WarheadEvents.RegisterEvents();
@@ -109,6 +119,10 @@ namespace SCriPt.LabAPI
             Scp106Events.RegisterEvents();
             Scp0492Events.RegisterEvents();
             Scp079Events.RegisterEvents();
+            Scp914Events.RegisterEvents();
+            Scp127Events.RegisterEvents();
+            Scp3114Events.RegisterEvents();
+            ObjectiveEvents.RegisterEvents();
             
             Logger.Info("Has PlayerSpawnEvent been registered? " + UserData.IsTypeRegistered<PlayerSpawnedEventArgs>());
         }
@@ -125,6 +139,10 @@ namespace SCriPt.LabAPI
             Scp106Events.UnregisterEvents();
             Scp0492Events.UnregisterEvents();
             Scp079Events.UnregisterEvents();
+            Scp914Events.UnregisterEvents();
+            Scp127Events.UnregisterEvents();
+            Scp3114Events.UnregisterEvents();
+            ObjectiveEvents.UnregisterEvents();
             
             ServerEvents = null;
             WarheadEvents = null;
@@ -136,6 +154,10 @@ namespace SCriPt.LabAPI
             Scp106Events = null;
             Scp0492Events = null;
             Scp079Events = null;
+            Scp914Events = null;
+            Scp127Events = null;
+            Scp3114Events = null;
+            ObjectiveEvents = null;
         }
 
         public bool CheckForMoonSharp()
@@ -152,7 +174,7 @@ namespace SCriPt.LabAPI
         public override string Name { get; } = "SCriPt.LabAPI";
         public override string Description { get; } = "A plugin for Lua programming with LabAPI.";
         public override string Author { get; } = "TayTay";
-        public override Version Version { get; } = new (0, 5, 0);
+        public override Version Version { get; } = new (0, 5, 1);
         public override Version RequiredApiVersion { get; } = new (LabApiProperties.CompiledVersion);
         public override LoadPriority Priority { get; } = LoadPriority.Low;
         
