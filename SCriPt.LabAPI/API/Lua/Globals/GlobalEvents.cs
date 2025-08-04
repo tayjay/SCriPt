@@ -31,6 +31,11 @@ public class GlobalEvents
     public static LuaScp0492Events Zombie => SCriPt.Instance.Scp0492Events;
     
     public static LuaScp914Events Scp914 => SCriPt.Instance.Scp914Events;
+    public static LuaObjectiveEvents Objective => SCriPt.Instance.ObjectiveEvents;
+    public static LuaScp079Events Scp079 => SCriPt.Instance.Scp079Events;
+    public static LuaScp127Events Scp127 => SCriPt.Instance.Scp127Events;
+    public static LuaScp3114Events Scp3114 => SCriPt.Instance.Scp3114Events;
+    public static LuaScp3114Events Skeleton => SCriPt.Instance.Scp3114Events;
     
     
     
