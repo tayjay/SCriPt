@@ -70,6 +70,9 @@
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
+        <Reference Include="Unity.TextMeshPro">
+          <HintPath>C:\Users\tayjm\Desktop\scpsl\SCPSL_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine">
           <HintPath>C:\Users\tayjm\Desktop\scpsl\SCPSL_Data\Managed\UnityEngine.dll</HintPath>
         </Reference>
@@ -94,8 +97,11 @@
         <Compile Include="API\Lua\Globals\GlobalRound.cs" />
         <Compile Include="API\Lua\Globals\GlobalSCriPt.cs" />
         <Compile Include="API\Lua\Globals\GlobalServer.cs" />
+        <Compile Include="API\Lua\Globals\GlobalSettings.cs" />
+        <Compile Include="API\Lua\Globals\GlobalTime.cs" />
         <Compile Include="API\Lua\Objects\LuaCustomCommand.cs" />
         <Compile Include="API\Lua\Objects\LuaCustomData.cs" />
+        <Compile Include="API\Lua\Objects\LuaCustomSettings.cs" />
         <Compile Include="API\Lua\Objects\LuaModule.cs" />
         <Compile Include="API\Lua\Objects\ScriptHandler.cs" />
         <Compile Include="API\Lua\Proxies\ProxyAdminToy.cs" />

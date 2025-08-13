@@ -21,6 +21,7 @@ using PlayerRoles.PlayableScps.HumeShield;
 using SCriPt.LabAPI.API.Lua.Globals;
 using SCriPt.LabAPI.API.Lua.Objects;
 using SCriPt.LabAPI.API.Lua.Proxies;
+using TMPro;
 using UnityEngine;
 using CapybaraToy = LabApi.Features.Wrappers.CapybaraToy;
 using Logger = LabApi.Features.Console.Logger;
@@ -174,6 +175,8 @@ public class ScriptLoader
         UserData.RegisterType<DoorName>();
         UserData.RegisterType<StatusEffectBase>();
         UserData.RegisterType<PlayerRoleBase>();
+        UserData.RegisterType<DateTime>();
+        UserData.RegisterType<TimeSpan>();
         /*UserData.RegisterType<AdminToys.PrimitiveObjectToy>();
         UserData.RegisterType<LabApi.Features.Wrappers.PrimitiveObjectToy>();
         UserData.RegisterType<PrimitiveFlags>();
@@ -202,6 +205,7 @@ public class ScriptLoader
         AddStaticGlobal<GlobalLobby>("Lobby");
         AddStaticGlobal<GlobalRound>("Round");
         AddStaticGlobal<GlobalServer>("Server");
+        AddStaticGlobal<GlobalSettings>("Settings");
 
         //ENUMS https://github.com/moonsharp-devs/moonsharp/blob/master/src/MoonSharp.Interpreter.Tests/EndToEnd/UserDataEnumsTest.cs
         AddStaticGlobal<RoleTypeId>("RoleTypeId");
@@ -211,6 +215,8 @@ public class ScriptLoader
         AddStaticGlobal<FacilityZone>("FacilityZone");
         AddStaticGlobal<StatusEffectBase.EffectClassification>("EffectClassification");
         AddStaticGlobal<CommandType>("CommandType");
+        AddStaticGlobal<KeyCode>("KeyCode");
+        AddStaticGlobal<TMP_InputField.ContentType>("ContentType");
 
         
         Globals["PlayerEvents"] = UserData.CreateStatic(typeof(PlayerEvents));

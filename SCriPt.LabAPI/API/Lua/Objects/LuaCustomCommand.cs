@@ -11,6 +11,7 @@ using RemoteAdmin;
 
 namespace SCriPt.LabAPI.API.Lua.Objects;
 
+[MoonSharpUserData]
 public class LuaCustomCommand : ICommand
 {
     public string Command { get; }

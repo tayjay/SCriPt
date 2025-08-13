@@ -11,16 +11,16 @@ public class LuaObjectiveEvents : ILuaEventHandler
     
     [MoonSharpVisible(true)] public event EventHandler<ObjectiveCompletingBaseEventArgs> Completing;
     [MoonSharpVisible(true)] public event EventHandler<ObjectiveCompletedBaseEventArgs> Completed;
-    [MoonSharpVisible(true)] public event EventHandler<EnemyKillingObjectiveEventArgs> KillingEnemy;
-    [MoonSharpVisible(true)] public event EventHandler<EnemyKilledObjectiveEventArgs> KilledEnemy;
-    [MoonSharpVisible(true)] public event EventHandler<EscapingObjectiveEventArgs> Escaping;
-    [MoonSharpVisible(true)] public event EventHandler<EscapedObjectiveEventArgs> Escaped;
-    [MoonSharpVisible(true)] public event EventHandler<GeneratorActivatingObjectiveEventArgs> ActivatingGenerator;
-    [MoonSharpVisible(true)] public event EventHandler<GeneratorActivatedObjectiveEventArgs> ActivatedGenerator;
-    [MoonSharpVisible(true)] public event EventHandler<ScpDamagingObjectiveEventArgs> DamagingScp;
-    [MoonSharpVisible(true)] public event EventHandler<ScpDamagedObjectiveEventArgs> DamagedScp;
-    [MoonSharpVisible(true)] public event EventHandler<ScpItemPickingObjectiveEventArgs> PickingScpItem;
-    [MoonSharpVisible(true)] public event EventHandler<ScpItemPickedObjectiveEventArgs> PickedScpItem;
+    [MoonSharpVisible(true)] public event EventHandler<EnemyKillingObjectiveEventArgs> KillingEnemyCompleting;
+    [MoonSharpVisible(true)] public event EventHandler<EnemyKilledObjectiveEventArgs> KilledEnemyCompleted;
+    [MoonSharpVisible(true)] public event EventHandler<EscapingObjectiveEventArgs> EscapingCompleting;
+    [MoonSharpVisible(true)] public event EventHandler<EscapedObjectiveEventArgs> EscapedCompleted;
+    [MoonSharpVisible(true)] public event EventHandler<GeneratorActivatingObjectiveEventArgs> ActivatingGeneratorCompleting;
+    [MoonSharpVisible(true)] public event EventHandler<GeneratorActivatedObjectiveEventArgs> ActivatedGeneratorCompleted;
+    [MoonSharpVisible(true)] public event EventHandler<ScpDamagingObjectiveEventArgs> DamagingScpCompleting;
+    [MoonSharpVisible(true)] public event EventHandler<ScpDamagedObjectiveEventArgs> DamagedScpCompleted;
+    [MoonSharpVisible(true)] public event EventHandler<ScpItemPickingObjectiveEventArgs> PickingScpItemCompleting;
+    [MoonSharpVisible(true)] public event EventHandler<ScpItemPickedObjectiveEventArgs> PickedScpItemCompleted;
     
     
     [MoonSharpHidden]
@@ -38,59 +38,59 @@ public class LuaObjectiveEvents : ILuaEventHandler
     [MoonSharpHidden]
     public void OnKillingEnemy(EnemyKillingObjectiveEventArgs ev)
     {
-        KillingEnemy?.Invoke(this, ev);
+        KillingEnemyCompleting?.Invoke(this, ev);
     }
     [MoonSharpHidden]
     public void OnKilledEnemy(EnemyKilledObjectiveEventArgs ev)
     {
-        KilledEnemy?.Invoke(this, ev);
+        KilledEnemyCompleted?.Invoke(this, ev);
     }
     [MoonSharpHidden]
     public void OnEscaping(EscapingObjectiveEventArgs ev)
     {
-        Escaping?.Invoke(this, ev);
+        EscapingCompleting?.Invoke(this, ev);
     }
     
     [MoonSharpHidden]
     public void OnEscaped(EscapedObjectiveEventArgs ev)
     {
-        Escaped?.Invoke(this, ev);
+        EscapedCompleted?.Invoke(this, ev);
     }
     
     [MoonSharpHidden]
     public void OnActivatingGenerator(GeneratorActivatingObjectiveEventArgs ev)
     {
-        ActivatingGenerator?.Invoke(this, ev);
+        ActivatingGeneratorCompleting?.Invoke(this, ev);
     }
     
     [MoonSharpHidden]
     public void OnActivatedGenerator(GeneratorActivatedObjectiveEventArgs ev)
     {
-        ActivatedGenerator?.Invoke(this, ev);
+        ActivatedGeneratorCompleted?.Invoke(this, ev);
     }
     
     [MoonSharpHidden]
     public void OnDamagingScp(ScpDamagingObjectiveEventArgs ev)
     {
-        DamagingScp?.Invoke(this, ev);
+        DamagingScpCompleting?.Invoke(this, ev);
     }
     
     [MoonSharpHidden]
     public void OnDamagedScp(ScpDamagedObjectiveEventArgs ev)
     {
-        DamagedScp?.Invoke(this, ev);
+        DamagedScpCompleted?.Invoke(this, ev);
     }
     
     [MoonSharpHidden]
     public void OnPickingScpItem(ScpItemPickingObjectiveEventArgs ev)
     {
-        PickingScpItem?.Invoke(this, ev);
+        PickingScpItemCompleting?.Invoke(this, ev);
     }
     
     [MoonSharpHidden]
     public void OnPickedScpItem(ScpItemPickedObjectiveEventArgs ev)
     {
-        PickedScpItem?.Invoke(this, ev);
+        PickedScpItemCompleted?.Invoke(this, ev);
     }
     
     

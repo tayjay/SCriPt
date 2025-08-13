@@ -4,6 +4,9 @@ using LabApi.Features.Wrappers;
 using MEC;
 using MoonSharp.Interpreter;
 using NetworkManagerUtils.Dummies;
+using PlayerRoles.FirstPersonControl;
+using PlayerRoles.FirstPersonControl.Thirdperson;
+using PlayerRoles.FirstPersonControl.Thirdperson.Subcontrollers;
 using SCriPt.LabAPI.API.Lua.Objects;
 
 namespace SCriPt.LabAPI.API.Lua.Globals;
@@ -32,6 +35,16 @@ public class GlobalDummy
           return null;
      }
      
+     public Player Remove(Player dummy)
+     {
+          if (dummy == null || !Dummies.Contains(dummy))
+               return null;
+          
+          Dummies.Remove(dummy);
+          dummy.Kick(Player.Host, "Dummy removed by script.");
+          return dummy;
+     }
+     
      public Table GetDummyActions(Player dummy)
      {
           List<DummyAction> actions = DummyActionCollector.ServerGetActions(dummy.ReferenceHub);
@@ -53,13 +66,13 @@ public class GlobalDummy
                {
                     // Extract the time in seconds from the action string
                     var time = float.Parse(action.Substring("WaitSeconds_".Length));
-                    return time;
+                    return Timing.WaitForSeconds(time);
                }
                else if (action.StartsWith("WaitFrames"))
                {
                     // Extract the number of frames from the action string
                     var frames = int.Parse(action.Substring("WaitFrames_".Length));
-                    return 0.01f * frames;
+                    return frames;
                }
           }
 
@@ -90,6 +103,17 @@ public class GlobalDummy
                return Timing.WaitForOneFrame; // Return a small delay to allow the action to complete
           }
 
+          if (action.StartsWith("Emotion"))
+          {
+               var emotionStr = action.Substring("Emotion_".Length);
+               if (Enum.TryParse(emotionStr, out EmotionPresetType emotionType))
+               {
+                    // Execute the emotion
+                    dummy.ReferenceHub.ServerSetEmotionPreset(emotionType);
+                    return Timing.WaitForOneFrame; // Return a small delay to allow the action to complete
+               }
+          }
+
           List<DummyAction> actions = DummyActionCollector.ServerGetActions(dummy.ReferenceHub);
           foreach (var dummyAction in actions)
           {
@@ -97,7 +121,8 @@ public class GlobalDummy
                {
                     // Execute the action
                     dummyAction.Action();
-                    return Timing.WaitForOneFrame; // Return a small delay to allow the action to complete
+                    //return Timing.WaitForOneFrame; // Return a small delay to allow the action to complete
+                    // We don't return a delay here since there could be multiple actions with the same name in different Controllers
                }
           }
           
@@ -121,11 +146,16 @@ public class GlobalDummy
                else if (action.Type == DataType.Table)
                {
                     var actionTable = action.Table;
+                    float waitTime = 0f;
                     foreach (var action2 in actionTable.Values)
                     {
-                         Action(dummy, action2.String);
+                         float newtime = Action(dummy, action2.String);
+                         if (newtime > waitTime)
+                         {
+                              waitTime = newtime;
+                         }
                     }
-                    yield return Timing.WaitForOneFrame;
+                    yield return waitTime;
                } 
                else
                {

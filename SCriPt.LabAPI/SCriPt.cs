@@ -10,6 +10,7 @@ using LabApi.Features.Wrappers;
 using LabApi.Loader.Features.Plugins;
 using LabApi.Loader.Features.Plugins.Enums;
 using MoonSharp.Interpreter;
+using SCriPt.LabAPI.API.Lua.Globals;
 using SCriPt.LabAPI.API.Lua.Objects;
 using SCriPt.LabAPI.Handlers;
 
@@ -109,6 +110,8 @@ namespace SCriPt.LabAPI
             Scp3114Events.RegisterEventTypes();
             ObjectiveEvents.RegisterEventTypes();
             
+            GlobalSettings.RegisterTypes();
+            
             ServerEvents.RegisterEvents();
             WarheadEvents.RegisterEvents();
             PlayerEvents.RegisterEvents();
@@ -123,6 +126,8 @@ namespace SCriPt.LabAPI
             Scp127Events.RegisterEvents();
             Scp3114Events.RegisterEvents();
             ObjectiveEvents.RegisterEvents();
+            
+            
             
             Logger.Info("Has PlayerSpawnEvent been registered? " + UserData.IsTypeRegistered<PlayerSpawnedEventArgs>());
         }
@@ -174,7 +179,7 @@ namespace SCriPt.LabAPI
         public override string Name { get; } = "SCriPt.LabAPI";
         public override string Description { get; } = "A plugin for Lua programming with LabAPI.";
         public override string Author { get; } = "TayTay";
-        public override Version Version { get; } = new (0, 5, 1);
+        public override Version Version { get; } = new (0, 5, 2);
         public override Version RequiredApiVersion { get; } = new (LabApiProperties.CompiledVersion);
         public override LoadPriority Priority { get; } = LoadPriority.Low;
         

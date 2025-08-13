@@ -35,9 +35,6 @@
         <WarningLevel>4</WarningLevel>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
-    <PropertyGroup>
-      <PostBuildEvent>xcopy /Y "E:\Projects\SCPSL\SCriPt\SCriPt.EXILED\bin\Debug\SCriPt.EXILED.dll" "C:\Users\tayjm\AppData\Roaming\EXILED\Plugins"</PostBuildEvent>
-    </PropertyGroup>
     <ItemGroup>
         <Reference Include="0Harmony">
           <HintPath>..\..\ReplayPlugin\bin\Debug\0Harmony.dll</HintPath>

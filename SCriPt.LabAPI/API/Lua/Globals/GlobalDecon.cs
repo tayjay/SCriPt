@@ -16,4 +16,10 @@ public class GlobalDecon
         LightContainmentZoneDecontamination.DecontaminationController.Singleton.DecontaminationOverride=
             LightContainmentZoneDecontamination.DecontaminationController.DecontaminationStatus.Forced;
     }
+    
+    public static void Reset()
+    {
+        LightContainmentZoneDecontamination.DecontaminationController.Singleton.DecontaminationOverride =
+            LightContainmentZoneDecontamination.DecontaminationController.DecontaminationStatus.None;
+    }
 }

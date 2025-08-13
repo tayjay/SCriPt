@@ -16,6 +16,11 @@ public class GlobalPlayers
         }
     }
 
+    public static IReadOnlyCollection<Player> All()
+    {
+        return List;
+    }
+
     public static Player ByName(string name)
     {
         Player.TryGetPlayersByName(name, out var list);
@@ -63,6 +68,7 @@ public class GlobalPlayers
             .OrderBy(_ => UnityEngine.Random.value)
             .FirstOrDefault() ?? null;
     }
+    
     
     
     

@@ -21,11 +21,20 @@ public class GlobalServer
     public static string Name => Server.ServerListName;
 
     public static string IpAddress => Server.IpAddress;
+    
+    public static int Port => Server.Port;
 
+    
     public static bool IdleModeAvailable
     {
         get => Server.IdleModeAvailable;
         set => Server.IdleModeAvailable = value;
+    }
+    
+    public static bool PauseIdleMode
+    {
+        get => Server.PauseIdleMode;
+        set => Server.PauseIdleMode = value;
     }
     
     public bool IdleModeActive => Server.IdleModeActive;
@@ -91,6 +100,16 @@ public class GlobalServer
     public static void SendBroadcast(string message, ushort duration = 5)
     {
         Server.SendBroadcast(message, duration);
+    }
+
+    public static void Restart()
+    {
+        Server.Restart();
+    }
+
+    public static void Shutdown()
+    {
+        Server.Shutdown();
     }
     
     

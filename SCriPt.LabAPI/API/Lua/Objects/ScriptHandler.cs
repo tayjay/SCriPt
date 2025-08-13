@@ -22,12 +22,14 @@ public class ScriptHandler : Script
     
     public List<LuaModule> Modules;
     public List<LuaCustomCommand> CustomCommands;
+    public List<LuaCustomSettings> CustomSettings;
     
     public ScriptHandler(string name, CoreModules sandbox) : base(sandbox)
     {
         Name = name;
         Modules = new List<LuaModule>();
         CustomCommands = new List<LuaCustomCommand>();
+        CustomSettings = new List<LuaCustomSettings>();
     }
 
     public void SetupAPI()
@@ -51,6 +53,14 @@ public class ScriptHandler : Script
         {
             module.LoadModule();
         }
+        foreach (var customCommand in CustomCommands)
+        {
+            customCommand.Register();
+        }
+        foreach (var customSettings in CustomSettings)
+        {
+            customSettings.Activate();
+        }
     }
     
     public void ExecuteUnload()
@@ -68,6 +78,11 @@ public class ScriptHandler : Script
         foreach (var customCommand in CustomCommands)
         {
             customCommand.Unregister();
+        }
+        
+        foreach (var customSettings in CustomSettings)
+        {
+            customSettings.Deactivate();
         }
         
         foreach (Player dummy in Dummy.Dummies)
