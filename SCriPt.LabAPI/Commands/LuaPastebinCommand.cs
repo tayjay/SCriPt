@@ -5,7 +5,6 @@ using LabApi.Features.Permissions;
 
 namespace SCriPt.LabAPI.Commands;
 
-[CommandHandler(typeof(RemoteAdminCommandHandler))]
 public class LuaPastebinCommand : ICommand
 {
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, [UnscopedRef] out string response)

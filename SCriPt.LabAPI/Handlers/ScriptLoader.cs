@@ -146,9 +146,14 @@ public class ScriptLoader
     {
         UserData.RegisterType<Player>();
         UserData.RegisterType<Room>();
+        UserData.RegisterType<Door>();
+        UserData.RegisterType<Pickup>();
+        UserData.RegisterType<Item>();
+        UserData.RegisterType<TeslaGate>();
+        UserData.RegisterType<CommandSender>();
         
         
-        UserData.RegisterType<RoleTypeId>();
+        
         UserData.RegisterType<Component>();
         UserData.RegisterType<Behaviour>();
         UserData.RegisterType<MonoBehaviour>();
@@ -177,16 +182,18 @@ public class ScriptLoader
         UserData.RegisterType<PlayerRoleBase>();
         UserData.RegisterType<DateTime>();
         UserData.RegisterType<TimeSpan>();
-        /*UserData.RegisterType<AdminToys.PrimitiveObjectToy>();
+        
+        /*UserData.RegisterType<AdminToy>();
+        //UserData.RegisterType<AdminToys.PrimitiveObjectToy>();
         UserData.RegisterType<LabApi.Features.Wrappers.PrimitiveObjectToy>();
         UserData.RegisterType<PrimitiveFlags>();
-        UserData.RegisterType<AdminToys.SpeakerToy>();
+        //UserData.RegisterType<AdminToys.SpeakerToy>();
         UserData.RegisterType<LabApi.Features.Wrappers.SpeakerToy>();
-        UserData.RegisterType<AdminToys.LightSourceToy>();
+        //UserData.RegisterType<AdminToys.LightSourceToy>();
         UserData.RegisterType<LabApi.Features.Wrappers.LightSourceToy>();
-        UserData.RegisterType<AdminToys.ShootingTarget>();
+        //UserData.RegisterType<AdminToys.ShootingTarget>();
         UserData.RegisterType<LabApi.Features.Wrappers.ShootingTargetToy>();
-        UserData.RegisterType<AdminToys.TextToy>();
+        //UserData.RegisterType<AdminToys.TextToy>();
         UserData.RegisterType<LabApi.Features.Wrappers.TextToy>();*/
         
         UserData.RegisterAssembly();
@@ -196,6 +203,8 @@ public class ScriptLoader
     public static void SetupStaticGlobals()
     {
         AddStaticGlobal<GlobalAdminToys>("AdminToys");
+        AddStaticGlobal<GlobalCassie>("CASSIE");
+        AddStaticGlobal<GlobalCassie>("Cassie");
         AddStaticGlobal<GlobalDeadmanSwitch>("DeadmanSwitch");
         AddStaticGlobal<GlobalDeadmanSwitch>("DMS");
         AddStaticGlobal<GlobalEvents>("Events");
@@ -212,24 +221,35 @@ public class ScriptLoader
         AddStaticGlobal<RoleTypeId>("RoleType");
         AddStaticGlobal<ItemType>("ItemType");
         AddStaticGlobal<Team>("Team");
+        AddStaticGlobal<Faction>("Faction");
         AddStaticGlobal<FacilityZone>("FacilityZone");
         AddStaticGlobal<StatusEffectBase.EffectClassification>("EffectClassification");
         AddStaticGlobal<CommandType>("CommandType");
         AddStaticGlobal<KeyCode>("KeyCode");
         AddStaticGlobal<TMP_InputField.ContentType>("ContentType");
+        AddStaticGlobal<PrimitiveFlags>("PrimitiveFlags");
+        AddStaticGlobal<RoleChangeReason>("RoleChangeReason");
 
         
         Globals["PlayerEvents"] = UserData.CreateStatic(typeof(PlayerEvents));
     }
     
     
-    private static void AddStaticGlobal<T>(string globalName)
+    public static void AddStaticGlobal<T>(string globalName)
     {
-        if (Attribute.GetCustomAttribute(typeof(T), typeof(MoonSharpUserDataAttribute)) == null)
+        if (!UserData.IsTypeRegistered<T>())
             UserData.RegisterType<T>();
         if(Globals.ContainsKey(globalName)) return;
         //UserData.CreateStatic(typeof(T));
         Globals[globalName] = UserData.CreateStatic(typeof(T));
+    }
+    
+    public static void AddStaticGlobal(string globalName, Type type)
+    {
+        if (!UserData.IsTypeRegistered(type))
+            UserData.RegisterType(type);
+        if(Globals.ContainsKey(globalName)) return;
+        Globals[globalName] = UserData.CreateStatic(type);
     }
     
     // lua var items [ItemType.Jailbird, ItemType.Scp018]

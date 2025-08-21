@@ -61,7 +61,7 @@ namespace SCriPt.LabAPI
             
             Scripts = new Dictionary<string, ScriptHandler>();
             ScriptLoader.Initialize();
-            ScriptLoader.LoadScripts();
+            
             
             
         }
@@ -75,7 +75,7 @@ namespace SCriPt.LabAPI
                 return;
             }
             UnregisterEvents();
-            ScriptLoader.UnloadAllScripts();
+            
         }
         
         private void RegisterEvents()
@@ -179,13 +179,44 @@ namespace SCriPt.LabAPI
         public override string Name { get; } = "SCriPt.LabAPI";
         public override string Description { get; } = "A plugin for Lua programming with LabAPI.";
         public override string Author { get; } = "TayTay";
-        public override Version Version { get; } = new (0, 5, 2);
+        public override Version Version { get; } = new (0, 5, 3);
         public override Version RequiredApiVersion { get; } = new (LabApiProperties.CompiledVersion);
-        public override LoadPriority Priority { get; } = LoadPriority.Low;
+        public override LoadPriority Priority { get; } = LoadPriority.High;
         
         
+        public static void RegisterType<T>() where T : class
+        {
+            if (UserData.IsTypeRegistered<T>())
+            {
+                Logger.Warn($"Type {typeof(T).Name} is already registered.");
+                return;
+            }
+            
+            UserData.RegisterType<T>();
+            Logger.Info($"Registered type: {typeof(T).Name}");
+        }
         
+        public static void RegisterType(Type type)
+        {
+            if (UserData.IsTypeRegistered(type))
+            {
+                Logger.Warn($"Type {type.Name} is already registered.");
+                return;
+            }
+            
+            UserData.RegisterType(type);
+            Logger.Info($"Registered type: {type.Name}");
+        }
+
+        public static void RegisterGlobal<T>(string name)
+        {
+            ScriptLoader.AddStaticGlobal<T>(name);
+        }
         
+        public static void RegisterGlobal(string name, Type type)
+        {
+            ScriptLoader.AddStaticGlobal(name, type);
+        }
         
     }
 }

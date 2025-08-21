@@ -6,6 +6,7 @@ using UserSettings.ServerSpecific;
 
 namespace SCriPt.LabAPI.API.Lua.Globals;
 
+[MoonSharpUserData]
 public class GlobalSettings
 {
 
@@ -44,9 +45,9 @@ public class GlobalSettings
         return new SSSliderSetting(null, label, minValue, maxValue, defaultValue, hint:hint);
     }
     
-    public static SSTwoButtonsSetting TwoButtons(string label, string button1Text, string button2Text, bool defaultIsB = false, string hint = null)
+    public static SSTwoButtonsSetting TwoButtons(string label, string buttonAText, string buttonBText, bool defaultIsB = false, string hint = null)
     {
-        return new SSTwoButtonsSetting(null, label, button1Text, button2Text, defaultIsB, hint:hint);
+        return new SSTwoButtonsSetting(null, label, buttonAText, buttonBText, defaultIsB, hint:hint);
     }
 
 
@@ -57,6 +58,7 @@ public class GlobalSettings
     }
     
     
+    [MoonSharpHidden]
     public static void RegisterTypes()
     {
         UserData.RegisterType<ServerSpecificSettingBase>();

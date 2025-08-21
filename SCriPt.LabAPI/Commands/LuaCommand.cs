@@ -28,5 +28,8 @@ public class LuaCommand : ParentCommand
         RegisterCommand(new LuaReloadCommand());
         RegisterCommand(new LuaListCommand());
         RegisterCommand(new LuaDocsCommand());
+        RegisterCommand(new LuaDisableScriptCommand());
+        RegisterCommand(new LuaEnableScriptCommand());
+        RegisterCommand(new LuaPastebinCommand());
     }
 }

@@ -79,7 +79,7 @@ public class GlobalCoroutines
             if (closure == null)
                 throw new NullReferenceException("Closure cannot be null.");
             DynValue coroutine = closure.OwnerScript.CreateCoroutine(closure);
-            coroutine.Coroutine.AutoYieldCounter = 0;//CoroutineAutoYield;
+            coroutine.Coroutine.AutoYieldCounter = SCriPt.Instance.Config.CoroutineAutoYield;
             CoroutineHandle handle = Timing.RunCoroutine(Coroutine(coroutine));
             Handles.Add(handle);
             return handle;
@@ -95,7 +95,7 @@ public class GlobalCoroutines
                 return CallCoroutine(closure);
             }
             DynValue coroutine = closure.OwnerScript.CreateCoroutine(closure);
-            coroutine.Coroutine.AutoYieldCounter = 0;//CoroutineAutoYield;
+            coroutine.Coroutine.AutoYieldCounter = SCriPt.Instance.Config.CoroutineAutoYield;
             CoroutineHandle handle = Timing.RunCoroutine(Coroutine(coroutine, args));
             Handles.Add(handle);
             return handle;

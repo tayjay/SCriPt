@@ -7,7 +7,7 @@ using SCriPt.LabAPI.Handlers;
 
 namespace SCriPt.LabAPI.Commands;
 
-[CommandHandler(typeof(RemoteAdminCommandHandler))]
+
 public class LuaDisableScriptCommand : ICommand
 {
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, [UnscopedRef] out string response)

@@ -9,12 +9,12 @@ public class GlobalTime
     {
         get => System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
     }
-    public long ServerTime
+    public long ServerTimeLocal
     {
         get => System.DateTimeOffset.Now.ToUnixTimeMilliseconds();
     }
 
-    public double RoundTime
+    public double RoundDuration
     {
         get => Round.Duration.TotalMilliseconds;
     }
@@ -24,7 +24,7 @@ public class GlobalTime
         get => System.DateTimeOffset.UtcNow.DateTime;
     }
     
-    public DateTime ServerDateTime
+    public DateTime ServerDateTimeLocal
     {
         get => System.DateTimeOffset.Now.DateTime;
     }

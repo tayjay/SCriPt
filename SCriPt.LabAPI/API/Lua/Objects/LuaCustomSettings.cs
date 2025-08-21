@@ -12,7 +12,7 @@ public class LuaCustomSettings
 {
     private ScriptHandler Owner { get; set; }
     
-    private Table SettingsTable;
+    public Table SettingsTable;
     private Closure SettingsUpdateCallback;
 
     public LuaCustomSettings(ScriptHandler owner, Table settingsTable, Closure settingsUpdateCallback)
@@ -60,5 +60,11 @@ public class LuaCustomSettings
             Logger.Error("Generated error in ServerOnSettingValueReceived: " + ex);
         }
         
+    }
+
+    public DynValue this[string key]
+    {
+        get => SettingsTable.Get(key);
+        set => SettingsTable.Set(key, value);
     }
 }
