@@ -25,6 +25,10 @@ public class LuaScp173Events : ILuaEventHandler
     public event EventHandler<Scp173PlayingSoundEventArgs> PlayingSound;
 
     public event EventHandler<Scp173PlayedSoundEventArgs> PlayedSound;
+   
+    public event EventHandler<Scp173TeleportedEventArgs> Teleported;
+    
+    public event EventHandler<Scp173TeleportingEventArgs> Teleporting; 
     
     [MoonSharpHidden]
     public void OnBreakneckSpeedChanging(Scp173BreakneckSpeedChangingEventArgs ev)
@@ -85,6 +89,16 @@ public class LuaScp173Events : ILuaEventHandler
     {
         PlayedSound?.Invoke(this, ev);
     }
+    [MoonSharpHidden]
+    public void OnTeleporting(Scp173TeleportingEventArgs ev)
+    {
+        Teleporting?.Invoke(this, ev);
+    }
+    [MoonSharpHidden]
+    public void OnTeleported(Scp173TeleportedEventArgs ev)
+    {
+        Teleported?.Invoke(this, ev);
+    }
     
     public void RegisterEventTypes()
     {
@@ -98,6 +112,8 @@ public class LuaScp173Events : ILuaEventHandler
         UserData.RegisterType<Scp173CreatedTantrumEventArgs>();
         UserData.RegisterType<Scp173PlayingSoundEventArgs>();
         UserData.RegisterType<Scp173PlayedSoundEventArgs>();
+        UserData.RegisterType<Scp173TeleportingEventArgs>();
+        UserData.RegisterType<Scp173TeleportedEventArgs>();
     }
     
     public void RegisterEvents()
@@ -112,6 +128,8 @@ public class LuaScp173Events : ILuaEventHandler
         LabApi.Events.Handlers.Scp173Events.CreatedTantrum += OnCreatedTantrum;
         LabApi.Events.Handlers.Scp173Events.PlayingSound += OnPlayingSound;
         LabApi.Events.Handlers.Scp173Events.PlayedSound += OnPlayedSound;
+        LabApi.Events.Handlers.Scp173Events.Teleporting += OnTeleporting;
+        LabApi.Events.Handlers.Scp173Events.Teleported += OnTeleported;
     }
     
     public void UnregisterEvents()
@@ -126,6 +144,8 @@ public class LuaScp173Events : ILuaEventHandler
         LabApi.Events.Handlers.Scp173Events.CreatedTantrum -= OnCreatedTantrum;
         LabApi.Events.Handlers.Scp173Events.PlayingSound -= OnPlayingSound;
         LabApi.Events.Handlers.Scp173Events.PlayedSound -= OnPlayedSound;
+        LabApi.Events.Handlers.Scp173Events.Teleporting -= OnTeleporting;
+        LabApi.Events.Handlers.Scp173Events.Teleported -= OnTeleported;
     }
     
     

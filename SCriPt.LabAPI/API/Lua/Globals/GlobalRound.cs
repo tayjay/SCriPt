@@ -35,9 +35,21 @@ public class GlobalRound
 
     public static bool CanRoundEnd => Round.CanRoundEnd;
     
-    public static bool InProgress => RoundSummary.RoundInProgress();
+    public static bool InProgress => Round.IsRoundInProgress;
         
-    public static bool IsLocked => RoundSummary.RoundLock;
+    public static bool IsLocked => Round.IsLocked;
         
     public static bool IsEnded => Round.IsRoundEnded;
+
+    public static int ExtraTargets
+    {
+        get => Round.ExtraTargets;
+        set => Round.ExtraTargets = value;
+    }
+    
+    public static int TargetCount
+    {
+        get => RoundSummary.singleton.Network_targetCount;
+        set => RoundSummary.singleton.Network_targetCount = value;
+    }
 }

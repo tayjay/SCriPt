@@ -7,7 +7,7 @@ namespace SCriPt.LabAPI.Commands;
 
 public class LuaPastebinCommand : ICommand
 {
-    public bool Execute(ArraySegment<string> arguments, ICommandSender sender, [UnscopedRef] out string response)
+    public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
         if(!sender.HasPermissions("script.pastebin"))
         {

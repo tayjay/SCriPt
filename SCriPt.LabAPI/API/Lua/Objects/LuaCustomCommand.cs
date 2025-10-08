@@ -36,7 +36,7 @@ public class LuaCustomCommand : ICommand
         ExecuteFunction = execute;
     }
     
-    public bool Execute(ArraySegment<string> arguments, ICommandSender sender, [UnscopedRef] out string response)
+    public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
         try
         {

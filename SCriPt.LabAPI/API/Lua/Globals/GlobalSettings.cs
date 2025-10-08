@@ -57,6 +57,12 @@ public class GlobalSettings
         return setting;
     }
     
+    public static ServerSpecificSettingBase GetSettingOfPlayer(Player player, ServerSpecificSettingBase s)
+    {
+        ServerSpecificSettingsSync.TryGetSettingOfUser(player.ReferenceHub, s.SettingId, out ServerSpecificSettingBase setting);
+        return setting;
+    }
+    
     
     [MoonSharpHidden]
     public static void RegisterTypes()

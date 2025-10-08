@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using LabApi.Features.Console;
 using LabApi.Features.Wrappers;
 using MoonSharp.Interpreter;
@@ -31,7 +32,10 @@ public class LuaCustomSettings
             settings.Add((ServerSpecificSettingBase)pair.Value.ToObject());
         }
         // Register the settings with the server
-        ServerSpecificSettingsSync.DefinedSettings = settings.ToArray();
+        if(ServerSpecificSettingsSync.DefinedSettings == null)
+            ServerSpecificSettingsSync.DefinedSettings = settings.ToArray();
+        else
+            ServerSpecificSettingsSync.DefinedSettings = ServerSpecificSettingsSync.DefinedSettings.Concat(settings).ToArray();
         ServerSpecificSettingsSync.ServerOnSettingValueReceived += ServerOnSettingValueReceived;
         ServerSpecificSettingsSync.SendToAll();
     }

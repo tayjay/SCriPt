@@ -11,12 +11,13 @@ using LabApi.Loader.Features.Paths;
 using MEC;
 using SCriPt.LabAPI.API.Lua.Objects;
 using SCriPt.LabAPI.Handlers;
+using SCriPt.LabAPI.Utils;
 
 namespace SCriPt.LabAPI.Commands;
 
 public class LuaDocsCommand : ICommand
 {
-    public bool Execute(ArraySegment<string> arguments, ICommandSender sender, [UnscopedRef] out string response)
+    public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
         if(!sender.HasPermissions("script.docs"))
         {
@@ -35,6 +36,7 @@ public class LuaDocsCommand : ICommand
             Logger.Info("Documentation Generation Complete.");
         });
         
+        
         response = "Documentation Generation Started...";
         return true;
         
@@ -47,7 +49,7 @@ public class LuaDocsCommand : ICommand
     private void WriteDocumentation(Assembly assembly)
     {
         // Define the output path for the documentation file.
-        string outputFileName = ScriptLoader.ScriptPathParent.FullName + $"/SCriPt/Docs/{assembly.GetName().Name}.txt";
+        string outputFileName = ScriptLoader.ScriptPathParent.FullName + $"/SCriPt/Docs/{assembly.GetName().Name}.md";
         Directory.CreateDirectory(Path.GetDirectoryName(outputFileName)); // Ensure the directory exists.
 
         try
@@ -55,30 +57,8 @@ public class LuaDocsCommand : ICommand
             // --- 1. Load the Assembly ---
             Logger.Info($"Reflecting Assembly: {assembly.GetName().Name}...");
 
-            // --- 2. Setup File Writer ---
-            // The 'using' statement ensures the writer is automatically closed, and the file is saved.
-            using (StreamWriter writer = new StreamWriter(outputFileName))
-            {
-                writer.WriteLine($"# Assembly Documentation: {assembly.GetName().Name}");
-                writer.WriteLine($"Generated on: {DateTime.Now}");
-                writer.WriteLine(new string('=', 50));
-                writer.WriteLine();
-
-                // --- 3. Iterate Through Types ---
-                // Get all types from the assembly.
-                Type[] types = assembly.GetTypes();
-
-                foreach (Type type in types)
-                {
-                    // Skip non-public types to keep the documentation clean.
-                    if (!type.IsPublic) continue;
-
-                    // Print detailed information for each public type.
-                    PrintTypeInfo(type, writer);
-                    writer.WriteLine(new string('-', 40));
-                    writer.WriteLine();
-                }
-            } // The file is automatically saved here when the 'using' block ends.
+            using var fs = File.CreateText(outputFileName);
+            MarkdownDocGen.PrintAssembly(assembly, fs);
 
             Logger.Info($"\n--- Success! ---");
             Logger.Info($"Documentation has been written to: {Path.GetFullPath(outputFileName)}");
@@ -115,7 +95,7 @@ public class LuaDocsCommand : ICommand
 
         // --- Find and Print Members (Fields, Properties, Events, Methods) ---
         
-        // Fields
+        // Fieldsr
         FieldInfo[] fields = type.GetFields(flags);
         if (fields.Length > 0)
         {

@@ -4,6 +4,7 @@ using LabApi.Features.Console;
 using LabApi.Features.Enums;
 using MoonSharp.Interpreter;
 using SCriPt.LabAPI.API.Lua.Objects;
+using SCriPt.LabAPI.Handlers;
 
 namespace SCriPt.LabAPI.API.Lua.Globals;
 
@@ -60,6 +61,23 @@ public class GlobalSCriPt
         }
         UserData.RegisterType(type);
         Logger.Info("Registered type: " + typeName);
+    }
+
+    public void AddStaticGlobal(string typeName, string globalName = null)
+    {
+        Type type = Type.GetType(typeName);
+        if (type == null)
+        {
+            Logger.Error("Failed to register type: " + typeName + ". Type not found.");
+            return;
+        }
+
+        if (globalName == null)
+        {
+            globalName = type.Name.Split('.').Last();
+        }
+        ScriptLoader.AddStaticGlobal(globalName, type);
+        Logger.Info("Registered Global: " + typeName);
     }
 
     public LuaCustomSettings Settings(Table table, Closure callback)

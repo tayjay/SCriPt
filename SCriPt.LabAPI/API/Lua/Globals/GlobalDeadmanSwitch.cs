@@ -17,10 +17,9 @@ public class GlobalDeadmanSwitch
         DeadmanSwitch.CountdownTimeLeft += addDelay;
     }
     
-    //todo: Temp, likely won't work this way as TimeLeft is changed on spawn wave
     public static bool IsDeadmanSwitchEnabled
     {
-        get => DeadmanSwitch.IsDeadmanSwitchEnabled;
+        get => DeadmanSwitch.ForceCountdownToggle;
         set => DeadmanSwitch.ForceCountdownToggle = value;
     }
     

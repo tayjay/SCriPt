@@ -154,6 +154,7 @@ public class ScriptLoader
         
         
         
+        
         UserData.RegisterType<Component>();
         UserData.RegisterType<Behaviour>();
         UserData.RegisterType<MonoBehaviour>();
@@ -229,6 +230,10 @@ public class ScriptLoader
         AddStaticGlobal<TMP_InputField.ContentType>("ContentType");
         AddStaticGlobal<PrimitiveFlags>("PrimitiveFlags");
         AddStaticGlobal<RoleChangeReason>("RoleChangeReason");
+        
+        AddStaticGlobal<Player>("Player");
+        AddStaticGlobal<Door>("Door");
+        AddStaticGlobal<Pickup>("Pickup");
 
         
         Globals["PlayerEvents"] = UserData.CreateStatic(typeof(PlayerEvents));

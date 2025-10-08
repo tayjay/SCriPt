@@ -16,7 +16,7 @@ public class LuaCommand : ParentCommand
     public override string[] Aliases { get; } = new string[] { "script" };
     public override string Description { get; } = "Lua command for executing Lua scripts and commands within the SCriPt environment.";
 
-    protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, [UnscopedRef] out string response)
+    protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
         response = "This command is a parent command for Lua scripts and commands. Use subcommands to execute specific Lua scripts or commands.";
         return false; // Indicating that no subcommand was executed

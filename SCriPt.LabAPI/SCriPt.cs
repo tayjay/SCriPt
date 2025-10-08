@@ -61,9 +61,6 @@ namespace SCriPt.LabAPI
             
             Scripts = new Dictionary<string, ScriptHandler>();
             ScriptLoader.Initialize();
-            
-            
-            
         }
 
         
@@ -179,7 +176,7 @@ namespace SCriPt.LabAPI
         public override string Name { get; } = "SCriPt.LabAPI";
         public override string Description { get; } = "A plugin for Lua programming with LabAPI.";
         public override string Author { get; } = "TayTay";
-        public override Version Version { get; } = new (0, 5, 3);
+        public override Version Version { get; } = new (0, 6, 0);
         public override Version RequiredApiVersion { get; } = new (LabApiProperties.CompiledVersion);
         public override LoadPriority Priority { get; } = LoadPriority.High;
         
