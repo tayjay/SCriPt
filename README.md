@@ -1,5 +1,7 @@
 [![GitHub Release](https://img.shields.io/github/v/release/tayjay/SCriPt?include_prereleases)](https://github.com/tayjay/SCriPt/releases/latest)
-[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/tayjay/SCriPt/total)](https://github.com/tayjay/SCriPt/releases/latest)
+
+
+![GitHub Downloads (specific asset, all releases)](https://img.shields.io/github/downloads/tayjay/SCriPt/SCriPt.LabAPI.dll?displayAssetName=false&label=SCriPt%20Downloads&color=green&link=https%3A%2F%2Fgithub.com%2Ftayjay%2FSCriPt%2Freleases%2Flatest)
 
 
 # SCriPt
