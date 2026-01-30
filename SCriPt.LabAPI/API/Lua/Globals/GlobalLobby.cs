@@ -20,6 +20,7 @@ public class GlobalLobby
         
     public static void Lock()
     {
+        
         RoundStart.LobbyLock = true;
     }
         

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using AdminToys;
 using CustomPlayerEffects;
@@ -18,9 +19,11 @@ using MoonSharp.Interpreter.Loaders;
 using MoonSharp.Interpreter.Platforms;
 using PlayerRoles;
 using PlayerRoles.PlayableScps.HumeShield;
+using SCriPt.LabAPI.API.Lua;
 using SCriPt.LabAPI.API.Lua.Globals;
 using SCriPt.LabAPI.API.Lua.Objects;
 using SCriPt.LabAPI.API.Lua.Proxies;
+using SCriPt.LabAPI.Utils;
 using TMPro;
 using UnityEngine;
 using CapybaraToy = LabApi.Features.Wrappers.CapybaraToy;
@@ -58,7 +61,9 @@ public class ScriptLoader
         ScriptPathParent.CreateSubdirectory("SCriPt/Scripts");
         ScriptPathParent.CreateSubdirectory("SCriPt/Data");
         GlobalData.LoadFromDisk();
-        
+
+        // Generate Lua API documentation
+        LuaDocGenerator.Generate();
     }
 
     public static void CreateScriptByCommand(string command)
@@ -128,9 +133,85 @@ public class ScriptLoader
 
     private static void RegisterProxies()
     {
-        //UserData.RegisterProxyType<ProxyPlayer, Player>(p => new ProxyPlayer(p));
         UserData.RegisterProxyType<ProxyAdminToy, AdminToy>(p => new ProxyAdminToy(p));
         UserData.RegisterProxyType<ProxyCapybaraToy, CapybaraToy>(p => new ProxyCapybaraToy(p));
+    }
+
+    private static void RegisterSafe<T>()
+    {
+        RegisterSafe(typeof(T));
+    }
+
+    private static void RegisterSafe(Type type)
+    {
+        if (UserData.IsTypeRegistered(type)) return;
+        UserData.RegisterType(type, new SafeUserDataDescriptor(type, InteropAccessMode.LazyOptimized));
+    }
+
+    private static void RegisterLabApiWrappers()
+    {
+        var wrapperAssembly = typeof(Player).Assembly;
+        var wrapperTypes = wrapperAssembly.GetTypes()
+            .Where(t => t.Namespace == "LabApi.Features.Wrappers" && t.IsPublic && !t.IsEnum && !t.IsInterface);
+
+        foreach (var type in wrapperTypes)
+        {
+            try
+            {
+                RegisterSafe(type);
+                if(HasStaticMembers(type))
+                    AddStaticGlobal(type.Name, type);
+            }
+            catch (Exception e)
+            {
+                Logger.Warn($"[ScriptLoader] Failed to register wrapper type '{type.Name}': {e.Message}");
+            }
+        }
+    }
+
+    private static bool HasStaticMembers(Type type)
+    {
+        string[] ignoredStaticNames = new[] { "get_Dictionary", "get_List", "Get", "TryGet", "Dictionary", "List" };
+        return type.GetMembers(BindingFlags.Public | BindingFlags.Static)
+            .Any(info => !ignoredStaticNames.Contains(info.Name));
+    }
+
+    private static void RegisterLabApiEnums()
+    {
+        var labApiAssembly = typeof(Player).Assembly;
+        var enumTypes = labApiAssembly.GetTypes()
+            .Where(t => t.IsPublic && t.IsEnum);
+
+        foreach (var type in enumTypes)
+        {
+            try
+            {
+                AddStaticGlobal(type.Name, type);
+            }
+            catch (Exception e)
+            {
+                Logger.Warn($"[ScriptLoader] Failed to register enum '{type.Name}': {e.Message}");
+            }
+        }
+    }
+
+    private static void RegisterBaseGameEnums()
+    {
+        var baseGameAssembly = typeof(ReferenceHub).Assembly;
+        var enumTypes = baseGameAssembly.GetTypes()
+            .Where(t => t.IsPublic && t.IsEnum);
+
+        foreach (var type in enumTypes)
+        {
+            try
+            {
+                AddStaticGlobal(type.Name, type);
+            }
+            catch (Exception e)
+            {
+                Logger.Warn($"[ScriptLoader] Failed to register enum '{type.Name}': {e.Message}");
+            }
+        }
     }
     
     public static void AddGlobalsToScript(ScriptHandler script)
@@ -141,15 +222,10 @@ public class ScriptLoader
         }
     }
     
-
+//ENUMS https://github.com/moonsharp-devs/moonsharp/blob/master/src/MoonSharp.Interpreter.Tests/EndToEnd/UserDataEnumsTest.cs
     private static void RegisterTypes()
     {
-        UserData.RegisterType<Player>();
-        UserData.RegisterType<Room>();
-        UserData.RegisterType<Door>();
-        UserData.RegisterType<Pickup>();
-        UserData.RegisterType<Item>();
-        UserData.RegisterType<TeslaGate>();
+        RegisterLabApiWrappers();
         UserData.RegisterType<CommandSender>();
         
         
@@ -183,21 +259,10 @@ public class ScriptLoader
         UserData.RegisterType<PlayerRoleBase>();
         UserData.RegisterType<DateTime>();
         UserData.RegisterType<TimeSpan>();
-        
-        /*UserData.RegisterType<AdminToy>();
-        //UserData.RegisterType<AdminToys.PrimitiveObjectToy>();
-        UserData.RegisterType<LabApi.Features.Wrappers.PrimitiveObjectToy>();
-        UserData.RegisterType<PrimitiveFlags>();
-        //UserData.RegisterType<AdminToys.SpeakerToy>();
-        UserData.RegisterType<LabApi.Features.Wrappers.SpeakerToy>();
-        //UserData.RegisterType<AdminToys.LightSourceToy>();
-        UserData.RegisterType<LabApi.Features.Wrappers.LightSourceToy>();
-        //UserData.RegisterType<AdminToys.ShootingTarget>();
-        UserData.RegisterType<LabApi.Features.Wrappers.ShootingTargetToy>();
-        //UserData.RegisterType<AdminToys.TextToy>();
-        UserData.RegisterType<LabApi.Features.Wrappers.TextToy>();*/
-        
+
         UserData.RegisterAssembly();
+        
+        Logger.Info("Completed loading Types...");
         
     }
 
@@ -206,6 +271,7 @@ public class ScriptLoader
         AddStaticGlobal<GlobalAdminToys>("AdminToys");
         AddStaticGlobal<GlobalCassie>("CASSIE");
         AddStaticGlobal<GlobalCassie>("Cassie");
+        AddStaticGlobal<GlobalCassie>("Announcer");
         AddStaticGlobal<GlobalDeadmanSwitch>("DeadmanSwitch");
         AddStaticGlobal<GlobalDeadmanSwitch>("DMS");
         AddStaticGlobal<GlobalEvents>("Events");
@@ -216,8 +282,13 @@ public class ScriptLoader
         AddStaticGlobal<GlobalRound>("Round");
         AddStaticGlobal<GlobalServer>("Server");
         AddStaticGlobal<GlobalSettings>("Settings");
+        AddStaticGlobal<GlobalPlayers>("Players");
 
-        //ENUMS https://github.com/moonsharp-devs/moonsharp/blob/master/src/MoonSharp.Interpreter.Tests/EndToEnd/UserDataEnumsTest.cs
+        // Auto-register all LabAPI enums
+        RegisterLabApiEnums();
+        RegisterBaseGameEnums();
+
+        // Game/Unity enums (not in LabAPI assembly)
         AddStaticGlobal<RoleTypeId>("RoleTypeId");
         AddStaticGlobal<RoleTypeId>("RoleType");
         AddStaticGlobal<ItemType>("ItemType");
@@ -225,7 +296,6 @@ public class ScriptLoader
         AddStaticGlobal<Faction>("Faction");
         AddStaticGlobal<FacilityZone>("FacilityZone");
         AddStaticGlobal<StatusEffectBase.EffectClassification>("EffectClassification");
-        AddStaticGlobal<CommandType>("CommandType");
         AddStaticGlobal<KeyCode>("KeyCode");
         AddStaticGlobal<TMP_InputField.ContentType>("ContentType");
         AddStaticGlobal<PrimitiveFlags>("PrimitiveFlags");

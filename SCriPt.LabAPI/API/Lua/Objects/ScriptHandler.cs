@@ -38,10 +38,13 @@ public class ScriptHandler : Script
         Options.ScriptLoader = new FileSystemScriptLoader();
         Options.DebugPrint = s => Logger.Debug($"[Lua-{Name}] {s}");
         ScriptLoader.AddGlobalsToScript(this);
+        // These are here because they reference the Script object directly
         Coroutines = new GlobalCoroutines(this);
         Globals["Timing"] = Coroutines;
         SCriPt = new GlobalSCriPt(this);
         Globals["SCriPt"] = SCriPt;
+        Globals["SCRIPT"] = SCriPt;
+        Globals["Script"] = SCriPt;
         Dummy = new GlobalDummy(this);
         Globals["Dummy"] = Dummy;
     }
@@ -79,18 +82,22 @@ public class ScriptHandler : Script
         {
             customCommand.Unregister();
         }
-        
+
         foreach (var customSettings in CustomSettings)
         {
             customSettings.Deactivate();
         }
-        
+
         foreach (Player dummy in Dummy.Dummies)
         {
             dummy.Kick(Player.Host, "Script unloaded, dummy removed.");
         }
-            
-        
+
+        // Auto-unregister all event callbacks belonging to this script
+        foreach (var handler in LabAPI.SCriPt.Instance.DynamicEventHandlers.Values)
+        {
+            handler.RemoveCallbacksForScript(this);
+        }
     }
 
 

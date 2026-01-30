@@ -48,8 +48,8 @@
         <Reference Include="CommandSystem.Core">
           <HintPath>C:\Users\tayjm\Desktop\scpsl\SCPSL_Data\Managed\CommandSystem.Core.dll</HintPath>
         </Reference>
-        <Reference Include="LabApi">
-          <HintPath>C:\Users\tayjm\Desktop\scpsl\SCPSL_Data\Managed\LabApi.dll</HintPath>
+        <Reference Include="LabApi, Version=1.1.4.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\Northwood.LabAPI.1.1.4\lib\net48\LabApi.dll</HintPath>
         </Reference>
         <Reference Include="Mirror">
           <HintPath>C:\Users\tayjm\Desktop\scpsl\SCPSL_Data\Managed\Mirror.dll</HintPath>
@@ -86,6 +86,7 @@
         <Compile Include="API\Lua\Globals\GlobalDecon.cs" />
         <Compile Include="API\Lua\Globals\GlobalDummy.cs" />
         <Compile Include="API\Lua\Globals\GlobalEvents.cs" />
+        <Compile Include="API\Lua\Globals\GlobalEventsDescriptor.cs" />
         <Compile Include="API\Lua\Globals\GlobalLobby.cs" />
         <Compile Include="API\Lua\Globals\GlobalNew.cs" />
         <Compile Include="API\Lua\Globals\GlobalPlayers.cs" />
@@ -104,6 +105,7 @@
         <Compile Include="API\Lua\Proxies\ProxyCapybaraToy.cs" />
         <Compile Include="API\Lua\Proxies\ProxyDummy.cs" />
         <Compile Include="API\Lua\Proxies\ProxyPlayer.cs" />
+        <Compile Include="API\Lua\SafeUserDataDescriptor.cs" />
         <Compile Include="Commands\LuaCommand.cs" />
         <Compile Include="Commands\LuaDisableScriptCommand.cs" />
         <Compile Include="Commands\LuaDocsCommand.cs" />
@@ -113,6 +115,9 @@
         <Compile Include="Commands\LuaPastebinCommand.cs" />
         <Compile Include="Commands\LuaReloadCommand.cs" />
         <Compile Include="Config.cs" />
+        <Compile Include="Handlers\EventHandlers\DynamicLuaEventDescriptor.cs" />
+        <Compile Include="Handlers\EventHandlers\DynamicLuaEventHandler.cs" />
+        <Compile Include="Handlers\EventHandlers\LuaEvent.cs" />
         <Compile Include="Handlers\EventHandlers\ILuaEventHandler.cs" />
         <Compile Include="Handlers\EventHandlers\LuaObjectiveEvents.cs" />
         <Compile Include="Handlers\EventHandlers\LuaPlayerEvents.cs" />
@@ -133,6 +138,7 @@
         <Compile Include="SCriPt.cs" />
         <Compile Include="SCriPtLoader.cs" />
         <Compile Include="Utils\CollectionExtensions.cs" />
+        <Compile Include="Utils\LuaDocGenerator.cs" />
         <Compile Include="Utils\MarkdownDocGen.cs" />
     </ItemGroup>
     <ItemGroup>
